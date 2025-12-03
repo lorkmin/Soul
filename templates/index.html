@@ -117,36 +117,33 @@
 <!--                     НАШИ КУРСЫ                            -->
 <!-- ========================================================= -->
 <section id="courses">
-    <div class="section-inner">
-
-        <div class="section-title">
-            <h3>Наши курсы</h3>
-            <p class="subtitle">Подберите подходящий вариант обучения</p>
-        </div>
-
-        <div class="courses-grid">
-            {% for c in courses %}
-            <div class="course-card animate-on-scroll">
-
-                <div class="course-image-wrap">
-                    {% if c.image %}
-                    <img src="{{ url_for('static', filename='uploads/courses/' ~ c.photo) }}" alt="{{ c.name }}">
-                    {% else %}
-                    <img src="/static/default_course.jpg" alt="">
-                    {% endif %}
-                </div>
-
-                <div class="course-info">
-                    <h4 class="course-title">{{ c.name }}</h4>
-                    <p class="course-desc">{{ c.description }}</p>
-                </div>
-
-            </div>
-            {% endfor %}
-        </div>
-
+  <div class="section-inner">
+    <div class="section-title">
+      <h3>Наши курсы</h3>
+      <span>Подберите подходящий вариант обучения</span>
     </div>
+
+    <div class="courses-grid">
+      {% for c in courses %}
+        <article class="course-card animate-on-scroll">
+          {% if c.photo %}
+            <div class="course-image-wrap">
+              <img src="{{ url_for('static', filename='uploads/courses/' ~ c.photo) }}"
+                   alt="{{ c.title }}">
+            </div>
+          {% endif %}
+
+          <h4 class="course-title">{{ c.title }}</h4>
+          <p class="course-meta">
+            {{ c.lessons }} уроков · {{ c.price }} ₽
+          </p>
+          <p class="course-desc">{{ c.description }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
 </section>
+
 
 
 
