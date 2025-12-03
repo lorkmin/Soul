@@ -613,7 +613,7 @@ def admin_teachers_delete(tid):
 @login_required
 def admin_courses():
     conn = get_db()
-    conn.row_factory = sqlite3.Row
+    #conn.row_factory = sqlite3.Row
     rows = conn.execute("SELECT * FROM courses ORDER BY created_at DESC").fetchall()
     conn.close()
     return render_template("admin_courses.html", courses=rows)
