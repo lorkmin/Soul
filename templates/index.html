@@ -165,24 +165,60 @@
 
     <div class="courses-grid">
       {% for c in courses %}
-        <article class="course-card animate-on-scroll">
-          {% if c.photo %}
-            <div class="course-image-wrap">
-              <img src="{{ url_for('static', filename='uploads/courses/' ~ c.photo) }}"
-                   alt="{{ c.title }}">
-            </div>
-          {% endif %}
+        <!-- КАРТОЧКА КУРСА -->
+        <article class="course-card animate-on-scroll"
+                 data-course-id="{{ c['id'] }}"
+                 data-course-title="{{ c['title'] }}">
+          <div class="course-image-wrap">
+            {% if c['photo'] %}
+              <img src="{{ url_for('static', filename='uploads/courses/' ~ c['photo']) }}"
+                   alt="{{ c['title'] }}">
+            {% endif %}
+          </div>
 
-          <h4 class="course-title">{{ c.title }}</h4>
+          <h4 class="course-title">{{ c['title'] }}</h4>
           <p class="course-meta">
-            {{ c.lessons }} уроков · {{ c.price }} ₽
+            {{ c['lessons'] }} уроков · {{ c['price'] }} ₽
           </p>
-          <p class="course-desc">{{ c.description }}</p>
         </article>
+
+        <!-- МОДАЛКА КУРСА -->
+        <div class="course-modal"
+             id="course-modal-{{ c['id'] }}"
+             data-course-id="{{ c['id'] }}"
+             data-course-title="{{ c['title'] }}">
+          <div class="course-modal-backdrop"></div>
+          <div class="course-modal-content">
+            <!-- Кнопки навигации -->
+            <button class="course-modal-prev" type="button">‹</button>
+            <button class="course-modal-next" type="button">›</button>
+
+            <button class="course-modal-close" aria-label="Закрыть">×</button>
+
+            {% if c['photo'] %}
+              <img src="{{ url_for('static', filename='uploads/courses/' ~ c['photo']) }}"
+                   class="course-modal-image"
+                   alt="{{ c['title'] }}">
+            {% endif %}
+
+            <h3 class="course-modal-title">{{ c['title'] }}</h3>
+            <p class="course-modal-meta">
+              {{ c['lessons'] }} уроков · {{ c['price'] }} ₽
+            </p>
+            <div class="course-modal-desc">
+              {{ c['description'] }}
+            </div>
+
+            <button class="course-modal-enroll-btn" type="button">
+              Записаться на этот курс
+            </button>
+          </div>
+        </div>
       {% endfor %}
     </div>
   </div>
 </section>
+
 
 
 
@@ -511,69 +547,156 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  // открытие модалки по клику на карточку
-  document.querySelectorAll('.teacher-card').forEach(function(card) {
-    card.addEventListener('click', function () {
+  // === АНИМАЦИЯ ПОЯВЛЕНИЯ БЛОКОВ ===
+  const animated = document.querySelectorAll('.animate-on-scroll');
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    animated.forEach(el => observer.observe(el));
+  } else {
+    animated.forEach(el => el.classList.add('visible'));
+  }
+
+  // ====================================================================
+  //                          МОДАЛКА ПРЕПОДАВАТЕЛЕЙ
+  // ====================================================================
+  const teacherCards  = document.querySelectorAll('.teacher-card');
+  const teacherModals = document.querySelectorAll('.teacher-modal');
+
+  teacherCards.forEach(card => {
+    card.addEventListener('click', () => {
       const id = card.dataset.teacherId;
-      if (!id) return;
       const modal = document.getElementById('teacher-modal-' + id);
       if (modal) modal.classList.add('active');
     });
   });
 
-  // закрытие по кнопке
-  document.querySelectorAll('.teacher-modal-close').forEach(function(btn) {
-    btn.addEventListener('click', function (e) {
+  document.querySelectorAll('.teacher-modal-close').forEach(btn => {
+    btn.addEventListener('click', () => {
       const modal = btn.closest('.teacher-modal');
       if (modal) modal.classList.remove('active');
     });
   });
 
-  // закрытие кликом по фону
-  document.querySelectorAll('.teacher-modal').forEach(function(modal) {
-    modal.addEventListener('click', function (e) {
+  teacherModals.forEach(modal => {
+    modal.addEventListener('click', e => {
       if (e.target === modal) modal.classList.remove('active');
     });
   });
 
-  // optional: close on Esc
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.teacher-modal.active').forEach(function(m){ m.classList.remove('active'); });
-    }
-  });
-  // ===== МОДАЛКА КУРСА =====
-  document.querySelectorAll('.course-card').forEach(function(card) {
-    card.addEventListener('click', function () {
+  // ====================================================================
+  //                          МОДАЛКА КУРСОВ
+  // ====================================================================
+  const courseCards  = Array.from(document.querySelectorAll('.course-card'));
+  const courseModals = Array.from(document.querySelectorAll('.course-modal'));
+  let currentCourseIndex = null;
+
+  function openCourseModalByIndex(index) {
+    if (index < 0 || index >= courseModals.length) return;
+    courseModals.forEach(m => m.classList.remove('active'));
+    currentCourseIndex = index;
+    courseModals[index].classList.add('active');
+  }
+
+  function openCourseModalById(id) {
+    const modal = document.getElementById('course-modal-' + id);
+    if (!modal) return;
+    const index = courseModals.indexOf(modal);
+    if (index !== -1) openCourseModalByIndex(index);
+  }
+
+  // открыть по клику на карточку
+  courseCards.forEach(card => {
+    card.addEventListener('click', () => {
       const id = card.dataset.courseId;
-      const modal = document.getElementById('course-modal-' + id);
-      if (modal) {
-        modal.classList.add('active');
-      }
+      openCourseModalById(id);
     });
   });
 
-  document.querySelectorAll('.course-modal-close').forEach(function(btn) {
-    btn.addEventListener('click', function () {
+  // закрытие по крестику
+  document.querySelectorAll('.course-modal-close').forEach(btn => {
+    btn.addEventListener('click', () => {
       const modal = btn.closest('.course-modal');
       if (modal) modal.classList.remove('active');
+      currentCourseIndex = null;
     });
   });
 
-  document.querySelectorAll('.course-modal').forEach(function(modal) {
-    modal.addEventListener('click', function (e) {
-      if (e.target === modal) {
+  // закрытие по фону
+  courseModals.forEach(modal => {
+    const backdrop = modal.querySelector('.course-modal-backdrop');
+    if (backdrop) {
+      backdrop.addEventListener('click', () => {
         modal.classList.remove('active');
-      }
-    });
-  });
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.course-modal.active').forEach(function(m) {
-        m.classList.remove('active');
+        currentCourseIndex = null;
       });
     }
+  });
+
+  // стрелка "влево"
+  document.querySelectorAll('.course-modal-prev').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (currentCourseIndex === null) return;
+      const next = (currentCourseIndex - 1 + courseModals.length) % courseModals.length;
+      openCourseModalByIndex(next);
+    });
+  });
+
+  // стрелка "вправо"
+  document.querySelectorAll('.course-modal-next').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (currentCourseIndex === null) return;
+      const next = (currentCourseIndex + 1) % courseModals.length;
+      openCourseModalByIndex(next);
+    });
+  });
+
+  // Esc — закрыть все модалки курсов и преподавателей
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      teacherModals.forEach(m => m.classList.remove('active'));
+      courseModals.forEach(m => m.classList.remove('active'));
+      currentCourseIndex = null;
+    }
+  });
+
+  // ====================================================================
+  //      "Записаться на этот курс" — автоподстановка + скролл к форме
+  // ====================================================================
+  const enrollSection = document.getElementById('enroll');
+  const enrollSelect  = document.querySelector('#enroll select[name="tariff"], select[name="tariff"]');
+
+  document.querySelectorAll('.course-modal-enroll-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const modal = btn.closest('.course-modal');
+      if (!modal) return;
+      const title = modal.dataset.courseTitle;
+
+      if (enrollSelect && title) {
+        // выбираем курс в select, если он есть в списке
+        Array.from(enrollSelect.options).forEach(opt => {
+          if (opt.value === title) {
+            enrollSelect.value = title;
+          }
+        });
+      }
+
+      // закрываем все модалки курсов
+      courseModals.forEach(m => m.classList.remove('active'));
+      currentCourseIndex = null;
+
+      // скроллим к форме
+      if (enrollSection) {
+        enrollSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
   });
 });
 </script>
