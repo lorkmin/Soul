@@ -1155,3 +1155,12 @@ footer a {
     opacity: 0.75;
     line-height: 1.4em;
 }
+
+.teacher-photo-wrap { width:120px; height:120px; margin:0 auto 12px; border-radius:50%; overflow:hidden; border:3px solid rgba(255,255,255,0.12); }
+.teacher-photo-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
+
+.teacher-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter: blur(6px); align-items:center; justify-content:center; z-index:9999; }
+.teacher-modal.active { display:flex; }
+.teacher-modal-content { background: rgba(0,0,0,0.75); padding:24px; border-radius:12px; max-width:640px; width:90%; color:#fff; position:relative; }
+.teacher-modal-close { position:absolute; right:12px; top:10px; background:none; border:none; color:#fff; font-size:20px; cursor:pointer; }
+.teacher-modal-photo { width:140px; height:140px; border-radius:10px; object-fit:cover; display:block; margin:0 auto 12px; }
