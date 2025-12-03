@@ -617,6 +617,7 @@ def admin_courses():
     conn.close()
     return render_template("admin_courses.html", courses=rows)
 
+
 @app.post("/admin/courses/add")
 @login_required
 def admin_courses_add():

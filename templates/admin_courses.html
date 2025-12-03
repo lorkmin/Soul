@@ -1,19 +1,20 @@
-{% extends "admin_layout.html" %}
+@@ -0,0 +1,54 @@
+﻿{% extends "admin_layout.html" %}
 
 {% block content %}
 <h2>Курсы</h2>
 
 <div class="admin-form">
-  <form action="{{ url_for('admin_courses_add') }}" method="post" enctype="multipart/form-data">
+  <form action="/admin/courses/add" method="post" enctype="multipart/form-data">
     <h3>Добавить курс</h3>
 
     <input type="text" name="title" placeholder="Название курса" required>
-    <input type="number" name="price" placeholder="Цена, ₽" required>
+    <input type="number" name="price" placeholder="Цена" required>
     <input type="number" name="lessons" placeholder="Количество уроков" required>
 
-    <textarea name="description" rows="4" placeholder="Краткое описание курса"></textarea>
+    <textarea name="description" rows="4" placeholder="Описание курса"></textarea>
 
-    <label>Картинка курса:</label>
+    <label>Фото:</label>
     <input type="file" name="photo" accept="image/*">
 
     <button class="admin-btn" type="submit">Добавить</button>
@@ -23,7 +24,7 @@
 <table class="admin-table">
   <thead>
     <tr>
-      <th>Картинка</th>
+      <th>Фото</th>
       <th>Название</th>
       <th>Цена</th>
       <th>Уроки</th>
@@ -35,31 +36,20 @@
   <tbody>
     {% for c in courses %}
     <tr>
-      <td>
-        {% if c["photo"] %}
-          <img src="{{ url_for('static', filename='uploads/courses/' ~ c['photo']) }}">
-        {% else %}
-          —
-        {% endif %}
-      </td>
-      <td>{{ c["title"] }}</td>
-      <td>{{ c["price"] }} ₽</td>
-      <td>{{ c["lessons"] }}</td>
-      <td>{{ c["description"] }}</td>
+      <td><img src="/static/uploads/courses/{{ c.photo }}"></td>
+      <td>{{ c.title }}</td>
+      <td>{{ c.price }}₽</td>
+      <td>{{ c.lessons }}</td>
+      <td>{{ c.description }}</td>
 
-      <td style="white-space:nowrap;">
-        <!-- редактирование добавим позже -->
-        <form action="{{ url_for('admin_courses_delete', cid=c['id']) }}"
-              method="post"
-              style="display:inline-block;"
-              onsubmit="return confirm('Удалить курс {{ c[\"title\"] }}?');">
+      <td>
+        <form action="/admin/courses/delete/{{ c.id }}" method="post">
           <button class="admin-delete-btn">Удалить</button>
         </form>
       </td>
     </tr>
-    {% else %}
-      <tr><td colspan="6">Пока нет курсов.</td></tr>
     {% endfor %}
   </tbody>
 </table>
+
 {% endblock %}
