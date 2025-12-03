@@ -25,15 +25,15 @@ DB_PATH = os.path.join(BASE_DIR, "soul.db")
 # ================== НАСТРОЙКИ ==================
 
 # секретный ключ для сессий (логин в админку)
-app.secret_key = os.getenv("FLASK_SECRET_KEY", "dev-secret-change-me")
+app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
 # Настройки Telegram
-TELEGRAM_BOT_TOKEN = "7586193673:AAE_MeqS01U4s7ZAzntj5thXoyRCtP2PxjU"
-TELEGRAM_CHAT_ID = "-1003426957203"
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 # Данные администратора
-ADMIN_USER = os.getenv("ADMIN_USER", "admin")
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")  # ОБЯЗАТЕЛЬНО поменяй
+ADMIN_USER = os.getenv("ADMIN_USER")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")  # ОБЯЗАТЕЛЬНО поменяй
 
 # Анти-спам по заявкам
 ENROLL_SPAM_SECONDS = 60  # интервал между заявками с одного IP (в секундах)
