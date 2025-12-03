@@ -69,80 +69,63 @@ def get_db():
 
 
 def init_db():
-    conn = get_db()
+    conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
 
-    # Таблица отзывов
-    cur.execute(
-        """
+    # ---- REVIEWS ----
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS reviews (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
+            name TEXT,
             package TEXT,
             rating INTEGER,
-            text TEXT NOT NULL,
+            text TEXT,
+            approved INTEGER DEFAULT 0,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
-        """
-    )
+    """)
 
-    # Добавляем колонку approved, если её ещё нет
-    try:
-        cur.execute("ALTER TABLE reviews ADD COLUMN approved INTEGER DEFAULT 0;")
-    except sqlite3.OperationalError:
-        # колонка уже есть — ок
-        pass
-
-    # Старым отзывам выставим approved=1, если NULL
-    cur.execute("UPDATE reviews SET approved = 1 WHERE approved IS NULL;")
-
-    # Таблица заявок
-    cur.execute(
-        """
+    # ---- ENROLLS ----
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS enrolls (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            ip TEXT,
             name TEXT NOT NULL,
-            contact TEXT NOT NULL,
-            tariff TEXT,
-            level TEXT,
-            comment TEXT
+            phone TEXT NOT NULL,
+            course TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
-        """
-    )
+    """)
+
+    # ---- TEACHERS ----
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS teachers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            role TEXT,
+            bio TEXT,
+            photo TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+    """)
+
+    # ---- COURSES ----
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS courses (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            price INTEGER,
+            lessons INTEGER,
+            description TEXT,
+            photo TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+    """)
 
     conn.commit()
     conn.close()
 
 
 init_db()
-
-
-# ===== TEACHERS =====
-cur.execute("""
-    CREATE TABLE IF NOT EXISTS teachers (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        role TEXT,
-        bio TEXT,
-        photo TEXT DEFAULT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-""")
-
-# ===== COURSES =====
-cur.execute("""
-    CREATE TABLE IF NOT EXISTS courses (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
-        price INTEGER,
-        lessons INTEGER,
-        description TEXT,
-        photo TEXT DEFAULT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-""")
 
 
 # ================== ХЕЛПЕРЫ ==================
