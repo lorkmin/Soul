@@ -116,7 +116,7 @@
 
                 <div class="course-image-wrap">
                     {% if c.image %}
-                    <img src="{{ url_for('static', filename='uploads/courses/' ~ c.image) }}" alt="{{ c.name }}">
+                    <img src="{{ url_for('static', filename='uploads/courses/' ~ c.photo) }}" alt="{{ c.name }}">
                     {% else %}
                     <img src="/static/default_course.jpg" alt="">
                     {% endif %}
