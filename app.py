@@ -695,6 +695,7 @@ def admin_courses_edit(cid):
 
 
 
+
 # ================== DEV-запуск ==================
 
 if __name__ == "__main__":
