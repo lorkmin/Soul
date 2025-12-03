@@ -206,8 +206,8 @@ def send_enroll_email_to_user(payload: dict):
 
 @app.route("/")
 def index():
-    # показываем только одобренные отзывы
     conn = get_db()
+
     reviews = conn.execute(
         """
         SELECT name, package, rating, text, created_at
@@ -217,8 +217,23 @@ def index():
         LIMIT 9;
         """
     ).fetchall()
+
+    teachers = conn.execute(
+        "SELECT * FROM teachers ORDER BY created_at ASC"
+    ).fetchall()
+
+    courses = conn.execute(
+        "SELECT * FROM courses ORDER BY created_at ASC"
+    ).fetchall()
+
     conn.close()
-    return render_template("index.html", reviews=reviews)
+    return render_template(
+        "index.html",
+        reviews=reviews,
+        teachers=teachers,
+        courses=courses,
+    )
+
 
 
 @app.post("/add-review")
