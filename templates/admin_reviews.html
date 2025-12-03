@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Отзывы — админка Soul</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .admin-nav {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+    }
+    .reviews-admin-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      font-size: 0.85rem;
+    }
+    @media (max-width: 900px) {
+      .reviews-admin-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .review-admin-card {
+      border-radius: 10px;
+      border: 1px solid #333;
+      padding: 8px 10px;
+      background: #111;
+    }
+    .review-admin-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    .review-admin-name {
+      font-weight: 500;
+    }
+    .review-admin-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .review-admin-text {
+      margin-top: 6px;
+      margin-bottom: 8px;
+      white-space: pre-wrap;
+    }
+    .review-admin-actions {
+      display: flex;
+      gap: 6px;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid #444;
+    }
+    .badge.approved {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .badge.pending {
+      border-color: #888;
+      color: #bbb;
+    }
+    .btn-mini {
+      padding: 4px 8px;
+      font-size: 0.78rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <section>
+      <div class="section-inner">
+        <div class="section-title">
+          <h3>Отзывы</h3>
+          <span>модерация</span>
+        </div>
+
+        <div class="admin-nav">
+          <a href="{{ url_for('admin_enrolls') }}">Заявки</a>
+          <a href="{{ url_for('admin_reviews') }}">Отзывы</a>
+          <a href="{{ url_for('admin_logout') }}">Выйти</a>
+        </div>
+
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:10px;">
+          Новые отзывы по умолчанию скрыты, пока вы их не одобрите. На главной видны только
+          <span style="color:var(--accent);">одобренные</span>.
+        </p>
+
+        <div class="reviews-admin-grid">
+          {% for r in reviews %}
+            <div class="review-admin-card">
+              <div class="review-admin-header">
+                <div>
+                  <div class="review-admin-name">{{ r.name }}</div>
+                  <div class="review-admin-meta">
+                    {{ r.created_at }} ·
+                    {{ r.package or 'Пакет не указан' }} ·
+                    ★{{ r.rating or 0 }}
+                  </div>
+                </div>
+                <div>
+                  {% if r.approved %}
+                    <span class="badge approved">Опубликован</span>
+                  {% else %}
+                    <span class="badge pending">Скрыт</span>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="review-admin-text">
+                {{ r.text }}
+              </div>
+
+              <div class="review-admin-actions">
+                {% if not r.approved %}
+                  <form method="post" action="{{ url_for('admin_review_approve', review_id=r.id) }}">
+                    <button type="submit" class="btn btn-primary btn-mini">Одобрить</button>
+                  </form>
+                {% else %}
+                  <form method="post" action="{{ url_for('admin_review_hide', review_id=r.id) }}">
+                    <button type="submit" class="btn btn-outline btn-mini">Скрыть</button>
+                  </form>
+                {% endif %}
+              </div>
+            </div>
+          {% else %}
+            <p>Отзывов пока нет.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

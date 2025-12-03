@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Вход в админку — Soul</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .login-card {
+      max-width: 420px;
+      margin: 80px auto;
+      text-align: left;
+    }
+    .login-card h1 {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+    }
+    .login-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+    .login-card .error {
+      font-size: 0.85rem;
+      color: #f97373;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <section>
+      <div class="section-inner login-card">
+        <h1>Вход в админ-панель</h1>
+        <p>Введите логин и пароль администратора.</p>
+
+        {% if error %}
+          <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <form method="post">
+          <div>
+            <label for="username">Логин</label>
+            <input id="username" name="username" type="text" required />
+          </div>
+          <div>
+            <label for="password">Пароль</label>
+            <input id="password" name="password" type="password" required />
+          </div>
+          <button class="btn btn-primary form-submit" type="submit" style="margin-top:10px;">
+            Войти
+          </button>
+        </form>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

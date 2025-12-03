@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Заявки — админка Soul</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .admin-nav {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    .admin-table th,
+    .admin-table td {
+      border: 1px solid #333;
+      padding: 6px 8px;
+      vertical-align: top;
+    }
+    .admin-table th {
+      background: #111;
+      color: var(--accent);
+    }
+    .admin-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .top-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+    }
+    .top-actions a.btn-link {
+      font-size: 0.82rem;
+      text-decoration: underline;
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <section>
+      <div class="section-inner">
+        <div class="section-title">
+          <h3>Заявки на занятия</h3>
+          <span>админ-панель</span>
+        </div>
+
+        <div class="admin-nav">
+          <a href="{{ url_for('admin_enrolls') }}">Заявки</a>
+          <a href="{{ url_for('admin_reviews') }}">Отзывы</a>
+          <a href="{{ url_for('admin_logout') }}">Выйти</a>
+        </div>
+
+        <div class="top-actions">
+          <div>Всего заявок: {{ enrolls|length }}</div>
+          <div>
+            <a class="btn-link" href="{{ url_for('admin_enrolls_export') }}">Экспорт в CSV</a>
+          </div>
+        </div>
+
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Дата / IP</th>
+              <th>Имя / Контакт</th>
+              <th>Пакет / Уровень</th>
+              <th>Комментарий</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for e in enrolls %}
+              <tr>
+                <td>{{ e.id }}</td>
+                <td>
+                  <div>{{ e.created_at }}</div>
+                  <div class="admin-meta">{{ e.ip }}</div>
+                </td>
+                <td>
+                  <div>{{ e.name }}</div>
+                  <div class="admin-meta">{{ e.contact }}</div>
+                </td>
+                <td>
+                  <div>{{ e.tariff or '—' }}</div>
+                  <div class="admin-meta">{{ e.level or '—' }}</div>
+                </td>
+                <td>{{ e.comment or '' }}</td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="5">Пока нет заявок.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
