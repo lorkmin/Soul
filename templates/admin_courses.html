@@ -3,7 +3,6 @@
 {% block content %}
 <h2>Курсы</h2>
 
-<!-- === ФОРМА ДОБАВЛЕНИЯ КУРСА === -->
 <div class="admin-form">
   <form action="{{ url_for('admin_courses_add') }}" method="post" enctype="multipart/form-data">
     <h3>Добавить курс</h3>
@@ -14,18 +13,17 @@
 
     <textarea name="description" rows="4" placeholder="Краткое описание курса"></textarea>
 
-    <label style="margin-top:10px;">Картинка курса:</label>
+    <label>Картинка курса (опционально):</label>
     <input type="file" name="photo" accept="image/*">
 
     <button class="admin-btn" type="submit">Добавить</button>
   </form>
 </div>
 
-<!-- === ТАБЛИЦА КУРСОВ === -->
 <table class="admin-table">
   <thead>
     <tr>
-      <th>Фото</th>
+      <th>ID</th>
       <th>Название</th>
       <th>Цена</th>
       <th>Уроки</th>
@@ -37,45 +35,18 @@
   <tbody>
     {% for c in courses %}
       <tr>
-
-        <!-- Фото -->
-        <td>
-          {% if c["photo"] %}
-            <img src="{{ url_for('static', filename='uploads/courses/' ~ c['photo']) }}"
-                 style="width:90px;height:60px;object-fit:cover;border-radius:6px;">
-          {% else %}
-            —
-          {% endif %}
-        </td>
-
-        <!-- Название -->
+        <td>{{ c["id"] }}</td>
         <td>{{ c["title"] }}</td>
-
-        <!-- Цена -->
         <td>{{ c["price"] }} ₽</td>
-
-        <!-- Уроки -->
         <td>{{ c["lessons"] }}</td>
-
-        <!-- Описание -->
         <td>{{ c["description"] }}</td>
-
-        <!-- Действия -->
-        <td style="white-space: nowrap;">
-          <a href="{{ url_for('admin_courses_edit', cid=c['id']) }}"
-             class="btn-link"
-             style="margin-right:8px;">
-            Редактировать
-          </a>
-
+        <td>
           <form action="{{ url_for('admin_courses_delete', cid=c['id']) }}"
                 method="post"
-                style="display:inline-block;"
                 onsubmit="return confirm('Удалить курс {{ c[\"title\"] }}?');">
             <button class="admin-delete-btn">Удалить</button>
           </form>
         </td>
-
       </tr>
     {% else %}
       <tr>
@@ -84,5 +55,4 @@
     {% endfor %}
   </tbody>
 </table>
-
 {% endblock %}
