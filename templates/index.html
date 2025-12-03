@@ -72,30 +72,44 @@
     </section>
 
     <section id="teachers">
-        <div class="section-inner">
-            <div class="section-title">
-                <h3>Наши преподаватели</h3>
-            </div>
-
-            <div class="teachers-grid">
-                {% for t in teachers %}
-                    <div class="teacher-card animate-on-scroll">
-                    
-                        <div class="teacher-photo-wrap">
-                            {% if t.photo %}
-                            <img src="{{ url_for('static', filename='uploads/teachers/' ~ t.photo) }}"
-                                 alt="{{ t.name }}">
-                            {% endif %}
-                        </div>
-
-                        <h4 class="teacher-name">{{ t.name }}</h4>
-                        <p class="teacher-role">{{ t.role }}</p>
-
-                    </div>
-                {% endfor %}
-            </div>
+      <div class="section-inner">
+        <div class="section-title">
+          <h3>Наши преподаватели</h3>
         </div>
+
+        <div class="teachers-grid">
+          {% for t in teachers %}
+          <article class="teacher-card animate-on-scroll" data-teacher-id="{{ t.id }}">
+            <div class="teacher-photo-wrap">
+              {% if t.photo %}
+                <img src="{{ url_for('static', filename='uploads/teachers/' ~ t.photo) }}" alt="{{ t.name }}">
+              {% else %}
+                <img src="{{ url_for('static', filename='default_teacher.jpg') }}" alt="{{ t.name }}">
+              {% endif %}
+            </div>
+            <h4 class="teacher-name">{{ t.name }}</h4>
+            <p class="teacher-role">{{ t.role }}</p>
+          </article>
+
+          <!-- Modal for this teacher -->
+          <div class="teacher-modal" id="teacher-modal-{{ t.id }}">
+            <div class="teacher-modal-content">
+              <button class="teacher-modal-close" aria-label="close">&times;</button>
+              <div class="teacher-modal-inner">
+                {% if t.photo %}
+                  <img src="{{ url_for('static', filename='uploads/teachers/' ~ t.photo) }}" class="teacher-modal-photo" alt="{{ t.name }}">
+                {% endif %}
+                <h3>{{ t.name }}</h3>
+                <p class="teacher-modal-role">{{ t.role }}</p>
+                <div class="teacher-modal-bio">{{ t.bio|safe }}</div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
     </section>
+
 
 
 
