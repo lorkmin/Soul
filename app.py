@@ -40,7 +40,7 @@ ENROLL_SPAM_SECONDS = 60  # интервал между заявками с од
 
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads")
 TEACHER_UPLOAD = os.path.join(UPLOAD_FOLDER, "teachers")
-COURSE_UPLOAD = os.path.join(UPLOAD_FOLDER, "courses")
+COURSE_UPLOAD  = os.path.join(UPLOAD_FOLDER, "courses")
 
 for path in (UPLOAD_FOLDER, TEACHER_UPLOAD, COURSE_UPLOAD):
     os.makedirs(path, exist_ok=True)
@@ -523,20 +523,26 @@ def admin_review_delete(review_id: int):
     return redirect(url_for("admin_reviews"))
 
 
+# ----- СПИСОК ПРЕПОДАВАТЕЛЕЙ -----
 @app.get("/admin/teachers")
 @login_required
 def admin_teachers():
     conn = get_db()
-    rows = conn.execute("SELECT * FROM teachers ORDER BY created_at DESC").fetchall()
+    conn.row_factory = sqlite3.Row
+    rows = conn.execute(
+        "SELECT * FROM teachers ORDER BY created_at DESC"
+    ).fetchall()
     conn.close()
     return render_template("admin_teachers.html", teachers=rows)
 
+
+# ----- ДОБАВЛЕНИЕ ПРЕПОДАВАТЕЛЯ -----
 @app.post("/admin/teachers/add")
 @login_required
 def admin_teachers_add():
     name = request.form["name"]
     role = request.form["role"]
-    bio = request.form["bio"]
+    bio = request.form.get("bio", "")
     photo = save_upload(request.files.get("photo"), TEACHER_UPLOAD)
 
     conn = get_db()
@@ -546,24 +552,16 @@ def admin_teachers_add():
     )
     conn.commit()
     conn.close()
-
     return redirect(url_for("admin_teachers"))
 
-@app.post("/admin/teachers/delete/<int:tid>")
-@login_required
-def admin_teachers_delete(tid):
-    conn = get_db()
-    conn.execute("DELETE FROM teachers WHERE id=?", (tid,))
-    conn.commit()
-    conn.close()
-    return redirect(url_for("admin_teachers"))
 
+# ----- РЕДАКТИРОВАНИЕ ПРЕПОДАВАТЕЛЯ -----
 @app.route("/admin/teachers/<int:tid>/edit", methods=["GET", "POST"])
 @login_required
 def admin_teachers_edit(tid):
     conn = get_db()
+    conn.row_factory = sqlite3.Row
 
-    # текущий преподаватель
     teacher = conn.execute(
         "SELECT * FROM teachers WHERE id = ?",
         (tid,),
@@ -576,7 +574,7 @@ def admin_teachers_edit(tid):
     if request.method == "POST":
         name = request.form["name"]
         role = request.form["role"]
-        bio = request.form["bio"]
+        bio = request.form.get("bio", "")
         file = request.files.get("photo")
         new_photo = save_upload(file, TEACHER_UPLOAD) if file and file.filename else None
 
@@ -597,6 +595,18 @@ def admin_teachers_edit(tid):
 
     conn.close()
     return render_template("admin_teacher_edit.html", teacher=teacher)
+
+
+# ----- УДАЛЕНИЕ ПРЕПОДАВАТЕЛЯ -----
+@app.post("/admin/teachers/delete/<int:tid>")
+@login_required
+def admin_teachers_delete(tid):
+    conn = get_db()
+    conn.execute("DELETE FROM teachers WHERE id = ?", (tid,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for("admin_teachers"))
+
 
 
 @app.get("/admin/courses")

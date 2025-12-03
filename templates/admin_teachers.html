@@ -33,28 +33,27 @@
     {% for t in teachers %}
     <tr>
       <td>
-        {% if t.photo %}
-          <img src="{{ url_for('static', filename='uploads/teachers/' ~ t.photo) }}">
+        {% if t["photo"] %}
+          <img src="{{ url_for('static', filename='uploads/teachers/' ~ t['photo']) }}">
         {% else %}
           —
         {% endif %}
       </td>
-      <td>{{ t.name }}</td>
-      <td>{{ t.role }}</td>
-      <td>{{ t.bio }}</td>
+      <td>{{ t["name"] }}</td>
+      <td>{{ t["role"] }}</td>
+      <td>{{ t["bio"] }}</td>
 
-    <td style="white-space: nowrap;">
-        <a href="{{ url_for('admin_teachers_edit', tid=t.id) }}" class="btn-link" style="margin-right:6px;">
-        Редактировать
+      <td style="white-space:nowrap;">
+        <a href="{{ url_for('admin_teachers_edit', tid=t['id']) }}" class="btn-link" style="margin-right:6px;">
+          Редактировать
         </a>
-        <form action="{{ url_for('admin_teachers_delete', tid=t.id) }}"
-            method="post"
-            style="display:inline-block;"
-            onsubmit="return confirm('Удалить преподавателя {{ t.name }}?');">
-        <button class="admin-delete-btn">Удалить</button>
+        <form action="{{ url_for('admin_teachers_delete', tid=t['id']) }}"
+              method="post"
+              style="display:inline-block;"
+              onsubmit="return confirm('Удалить преподавателя {{ t[\"name\"] }}?');">
+          <button class="admin-delete-btn">Удалить</button>
         </form>
-    </td>
-
+      </td>
     </tr>
     {% else %}
       <tr><td colspan="5">Пока нет преподавателей.</td></tr>
