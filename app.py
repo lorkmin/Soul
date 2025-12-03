@@ -613,9 +613,11 @@ def admin_teachers_delete(tid):
 @login_required
 def admin_courses():
     conn = get_db()
+    conn.row_factory = sqlite3.Row
     rows = conn.execute("SELECT * FROM courses ORDER BY created_at DESC").fetchall()
     conn.close()
     return render_template("admin_courses.html", courses=rows)
+
 
 
 @app.post("/admin/courses/add")
@@ -627,7 +629,8 @@ def admin_courses_add():
     description = request.form["description"]
     photo = save_upload(request.files.get("photo"), COURSE_UPLOAD)
 
-    conn = get_db()
+   conn = get_db()
+   conn.row_factory = sqlite3.Row
     conn.execute("""
         INSERT INTO courses (title, price, lessons, description, photo)
         VALUES (?, ?, ?, ?, ?)
@@ -642,6 +645,7 @@ def admin_courses_add():
 @login_required
 def admin_courses_delete(cid):
     conn = get_db()
+    conn.row_factory = sqlite3.Row
     conn.execute("DELETE FROM courses WHERE id=?", (cid,))
     conn.commit()
     conn.close()
