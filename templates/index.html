@@ -236,12 +236,13 @@
 				<input id="name" name="name" type="text" required placeholder="Ваше имя" />
 			  </div>
 			  <div class="review-form-field">
-                <select name="tariff" required>
-                  <option value="">Выберите курс</option>
-                  {% for c in courses %}
-                    <option value="{{ c['title'] }}">{{ c['title'] }}</option>
-                  {% endfor %}
-                </select>
+				<label for="package">Пакет</label>
+				<select id="package" name="package">
+				  <option value="">Не выбрано</option>
+				  <option value="Старт">Старт</option>
+				  <option value="Продвижение">Продвижение</option>
+				  <option value="Интенсив">Интенсив</option>
+				</select>
 			  </div>
 
 			  <!-- НОВЫЙ блок рейтинга звёздочками -->
@@ -327,12 +328,13 @@
 
 			  <div>
 				<label for="tariff">Интересующий пакет</label>
-				<select id="tariff" name="tariff">
-				  <option value="">Пока не определился(ась)</option>
-				  <option value="Старт">Старт (4 урока)</option>
-				  <option value="Продвижение">Продвижение (8 уроков)</option>
-				  <option value="Интенсив">Интенсив (12 уроков)</option>
-				</select>
+                <select name="tariff" required>
+                  <option value="">Выберите курс</option>
+                  {% for c in courses %}
+                    <option value="{{ c['title'] }}">{{ c['title'] }}</option>
+                  {% endfor %}
+                </select>
+
 			  </div>
 
 			  <div>
