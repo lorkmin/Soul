@@ -165,47 +165,24 @@
 
     <div class="courses-grid">
       {% for c in courses %}
-        <!-- КАРТОЧКА КУРСА -->
-        <article class="course-card animate-on-scroll"
-                 data-course-id="{{ c['id'] }}">
-          <div class="course-image-wrap">
-            {% if c['photo'] %}
-              <img src="{{ url_for('static', filename='uploads/courses/' ~ c['photo']) }}"
-                   alt="{{ c['title'] }}">
-            {% endif %}
-          </div>
-
-          <h4 class="course-title">{{ c['title'] }}</h4>
-          <p class="course-meta">
-            {{ c['lessons'] }} уроков · {{ c['price'] }} ₽
-          </p>
-        </article>
-
-        <!-- МОДАЛЬНОЕ ОКНО КУРСА -->
-        <div class="course-modal" id="course-modal-{{ c['id'] }}">
-          <div class="course-modal-content">
-            <button class="course-modal-close" aria-label="Закрыть">×</button>
-
-            {% if c['photo'] %}
-              <img src="{{ url_for('static', filename='uploads/courses/' ~ c['photo']) }}"
-                   class="course-modal-image"
-                   alt="{{ c['title'] }}">
-            {% endif %}
-
-            <h3 class="course-modal-title">{{ c['title'] }}</h3>
-            <p class="course-modal-meta">
-              {{ c['lessons'] }} уроков · {{ c['price'] }} ₽
-            </p>
-            <div class="course-modal-desc">
-              {{ c['description'] }}
+        <article class="course-card animate-on-scroll">
+          {% if c.photo %}
+            <div class="course-image-wrap">
+              <img src="{{ url_for('static', filename='uploads/courses/' ~ c.photo) }}"
+                   alt="{{ c.title }}">
             </div>
-          </div>
-        </div>
+          {% endif %}
+
+          <h4 class="course-title">{{ c.title }}</h4>
+          <p class="course-meta">
+            {{ c.lessons }} уроков · {{ c.price }} ₽
+          </p>
+          <p class="course-desc">{{ c.description }}</p>
+        </article>
       {% endfor %}
     </div>
   </div>
 </section>
-
 
 
 
@@ -565,7 +542,6 @@ document.addEventListener('DOMContentLoaded', function () {
       document.querySelectorAll('.teacher-modal.active').forEach(function(m){ m.classList.remove('active'); });
     }
   });
-});
   // ===== МОДАЛКА КУРСА =====
   document.querySelectorAll('.course-card').forEach(function(card) {
     card.addEventListener('click', function () {
