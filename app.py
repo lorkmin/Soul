@@ -650,6 +650,8 @@ def admin_courses_delete(cid):
 @login_required
 def admin_courses_edit(cid):
     conn = get_db()
+    conn.row_factory = sqlite3.Row
+
     course = conn.execute(
         "SELECT * FROM courses WHERE id = ?",
         (cid,),
@@ -664,27 +666,22 @@ def admin_courses_edit(cid):
         price = request.form["price"]
         lessons = request.form["lessons"]
         description = request.form["description"]
+
         file = request.files.get("photo")
         new_photo = save_upload(file, COURSE_UPLOAD) if file and file.filename else None
 
         if new_photo:
-            conn.execute(
-                """
+            conn.execute("""
                 UPDATE courses
-                SET title = ?, price = ?, lessons = ?, description = ?, photo = ?
-                WHERE id = ?
-                """,
-                (title, price, lessons, description, new_photo, cid),
-            )
+                SET title=?, price=?, lessons=?, description=?, photo=?
+                WHERE id=?
+            """, (title, price, lessons, description, new_photo, cid))
         else:
-            conn.execute(
-                """
+            conn.execute("""
                 UPDATE courses
-                SET title = ?, price = ?, lessons = ?, description = ?
-                WHERE id = ?
-                """,
-                (title, price, lessons, description, cid),
-            )
+                SET title=?, price=?, lessons=?, description=?
+                WHERE id=?
+            """, (title, price, lessons, description, cid))
 
         conn.commit()
         conn.close()
@@ -692,6 +689,7 @@ def admin_courses_edit(cid):
 
     conn.close()
     return render_template("admin_course_edit.html", course=course)
+
 
 
 
