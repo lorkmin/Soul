@@ -71,26 +71,32 @@
       </aside>
     </section>
 
-    <div class="teachers-grid">
-      {% for t in teachers %}
-        <article class="teacher-card animate-on-scroll" data-id="{{ t.id }}">
-          <img src="/static/uploads/teachers/{{ t.photo }}" class="teacher-photo">
-          <h4>{{ t.name }}</h4>
-          <p class="teacher-role">{{ t.role }}</p>
-        </article>
+    <section id="teachers">
+        <div class="section-inner">
+            <div class="section-title">
+                <h3>Наши преподаватели</h3>
+            </div>
 
-        <!-- Modal -->
-        <div class="teacher-modal" id="teacher-modal-{{ t.id }}">
-          <div class="teacher-modal-content">
-            <button class="teacher-modal-close">&times;</button>
-            <img src="/static/uploads/teachers/{{ t.photo }}" class="teacher-modal-photo">
-            <h3>{{ t.name }}</h3>
-            <p class="teacher-modal-role">{{ t.role }}</p>
-            <p class="teacher-modal-bio">{{ t.bio|safe }}</p>
-          </div>
+            <div class="teachers-grid">
+                {% for t in teachers %}
+                    <div class="teacher-card animate-on-scroll">
+                    
+                        <div class="teacher-photo-wrap">
+                            {% if t.photo %}
+                            <img src="{{ url_for('static', filename='uploads/teachers/' ~ t.photo) }}"
+                                 alt="{{ t.name }}">
+                            {% endif %}
+                        </div>
+
+                        <h4 class="teacher-name">{{ t.name }}</h4>
+                        <p class="teacher-role">{{ t.role }}</p>
+
+                    </div>
+                {% endfor %}
+            </div>
         </div>
-      {% endfor %}
-    </div>
+    </section>
+
 
 
     <!-- ПАКЕТЫ УСЛУГ -->
@@ -103,19 +109,13 @@
 
         <div class="courses-grid">
           {% for c in courses %}
-            <article class="course-card animate-on-scroll">
-              <img src="/static/uploads/courses/{{ c.photo }}" class="course-photo">
-
-              <h4>{{ c.title }}</h4>
-
-              <p class="course-meta">
-                {{ c.lessons }} уроков · {{ c.price }}₽
-              </p>
-
-              <p class="course-desc">
-                {{ c.description }}
-              </p>
-            </article>
+            <div class="course-card animate-on-scroll">
+                <div class="course-image-wrap">
+                    <img src="{{ url_for('static', filename='uploads/courses/' ~ c.image) }}">
+                </div>
+                <h3>{{ c.name }}</h3>
+                <p>{{ c.description }}</p>
+            </div>
           {% endfor %}
         </div>
       </div>
