@@ -1206,6 +1206,9 @@ footer a {
   color: #f0f0f0;
 }
 
+.teacher-modal-close {
+    display: none !important;
+}
 
 .courses-grid {
   margin-top: 20px;
