@@ -1280,3 +1280,9 @@ footer a {
 #about .about-box p:last-child {
   margin-bottom: 0;
 }
+
+html {
+    scroll-behavior: smooth;
+}
+
+
