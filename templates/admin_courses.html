@@ -1,0 +1,54 @@
+﻿{% extends "admin_layout.html" %}
+
+{% block content %}
+<h2>Курсы</h2>
+
+<div class="admin-form">
+  <form action="/admin/courses/add" method="post" enctype="multipart/form-data">
+    <h3>Добавить курс</h3>
+
+    <input type="text" name="title" placeholder="Название курса" required>
+    <input type="number" name="price" placeholder="Цена" required>
+    <input type="number" name="lessons" placeholder="Количество уроков" required>
+
+    <textarea name="description" rows="4" placeholder="Описание курса"></textarea>
+
+    <label>Фото:</label>
+    <input type="file" name="photo" accept="image/*">
+
+    <button class="admin-btn" type="submit">Добавить</button>
+  </form>
+</div>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>Фото</th>
+      <th>Название</th>
+      <th>Цена</th>
+      <th>Уроки</th>
+      <th>Описание</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for c in courses %}
+    <tr>
+      <td><img src="/static/uploads/courses/{{ c.photo }}"></td>
+      <td>{{ c.title }}</td>
+      <td>{{ c.price }}₽</td>
+      <td>{{ c.lessons }}</td>
+      <td>{{ c.description }}</td>
+
+      <td>
+        <form action="/admin/courses/delete/{{ c.id }}" method="post">
+          <button class="admin-delete-btn">Удалить</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

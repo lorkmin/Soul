@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Админ-панель — Soul School</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="admin-container">
+
+  <nav class="admin-nav">
+    <a href="/admin/enrolls">Заявки</a>
+    <a href="/admin/reviews">Отзывы</a>
+    <a href="/admin/teachers" class="active">Преподаватели</a>
+    <a href="/admin/courses">Курсы</a>
+    <a href="/admin/logout">Выйти</a>
+  </nav>
+
+  {% block content %}{% endblock %}
+
+</div>
+
+</body>
+</html>

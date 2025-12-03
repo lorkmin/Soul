@@ -1,0 +1,51 @@
+{% extends "admin_layout.html" %}
+
+{% block content %}
+
+<h2>Преподаватели</h2>
+
+<div class="admin-form">
+  <form action="/admin/teachers/add" method="post" enctype="multipart/form-data">
+    <h3>Добавить преподавателя</h3>
+
+    <input type="text" name="name" placeholder="Имя" required>
+    <input type="text" name="role" placeholder="Роль / уровень" required>
+    <textarea name="bio" rows="4" placeholder="Биография / опыт"></textarea>
+
+    <label>Фото:</label>
+    <input type="file" name="photo" accept="image/*">
+
+    <button class="admin-btn" type="submit">Добавить</button>
+  </form>
+</div>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>Фото</th>
+      <th>Имя</th>
+      <th>Роль</th>
+      <th>Биография</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for t in teachers %}
+    <tr>
+      <td><img src="/static/uploads/teachers/{{ t.photo }}"></td>
+      <td>{{ t.name }}</td>
+      <td>{{ t.role }}</td>
+      <td>{{ t.bio }}</td>
+
+      <td>
+        <form action="/admin/teachers/delete/{{ t.id }}" method="post">
+          <button class="admin-delete-btn">Удалить</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

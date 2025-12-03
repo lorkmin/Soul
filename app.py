@@ -38,6 +38,27 @@ ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")  # ОБЯЗАТЕЛЬНО поме�
 # Анти-спам по заявкам
 ENROLL_SPAM_SECONDS = 60  # интервал между заявками с одного IP (в секундах)
 
+UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads")
+TEACHER_UPLOAD = os.path.join(UPLOAD_FOLDER, "teachers")
+COURSE_UPLOAD = os.path.join(UPLOAD_FOLDER, "courses")
+
+for path in (UPLOAD_FOLDER, TEACHER_UPLOAD, COURSE_UPLOAD):
+    os.makedirs(path, exist_ok=True)
+
+ALLOWED_EXT = {"png", "jpg", "jpeg", "webp"}
+
+def save_upload(file, folder):
+    if not file:
+        return None
+    ext = file.filename.rsplit(".", 1)[-1].lower()
+    if ext not in ALLOWED_EXT:
+        return None
+    filename = f"{datetime.utcnow().timestamp()}.{ext}"
+    filepath = os.path.join(folder, filename)
+    file.save(filepath)
+    return filename
+
+
 
 # ================== БАЗА ДАННЫХ ==================
 
@@ -96,6 +117,32 @@ def init_db():
 
 
 init_db()
+
+
+# ===== TEACHERS =====
+cur.execute("""
+    CREATE TABLE IF NOT EXISTS teachers (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        role TEXT,
+        bio TEXT,
+        photo TEXT DEFAULT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+""")
+
+# ===== COURSES =====
+cur.execute("""
+    CREATE TABLE IF NOT EXISTS courses (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        price INTEGER,
+        lessons INTEGER,
+        description TEXT,
+        photo TEXT DEFAULT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+""")
 
 
 # ================== ХЕЛПЕРЫ ==================
@@ -467,6 +514,80 @@ def admin_review_hide(review_id: int):
     conn.commit()
     conn.close()
     return redirect(url_for("admin_reviews"))
+
+@app.get("/admin/teachers")
+@login_required
+def admin_teachers():
+    conn = get_db()
+    rows = conn.execute("SELECT * FROM teachers ORDER BY created_at DESC").fetchall()
+    conn.close()
+    return render_template("admin_teachers.html", teachers=rows)
+
+@app.post("/admin/teachers/add")
+@login_required
+def admin_teachers_add():
+    name = request.form["name"]
+    role = request.form["role"]
+    bio = request.form["bio"]
+    photo = save_upload(request.files.get("photo"), TEACHER_UPLOAD)
+
+    conn = get_db()
+    conn.execute(
+        "INSERT INTO teachers (name, role, bio, photo) VALUES (?, ?, ?, ?)",
+        (name, role, bio, photo),
+    )
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for("admin_teachers"))
+
+@app.post("/admin/teachers/delete/<int:tid>")
+@login_required
+def admin_teachers_delete(tid):
+    conn = get_db()
+    conn.execute("DELETE FROM teachers WHERE id=?", (tid,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for("admin_teachers"))
+
+@app.get("/admin/courses")
+@login_required
+def admin_courses():
+    conn = get_db()
+    rows = conn.execute("SELECT * FROM courses ORDER BY created_at DESC").fetchall()
+    conn.close()
+    return render_template("admin_courses.html", courses=rows)
+
+@app.post("/admin/courses/add")
+@login_required
+def admin_courses_add():
+    title = request.form["title"]
+    price = request.form["price"]
+    lessons = request.form["lessons"]
+    description = request.form["description"]
+    photo = save_upload(request.files.get("photo"), COURSE_UPLOAD)
+
+    conn = get_db()
+    conn.execute("""
+        INSERT INTO courses (title, price, lessons, description, photo)
+        VALUES (?, ?, ?, ?, ?)
+    """, (title, price, lessons, description, photo))
+
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for("admin_courses"))
+
+@app.post("/admin/courses/delete/<int:cid>")
+@login_required
+def admin_courses_delete(cid):
+    conn = get_db()
+    conn.execute("DELETE FROM courses WHERE id=?", (cid,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for("admin_courses"))
+
+
 
 
 # ================== DEV-запуск ==================
