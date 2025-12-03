@@ -513,6 +513,16 @@ def admin_review_hide(review_id: int):
     conn.close()
     return redirect(url_for("admin_reviews"))
 
+@app.post("/admin/reviews/<int:review_id>/delete")
+@login_required
+def admin_review_delete(review_id: int):
+    conn = get_db()
+    conn.execute("DELETE FROM reviews WHERE id = ?", (review_id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for("admin_reviews"))
+
+
 @app.get("/admin/teachers")
 @login_required
 def admin_teachers():
@@ -547,6 +557,47 @@ def admin_teachers_delete(tid):
     conn.commit()
     conn.close()
     return redirect(url_for("admin_teachers"))
+
+@app.route("/admin/teachers/<int:tid>/edit", methods=["GET", "POST"])
+@login_required
+def admin_teachers_edit(tid):
+    conn = get_db()
+
+    # текущий преподаватель
+    teacher = conn.execute(
+        "SELECT * FROM teachers WHERE id = ?",
+        (tid,),
+    ).fetchone()
+
+    if not teacher:
+        conn.close()
+        return redirect(url_for("admin_teachers"))
+
+    if request.method == "POST":
+        name = request.form["name"]
+        role = request.form["role"]
+        bio = request.form["bio"]
+        file = request.files.get("photo")
+        new_photo = save_upload(file, TEACHER_UPLOAD) if file and file.filename else None
+
+        if new_photo:
+            conn.execute(
+                "UPDATE teachers SET name = ?, role = ?, bio = ?, photo = ? WHERE id = ?",
+                (name, role, bio, new_photo, tid),
+            )
+        else:
+            conn.execute(
+                "UPDATE teachers SET name = ?, role = ?, bio = ? WHERE id = ?",
+                (name, role, bio, tid),
+            )
+
+        conn.commit()
+        conn.close()
+        return redirect(url_for("admin_teachers"))
+
+    conn.close()
+    return render_template("admin_teacher_edit.html", teacher=teacher)
+
 
 @app.get("/admin/courses")
 @login_required
@@ -585,6 +636,52 @@ def admin_courses_delete(cid):
     conn.close()
     return redirect(url_for("admin_courses"))
 
+@app.route("/admin/courses/<int:cid>/edit", methods=["GET", "POST"])
+@login_required
+def admin_courses_edit(cid):
+    conn = get_db()
+    course = conn.execute(
+        "SELECT * FROM courses WHERE id = ?",
+        (cid,),
+    ).fetchone()
+
+    if not course:
+        conn.close()
+        return redirect(url_for("admin_courses"))
+
+    if request.method == "POST":
+        title = request.form["title"]
+        price = request.form["price"]
+        lessons = request.form["lessons"]
+        description = request.form["description"]
+        file = request.files.get("photo")
+        new_photo = save_upload(file, COURSE_UPLOAD) if file and file.filename else None
+
+        if new_photo:
+            conn.execute(
+                """
+                UPDATE courses
+                SET title = ?, price = ?, lessons = ?, description = ?, photo = ?
+                WHERE id = ?
+                """,
+                (title, price, lessons, description, new_photo, cid),
+            )
+        else:
+            conn.execute(
+                """
+                UPDATE courses
+                SET title = ?, price = ?, lessons = ?, description = ?
+                WHERE id = ?
+                """,
+                (title, price, lessons, description, cid),
+            )
+
+        conn.commit()
+        conn.close()
+        return redirect(url_for("admin_courses"))
+
+    conn.close()
+    return render_template("admin_course_edit.html", course=course)
 
 
 

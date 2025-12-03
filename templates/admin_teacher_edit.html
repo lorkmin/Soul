@@ -1,0 +1,32 @@
+﻿{% extends "admin_layout.html" %}
+
+{% block content %}
+<h2>Редактировать курс</h2>
+
+<div class="admin-form">
+  <form action="{{ url_for('admin_courses_edit', cid=course.id) }}"
+        method="post"
+        enctype="multipart/form-data">
+
+    <input type="text" name="title" value="{{ course.title }}" placeholder="Название курса" required>
+    <input type="number" name="price" value="{{ course.price }}" placeholder="Цена, ₽" required>
+    <input type="number" name="lessons" value="{{ course.lessons }}" placeholder="Количество уроков" required>
+
+    <textarea name="description" rows="4" placeholder="Описание курса">{{ course.description }}</textarea>
+
+    <p style="font-size:0.9rem;margin:8px 0;">Текущее изображение:</p>
+    {% if course.photo %}
+      <img src="{{ url_for('static', filename='uploads/courses/' ~ course.photo) }}"
+           style="width:140px;height:90px;object-fit:cover;border-radius:10px;margin-bottom:10px;">
+    {% else %}
+      <p style="font-size:0.9rem;color:var(--text-muted);">Картинка не загружена</p>
+    {% endif %}
+
+    <label>Новое изображение (если нужно заменить):</label>
+    <input type="file" name="photo" accept="image/*">
+
+    <button class="admin-btn" type="submit">Сохранить</button>
+    <a href="{{ url_for('admin_courses') }}" class="btn-link" style="margin-left:10px;">Отмена</a>
+  </form>
+</div>
+{% endblock %}
