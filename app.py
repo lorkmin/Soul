@@ -629,8 +629,7 @@ def admin_courses_add():
     description = request.form["description"]
     photo = save_upload(request.files.get("photo"), COURSE_UPLOAD)
 
-   conn = get_db()
-   conn.row_factory = sqlite3.Row
+    conn = get_db()
     conn.execute("""
         INSERT INTO courses (title, price, lessons, description, photo)
         VALUES (?, ?, ?, ?, ?)
@@ -645,7 +644,6 @@ def admin_courses_add():
 @login_required
 def admin_courses_delete(cid):
     conn = get_db()
-    conn.row_factory = sqlite3.Row
     conn.execute("DELETE FROM courses WHERE id=?", (cid,))
     conn.commit()
     conn.close()
