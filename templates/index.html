@@ -472,30 +472,41 @@
 </script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const animated = document.querySelectorAll('.animate-on-scroll');
-
-    if (!('IntersectionObserver' in window) || !animated.length) {
-      // старые браузеры или нет элементов — просто показываем всё
-      animated.forEach(el => el.classList.add('visible'));
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            obs.unobserve(entry.target); // анимация 1 раз
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    animated.forEach(el => observer.observe(el));
+document.addEventListener('DOMContentLoaded', function () {
+  // открытие модалки по клику на карточку
+  document.querySelectorAll('.teacher-card').forEach(function(card) {
+    card.addEventListener('click', function () {
+      const id = card.dataset.teacherId;
+      if (!id) return;
+      const modal = document.getElementById('teacher-modal-' + id);
+      if (modal) modal.classList.add('active');
+    });
   });
+
+  // закрытие по кнопке
+  document.querySelectorAll('.teacher-modal-close').forEach(function(btn) {
+    btn.addEventListener('click', function (e) {
+      const modal = btn.closest('.teacher-modal');
+      if (modal) modal.classList.remove('active');
+    });
+  });
+
+  // закрытие кликом по фону
+  document.querySelectorAll('.teacher-modal').forEach(function(modal) {
+    modal.addEventListener('click', function (e) {
+      if (e.target === modal) modal.classList.remove('active');
+    });
+  });
+
+  // optional: close on Esc
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.teacher-modal.active').forEach(function(m){ m.classList.remove('active'); });
+    }
+  });
+});
 </script>
+
 
 
 </body>
