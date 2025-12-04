@@ -1,37 +1,37 @@
-{% extends "admin_layout.html" %}
+п»ї{% extends "admin_layout.html" %}
 
 {% block content %}
-<h2>{{ 'Редактировать ученика' if student else 'Добавить ученика' }}</h2>
+<h2>{{ 'Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ СѓС‡РµРЅРёРєР°' if student else 'Р”РѕР±Р°РІРёС‚СЊ СѓС‡РµРЅРёРєР°' }}</h2>
 
 <div class="admin-form">
   <form method="post">
     {% if student %}
-      <p>Код для ученика: <code>{{ student['public_code'] }}</code></p>
+      <p>РљРѕРґ РґР»СЏ СѓС‡РµРЅРёРєР°: <code>{{ student['public_code'] }}</code></p>
     {% endif %}
 
-    <label>Имя</label>
-    <input type="text" name="name" value="{{ student['name'] if student else '' }}" placeholder="Имя ученика">
+    <label>РРјСЏ</label>
+    <input type="text" name="name" value="{{ student['name'] if student else '' }}" placeholder="РРјСЏ СѓС‡РµРЅРёРєР°">
 
-    <label>Курс / группа</label>
-    <input type="text" name="course" value="{{ student['course'] if student else '' }}" placeholder="Например: Начальный-1">
+    <label>РљСѓСЂСЃ / РіСЂСѓРїРїР°</label>
+    <input type="text" name="course" value="{{ student['course'] if student else '' }}" placeholder="РќР°РїСЂРёРјРµСЂ: РќР°С‡Р°Р»СЊРЅС‹Р№-1">
 
-    <label>Дата последней оплаты (ГГГГ-ММ-ДД)</label>
+    <label>Р”Р°С‚Р° РїРѕСЃР»РµРґРЅРµР№ РѕРїР»Р°С‚С‹ (Р“Р“Р“Р“-РњРњ-Р”Р”)</label>
     <input type="text" name="last_payment_date" value="{{ student['last_payment_date'] if student else '' }}" placeholder="2025-02-01">
 
-    <label>Сумма последней оплаты</label>
+    <label>РЎСѓРјРјР° РїРѕСЃР»РµРґРЅРµР№ РѕРїР»Р°С‚С‹</label>
     <input type="number" name="last_payment_amount" value="{{ student['last_payment_amount'] if student else '' }}" min="0">
 
-    <label>Всего занятий в пакете</label>
+    <label>Р’СЃРµРіРѕ Р·Р°РЅСЏС‚РёР№ РІ РїР°РєРµС‚Рµ</label>
     <input type="number" name="lessons_total" value="{{ student['lessons_total'] if student else '' }}" min="0">
 
-    <label>Осталось занятий</label>
+    <label>РћСЃС‚Р°Р»РѕСЃСЊ Р·Р°РЅСЏС‚РёР№</label>
     <input type="number" name="lessons_left" value="{{ student['lessons_left'] if student else '' }}" min="0">
 
-    <label>Комментарий (для себя)</label>
-    <textarea name="comment" rows="3" placeholder="Доп. инфо: формат, особые условия и т.п.">{{ student['comment'] if student else '' }}</textarea>
+    <label>РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РґР»СЏ СЃРµР±СЏ)</label>
+    <textarea name="comment" rows="3" placeholder="Р”РѕРї. РёРЅС„Рѕ: С„РѕСЂРјР°С‚, РѕСЃРѕР±С‹Рµ СѓСЃР»РѕРІРёСЏ Рё С‚.Рї.">{{ student['comment'] if student else '' }}</textarea>
 
     <button class="admin-btn" type="submit">
-      {{ 'Сохранить' if student else 'Создать' }}
+      {{ 'РЎРѕС…СЂР°РЅРёС‚СЊ' if student else 'РЎРѕР·РґР°С‚СЊ' }}
     </button>
   </form>
 </div>
