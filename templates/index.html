@@ -685,6 +685,18 @@
             }
             });
 
+            // закрытие по клику на серую область (псевдоэлемент ::before)
+            courseModals.forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                // если кликнули именно по самому контейнеру, а не по контенту
+                if (e.target === modal) {
+                modal.classList.remove('active');
+                currentCourseIndex = null;
+                updateBodyModalState();
+                }
+            });
+            });
+
 
             // стрелка "влево"
             document.querySelectorAll('.course-modal-prev').forEach(btn => {
