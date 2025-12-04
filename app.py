@@ -5,6 +5,7 @@ from functools import wraps
 import io
 import csv
 import random
+import traceback
 
 import requests
 from flask import (
@@ -963,6 +964,15 @@ def student_dashboard():
         not_found=not_found,
     )
 
+
+@app.errorhandler(500)
+def internal_error_handler(error):
+    print("\n" + "="*60)
+    print("🔥 INTERNAL SERVER ERROR")
+    print("-"*60)
+    traceback.print_exc()
+    print("="*60 + "\n")
+    return "Произошла внутренняя ошибка сервера. Ошибка записана в лог.", 500
 
 
 # ================== DEV-запуск ==================
