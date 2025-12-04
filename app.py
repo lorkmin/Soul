@@ -90,12 +90,16 @@ def init_db():
     cur.execute("""
         CREATE TABLE IF NOT EXISTS enrolls (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            ip TEXT,
             name TEXT NOT NULL,
-            phone TEXT NOT NULL,
-            course TEXT,
+            contact TEXT NOT NULL,
+            tariff TEXT,
+            level TEXT,
+            comment TEXT,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
     """)
+
 
     # ---- TEACHERS ----
     cur.execute("""
