@@ -315,15 +315,16 @@
                                 <label for="name">Имя</label>
                                 <input id="name" name="name" type="text" required placeholder="Ваше имя" />
                             </div>
-                            <div class="review-form-field">
-                                <label for="package">Пакет</label>
-                                <select id="package" name="package">
-                                    <option value="">Не выбрано</option>
-                                    <option value="Старт">Старт</option>
-                                    <option value="Продвижение">Продвижение</option>
-                                    <option value="Интенсив">Интенсив</option>
-                                </select>
-                            </div>
+                                <div class="review-form-field">
+                                    <label for="package">Пакет</label>
+                                    <select id="package" name="package">
+                                        <option value="">Не выбрано</option>
+                                        {% for c in courses %}
+                                            <option value="{{ c['title'] }}">{{ c['title'] }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>  
+
 
                             <!-- НОВЫЙ блок рейтинга звёздочками -->
                             <div class="review-form-field review-form-rating">
