@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from functools import wraps
 import io
 import csv
+import random
 
 import requests
 from flask import (
@@ -42,6 +43,8 @@ UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads")
 TEACHER_UPLOAD = os.path.join(UPLOAD_FOLDER, "teachers")
 COURSE_UPLOAD  = os.path.join(UPLOAD_FOLDER, "courses")
 GALLERY_UPLOAD = os.path.join(UPLOAD_FOLDER, "gallery")  # НОВОЕ
+TEACHER_KEY = os.getenv("TEACHER_KEY")  # типа 'teacher_very_long_secret'
+
 
 for path in (UPLOAD_FOLDER, TEACHER_UPLOAD, COURSE_UPLOAD, GALLERY_UPLOAD):
     os.makedirs(path, exist_ok=True)
@@ -58,6 +61,28 @@ def save_upload(file, folder):
     filepath = os.path.join(folder, filename)
     file.save(filepath)
     return filename
+
+
+def generate_student_code():
+    """Генерирует уникальный 6-значный код типа 038421."""
+    conn = get_db()
+    while True:
+        code = f"{random.randint(0, 999999):06d}"
+        exists = conn.execute(
+            "SELECT 1 FROM student_accounts WHERE public_code = ?",
+            (code,),
+        ).fetchone()
+        if not exists:
+            conn.close()
+            return code
+
+def teacher_login_required(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if not session.get("teacher_logged_in"):
+            return redirect(url_for("teacher_login", next=request.path))
+        return f(*args, **kwargs)
+    return wrapper
 
 
 
@@ -136,7 +161,21 @@ def init_db():
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
     """)
-
+    # ---- STUDENT ACCOUNTS ----
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS student_accounts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            public_code TEXT NOT NULL UNIQUE,        -- 6-значный код для ученика
+            name TEXT,                               -- имя ученика
+            course TEXT,                             -- курс/группа
+            last_payment_date TEXT,                  -- дата последней оплаты (строкой YYYY-MM-DD)
+            last_payment_amount INTEGER,             -- сумма последней оплаты
+            lessons_total INTEGER,                   -- всего занятий в текущем пакете
+            lessons_left INTEGER,                    -- сколько осталось
+            comment TEXT,                            -- любые пометки препода
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+    """)
 
     conn.commit()
     conn.close()
@@ -760,6 +799,169 @@ def admin_gallery_delete(gid):
     conn.close()
     return redirect(url_for("admin_gallery"))
 
+
+# ================== TEACHER DASHBOARD ==================
+
+@app.get("/teacher/login")
+def teacher_login():
+    error = request.args.get("error")
+    return render_template("teacher_login.html", error=error)
+
+
+@app.post("/teacher/login")
+def teacher_login_post():
+    code = (request.form.get("code") or "").strip()
+    if TEACHER_KEY and code == TEACHER_KEY:
+        session["teacher_logged_in"] = True
+        next_url = request.args.get("next") or url_for("teacher_students")
+        return redirect(next_url)
+    error = "Неверный ID преподавателя"
+    return render_template("teacher_login.html", error=error)
+
+
+@app.get("/teacher/logout")
+def teacher_logout():
+    session.pop("teacher_logged_in", None)
+    return redirect(url_for("teacher_login"))
+
+
+@app.get("/teacher/students")
+@teacher_login_required
+def teacher_students():
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+    students = conn.execute(
+        "SELECT * FROM student_accounts ORDER BY name COLLATE NOCASE"
+    ).fetchall()
+    conn.close()
+    return render_template("teacher_students.html", students=students)
+
+
+@app.route("/teacher/students/add", methods=["GET", "POST"])
+@teacher_login_required
+def teacher_students_add():
+    if request.method == "POST":
+        name = (request.form.get("name") or "").strip()
+        course = (request.form.get("course") or "").strip()
+        last_payment_date = (request.form.get("last_payment_date") or "").strip()
+        last_payment_amount = request.form.get("last_payment_amount") or None
+        lessons_total = request.form.get("lessons_total") or None
+        lessons_left = request.form.get("lessons_left") or None
+        comment = (request.form.get("comment") or "").strip()
+
+        code = generate_student_code()
+
+        conn = get_db()
+        conn.execute(
+            """
+            INSERT INTO student_accounts (
+                public_code, name, course, last_payment_date,
+                last_payment_amount, lessons_total, lessons_left, comment
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                code,
+                name or None,
+                course or None,
+                last_payment_date or None,
+                int(last_payment_amount) if last_payment_amount else None,
+                int(lessons_total) if lessons_total else None,
+                int(lessons_left) if lessons_left else None,
+                comment or None,
+            ),
+        )
+        conn.commit()
+        conn.close()
+        # после создания просто возвращаемся к списку
+        return redirect(url_for("teacher_students"))
+
+    return render_template("teacher_student_form.html", student=None)
+
+
+@app.route("/teacher/students/<int:sid>/edit", methods=["GET", "POST"])
+@teacher_login_required
+def teacher_students_edit(sid):
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+    student = conn.execute(
+        "SELECT * FROM student_accounts WHERE id = ?",
+        (sid,),
+    ).fetchone()
+
+    if not student:
+        conn.close()
+        return redirect(url_for("teacher_students"))
+
+    if request.method == "POST":
+        name = (request.form.get("name") or "").strip()
+        course = (request.form.get("course") or "").strip()
+        last_payment_date = (request.form.get("last_payment_date") or "").strip()
+        last_payment_amount = request.form.get("last_payment_amount") or None
+        lessons_total = request.form.get("lessons_total") or None
+        lessons_left = request.form.get("lessons_left") or None
+        comment = (request.form.get("comment") or "").strip()
+
+        conn.execute(
+            """
+            UPDATE student_accounts
+            SET name = ?, course = ?, last_payment_date = ?,
+                last_payment_amount = ?, lessons_total = ?, lessons_left = ?,
+                comment = ?, updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+            """,
+            (
+                name or None,
+                course or None,
+                last_payment_date or None,
+                int(last_payment_amount) if last_payment_amount else None,
+                int(lessons_total) if lessons_total else None,
+                int(lessons_left) if lessons_left else None,
+                comment or None,
+                sid,
+            ),
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for("teacher_students"))
+
+    conn.close()
+    return render_template("teacher_student_form.html", student=student)
+
+
+@app.post("/teacher/students/<int:sid>/delete")
+@teacher_login_required
+def teacher_students_delete(sid):
+    conn = get_db()
+    conn.execute("DELETE FROM student_accounts WHERE id = ?", (sid,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for("teacher_students"))
+
+
+@app.route("/student", methods=["GET", "POST"])
+def student_dashboard():
+    code = ""
+    student = None
+    not_found = False
+
+    if request.method == "POST":
+        code = (request.form.get("code") or "").strip()
+        conn = get_db()
+        conn.row_factory = sqlite3.Row
+        student = conn.execute(
+            "SELECT * FROM student_accounts WHERE public_code = ?",
+            (code,),
+        ).fetchone()
+        conn.close()
+        if not student:
+            not_found = True
+
+    return render_template(
+        "student_dashboard.html",
+        code=code,
+        student=student,
+        not_found=not_found,
+    )
 
 
 

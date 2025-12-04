@@ -1,0 +1,49 @@
+{% extends "admin_layout.html" %}
+
+{% block content %}
+<h2>”ченики (дашборд)</h2>
+
+<div class="admin-form" style="margin-bottom:20px;">
+  <a class="admin-btn" href="{{ url_for('teacher_students_add') }}">ƒобавить ученика</a>
+  <a class="admin-btn" href="{{ url_for('teacher_logout') }}" style="margin-left:10px;">¬ыйти из панели преподавател€</a>
+</div>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>ID дл€ ученика</th>
+      <th>»м€</th>
+      <th> урс</th>
+      <th>¬сего зан€тий</th>
+      <th>ќсталось</th>
+      <th>ѕоследн€€ оплата</th>
+      <th>—умма</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for s in students %}
+      <tr>
+        <td><code>{{ s['public_code'] }}</code></td>
+        <td>{{ s['name'] or 'Ч' }}</td>
+        <td>{{ s['course'] or 'Ч' }}</td>
+        <td>{{ s['lessons_total'] or 'Ч' }}</td>
+        <td>{{ s['lessons_left'] or 'Ч' }}</td>
+        <td>{{ s['last_payment_date'] or 'Ч' }}</td>
+        <td>{{ s['last_payment_amount'] or 'Ч' }}</td>
+        <td>
+          <a class="admin-btn" href="{{ url_for('teacher_students_edit', sid=s['id']) }}">–едактировать</a>
+          <form action="{{ url_for('teacher_students_delete', sid=s['id']) }}"
+                method="post"
+                style="display:inline;"
+                onsubmit="return confirm('”далить этого ученика?');">
+            <button class="admin-delete-btn" type="submit">”далить</button>
+          </form>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="8">ѕока нет учеников.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

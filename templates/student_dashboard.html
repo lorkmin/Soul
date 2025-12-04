@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Личный дашборд ученика — Soul</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style_light.css') }}">
+</head>
+<body>
+  <div class="wrapper">
+    <section>
+      <div class="section-inner">
+        <div class="section-title">
+          <h3>Личный кабинет ученика</h3>
+          <span>посмотрите ваши оплаты и оставшиеся занятия</span>
+        </div>
+
+        <div class="enroll-box" style="max-width:520px;">
+          <form method="post">
+            <div class="form-field">
+              <label for="code">Ваш 6-значный ID</label>
+              <input id="code" name="code" type="text" maxlength="6"
+                     placeholder="например, 038421" value="{{ code or '' }}" required>
+            </div>
+            <button class="btn-primary form-submit" type="submit">Показать данные</button>
+          </form>
+
+          {% if not_found %}
+            <p style="color:#c00; margin-top:10px;">Запись с таким ID не найдена. Проверьте код или спросите у преподавателя.</p>
+          {% endif %}
+
+          {% if student %}
+            <hr style="margin:20px 0; border:none; border-top:1px solid rgba(0,0,0,0.06);">
+
+            <h4 style="margin-bottom:10px;">{{ student['name'] or 'Ученик' }}</h4>
+            {% if student['course'] %}
+              <p style="margin:0 0 10px 0; color:#666;">Курс: {{ student['course'] }}</p>
+            {% endif %}
+
+            <p><strong>Всего занятий в пакете:</strong> {{ student['lessons_total'] or '—' }}</p>
+            <p><strong>Осталось занятий:</strong> {{ student['lessons_left'] or '—' }}</p>
+
+            <p style="margin-top:10px;">
+              <strong>Последняя оплата:</strong>
+              {{ student['last_payment_date'] or '—' }}
+              {% if student['last_payment_amount'] %}
+                · {{ student['last_payment_amount'] }} ?
+              {% endif %}
+            </p>
+
+            {% if student['comment'] %}
+              <p style="margin-top:10px; color:#777;">Комментарий от школы:<br>{{ student['comment'] }}</p>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
