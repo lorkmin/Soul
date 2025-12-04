@@ -1895,3 +1895,64 @@ section[id] {
     grid-template-columns: 1fr;
   }
 }
+/* ===================== FAQ ===================== */
+
+.faq-grid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.faq-item {
+  border-radius: 18px;
+  border: 1px solid var(--border-soft);
+  background: #ffffff;
+  box-shadow: var(--shadow-soft);
+  padding: 10px 14px;
+}
+
+.faq-item summary {
+  list-style: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.98rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* убираем стандартный треугольник */
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+/* свой маркер */
+.faq-item summary::before {
+  content: "❓";
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* раскрывшееся состояние */
+.faq-item[open] summary::before {
+  content: "✨";
+}
+
+.faq-item p {
+  margin: 8px 0 4px 24px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-main);
+}
+
+/* немного сжать на мобиле */
+@media (max-width: 600px) {
+  .faq-item {
+    padding: 9px 12px;
+  }
+
+  .faq-item p {
+    margin-left: 20px;
+  }
+}
