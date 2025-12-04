@@ -718,11 +718,13 @@ def admin_courses_edit(cid):
 @login_required
 def admin_gallery():
     conn = get_db()
+    conn.row_factory = sqlite3.Row        # ← вот этого не хватало
     images = conn.execute(
         "SELECT * FROM gallery ORDER BY created_at DESC"
     ).fetchall()
     conn.close()
     return render_template("admin_gallery.html", images=images)
+
 
 
 @app.post("/admin/gallery/add")
@@ -731,12 +733,11 @@ def admin_gallery_add():
     title = (request.form.get("title") or "").strip()
     description = (request.form.get("description") or "").strip()
     photo = save_upload(request.files.get("photo"), GALLERY_UPLOAD)
-
-    # без фото ничего добавлять не будем
     if not photo:
         return redirect(url_for("admin_gallery"))
 
     conn = get_db()
+    conn.row_factory = sqlite3.Row
     conn.execute(
         "INSERT INTO gallery (title, description, photo) VALUES (?, ?, ?)",
         (title or None, description or None, photo),
@@ -750,10 +751,12 @@ def admin_gallery_add():
 @login_required
 def admin_gallery_delete(gid):
     conn = get_db()
+    conn.row_factory = sqlite3.Row
     conn.execute("DELETE FROM gallery WHERE id=?", (gid,))
     conn.commit()
     conn.close()
     return redirect(url_for("admin_gallery"))
+
 
 
 
