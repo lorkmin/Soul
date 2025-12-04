@@ -713,13 +713,20 @@ def admin_courses_edit(cid):
 @app.get("/admin/gallery")
 @login_required
 def admin_gallery():
-    conn = get_db()
-    conn.row_factory = sqlite3.Row        # ← вот этого не хватало
-    images = conn.execute(
-        "SELECT * FROM gallery ORDER BY created_at DESC"
-    ).fetchall()
-    conn.close()
-    return render_template("admin_gallery.html", images=images)
+    try:
+        conn = get_db()
+        conn.row_factory = sqlite3.Row
+        images = conn.execute(
+            "SELECT * FROM gallery ORDER BY created_at DESC"
+        ).fetchall()
+        conn.close()
+        return render_template("admin_gallery.html", images=images)
+    except Exception as e:
+        import traceback
+        print("ERROR in /admin/gallery:", e)
+        traceback.print_exc()  # полный стэк в консоль
+        return f"Ошибка в галерее: {e}", 500
+
 
 
 
