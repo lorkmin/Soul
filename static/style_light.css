@@ -388,6 +388,16 @@ section:nth-of-type(even) {
   display: block;
 }
 
+/* аккуратная картинка в модалке курса */
+.course-modal-image {
+  max-height: 220px;        /* ниже, чтобы не съедала весь экран */
+  object-fit: contain;      /* полностью помещается, ничего не обрезается */
+  background: #fff7e9;      /* приятный фон под иллюстрацию */
+  border-radius: 18px;
+  padding: 10px;            /* чуть воздуха вокруг картинки */
+}
+
+
 /* заголовки и текст в модалке */
 .teacher-modal-inner h3,
 .course-modal-title {
