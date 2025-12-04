@@ -758,10 +758,6 @@ section[id] {
   }
 }
 
-#gallery .section-inner {
-  max-width: 1200px;
-}
-
 
 /* ---------- Инструменты ---------- */
 .tools-grid {
@@ -2007,36 +2003,12 @@ section[id] {
 }
 
 /* чуть разный наклон и смещение для первых пяти */
-.gallery-stack-item:nth-child(1) {
-  left: 0;
-  top: 30px;
-  transform: rotate(-5deg);
-  z-index: 1;
-}
-.gallery-stack-item:nth-child(2) {
-  left: 80px;
-  top: 10px;
-  transform: rotate(2deg);
-  z-index: 2;
-}
-.gallery-stack-item:nth-child(3) {
-  left: 160px;
-  top: 40px;
-  transform: rotate(-2deg);
-  z-index: 3;
-}
-.gallery-stack-item:nth-child(4) {
-  left: 240px;
-  top: 20px;
-  transform: rotate(4deg);
-  z-index: 4;
-}
-.gallery-stack-item:nth-child(5) {
-  left: 320px;
-  top: 35px;
-  transform: rotate(-3deg);
-  z-index: 5;
-}
+.gallery-stack-item:nth-child(1) { left: 0;   top: 40px; }
+.gallery-stack-item:nth-child(2) { left: 120px; top: 0; }
+.gallery-stack-item:nth-child(3) { left: 240px; top: 50px; }
+.gallery-stack-item:nth-child(4) { left: 360px; top: 20px; }
+.gallery-stack-item:nth-child(5) { left: 480px; top: 60px; }
+
 
 /* hover — карточка чуть выезжает */
 .gallery-stack-item:hover {
@@ -2058,23 +2030,14 @@ section[id] {
 
 /* мобильная версия: просто ряд карточек без сильного наложения */
 @media (max-width: 780px) {
-  .gallery-stack {
-    height: auto;
-    display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    padding-bottom: 6px;
-  }
+    .gallery-stack {
+      height: 360px; /* было 260 */
+    }
 
-  .gallery-stack-item {
-    position: relative;
-    left: 0;
-    top: 0;
-    transform: rotate(0);
-    width: 180px;
-    height: 130px;
-    flex-shrink: 0;
-  }
+    .gallery-stack-item {
+      width: 300px;     /* было 220px */
+      height: 220px;    /* было 160px */
+    }
 }
 
 /* ---------- Лайтбокс ---------- */
