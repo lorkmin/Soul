@@ -1405,3 +1405,187 @@ section[id] {
     grid-template-columns: 1fr;
   }
 }
+/* ===================== ПРЕПОДАВАТЕЛИ ===================== */
+
+.teachers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.teacher-card {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 14px 14px 12px;
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: center;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.teacher-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.08);
+  border-color: rgba(244, 201, 76, 0.6);
+}
+
+.teacher-photo-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #fff7e9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.teacher-photo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.teacher-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.teacher-name {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.teacher-role {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.teacher-mini {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.teacher-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.teacher-pill {
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #fffaf2;
+  border: 1px solid rgba(244, 201, 76, 0.5);
+}
+
+/* ---------- МОДАЛКА ПРЕПОДАВАТЕЛЯ ---------- */
+
+.teacher-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.teacher-modal.active {
+  display: flex;
+}
+
+.teacher-modal-content {
+  background: #ffffff;
+  border-radius: 24px;
+  max-width: 560px;
+  width: 100%;
+  padding: 18px 20px 18px;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.teacher-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  border: none;
+  background: transparent;
+  font-size: 1.4rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.teacher-modal-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.teacher-modal-header {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.teacher-modal-photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 24px;
+  object-fit: cover;
+}
+
+.teacher-modal-name {
+  margin: 0 0 4px;
+  font-size: 1.2rem;
+}
+
+.teacher-modal-role {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.teacher-modal-tagline {
+  margin: 6px 0 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.teacher-modal-bio {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-main);
+}
+
+/* Адаптив модалки на мобилке */
+@media (max-width: 600px) {
+  .teacher-modal-content {
+    padding: 16px 14px 16px;
+  }
+
+  .teacher-modal-header {
+    grid-template-columns: 1fr;
+  }
+
+  .teacher-modal-photo {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+

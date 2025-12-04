@@ -219,43 +219,67 @@
         <!-- ========================================================= -->
 
         <section id="teachers">
-            <div class="section-inner">
-                <div class="section-title">
-                    <h3>Наши преподаватели</h3>
-                </div>
-
-                <div class="teachers-grid">
-                    {% for t in teachers %}
-                    <article class="teacher-card animate-on-scroll" data-teacher-id="{{ t.id }}">
-                        <div class="teacher-photo-wrap">
-                            {% if t.photo %}
-                            <img src="{{ url_for('static', filename='uploads/teachers/' ~ t.photo) }}" alt="{{ t.name }}">
-                            {% else %}
-                            <img src="{{ url_for('static', filename='default_teacher.jpg') }}" alt="{{ t.name }}">
-                            {% endif %}
-                        </div>
-                        <h4 class="teacher-name">{{ t.name }}</h4>
-                        <p class="teacher-role">{{ t.role }}</p>
-                    </article>
-
-                    <!-- Modal for this teacher -->
-                    <div class="teacher-modal" id="teacher-modal-{{ t.id }}">
-                        <div class="teacher-modal-content">
-                            <button class="teacher-modal-close" aria-label="close">&times;</button>
-                            <div class="teacher-modal-inner">
-                                {% if t.photo %}
-                                <img src="{{ url_for('static', filename='uploads/teachers/' ~ t.photo) }}" class="teacher-modal-photo" alt="{{ t.name }}">
-                                {% endif %}
-                                <h3>{{ t.name }}</h3>
-                                <p class="teacher-modal-role">{{ t.role }}</p>
-                                <div class="teacher-modal-bio">{{ t.bio|safe }}</div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
+          <div class="section-inner">
+            <div class="section-title">
+              <h3>Наши преподаватели</h3>
+              <span>внимательные наставники, которые поддержат на каждом шаге</span>
             </div>
+
+            <div class="teachers-grid">
+              {% for t in teachers %}
+              <!-- КАРТОЧКА ПРЕПОДА -->
+              <article class="teacher-card animate-on-scroll" data-teacher-id="{{ t.id }}">
+                <div class="teacher-photo-wrap">
+                  {% if t.photo %}
+                    <img src="{{ url_for('static', filename='uploads/teachers/' ~ t.photo) }}" alt="{{ t.name }}">
+                  {% else %}
+                    <img src="{{ url_for('static', filename='default_teacher.jpg') }}" alt="{{ t.name }}">
+                  {% endif %}
+                </div>
+
+                <div class="teacher-info">
+                  <h4 class="teacher-name">{{ t.name }}</h4>
+                  <p class="teacher-role">{{ t.role }}</p>
+                  <p class="teacher-mini">
+                    Объясняет спокойно, по шагам и с примерами из жизни.
+                  </p>
+                  <div class="teacher-pill-row">
+                    <span class="teacher-pill">🌸 поддержка</span>
+                    <span class="teacher-pill">📚 понятные объяснения</span>
+                  </div>
+                </div>
+              </article>
+
+              <!-- МОДАЛКА ПРЕПОДА -->
+              <div class="teacher-modal" id="teacher-modal-{{ t.id }}">
+                <div class="teacher-modal-content">
+                  <button class="teacher-modal-close" aria-label="Закрыть">×</button>
+                  <div class="teacher-modal-inner">
+                    <div class="teacher-modal-header">
+                      {% if t.photo %}
+                        <img src="{{ url_for('static', filename='uploads/teachers/' ~ t.photo) }}"
+                             class="teacher-modal-photo" alt="{{ t.name }}">
+                      {% endif %}
+                      <div>
+                        <h3 class="teacher-modal-name">{{ t.name }}</h3>
+                        <p class="teacher-modal-role">{{ t.role }}</p>
+                        <p class="teacher-modal-tagline">
+                          ✨ Тёплый подход, живые примеры и поддержка даже на «сложных» темах.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="teacher-modal-bio">
+                      {{ t.bio|safe }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
         </section>
+
 
 
 
