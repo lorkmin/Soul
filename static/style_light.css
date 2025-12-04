@@ -758,6 +758,9 @@ section[id] {
   }
 }
 
+#gallery .section-inner {
+  max-width: 90%;  /* было ~740px */
+}
 
 /* ---------- Инструменты ---------- */
 .tools-grid {
