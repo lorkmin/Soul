@@ -837,6 +837,79 @@
     </script>
 
     <script>
+document.addEventListener("DOMContentLoaded", function () {
+  // --- Галерея: каскад -> лайтбокс ---
+  const stackItems = Array.from(document.querySelectorAll(".gallery-stack-item"));
+  const lightbox = document.getElementById("gallery-lightbox");
+  if (!lightbox || stackItems.length === 0) return;
+
+  const imgEl = document.getElementById("gallery-lightbox-image");
+  const titleEl = document.getElementById("gallery-lightbox-title");
+  const descEl = document.getElementById("gallery-lightbox-desc");
+  const btnClose = lightbox.querySelector(".gallery-lightbox-close");
+  const btnPrev = lightbox.querySelector(".gallery-lightbox-prev");
+  const btnNext = lightbox.querySelector(".gallery-lightbox-next");
+  const backdrop = lightbox.querySelector(".gallery-lightbox-backdrop");
+
+  // Соберём все фото (включая те, что не в первых 5, если они тоже есть в разметке)
+  // Но мы уже положили все нужные data-* в stackItems, так что используем их
+  let currentIndex = 0;
+
+  function showIndex(index) {
+    const item = stackItems[index];
+    if (!item) return;
+    currentIndex = index;
+    imgEl.src = item.dataset.src || "";
+    imgEl.alt = item.dataset.title || "";
+    titleEl.textContent = item.dataset.title || "";
+    descEl.textContent = item.dataset.desc || "";
+    lightbox.classList.add("active");
+  }
+
+  stackItems.forEach((btn, idx) => {
+    btn.addEventListener("click", () => showIndex(idx));
+  });
+
+  function showPrev() {
+    const prev = (currentIndex - 1 + stackItems.length) % stackItems.length;
+    showIndex(prev);
+  }
+  function showNext() {
+    const next = (currentIndex + 1) % stackItems.length;
+    showIndex(next);
+  }
+
+  btnPrev && btnPrev.addEventListener("click", function (e) {
+    e.stopPropagation();
+    showPrev();
+  });
+
+  btnNext && btnNext.addEventListener("click", function (e) {
+    e.stopPropagation();
+    showNext();
+  });
+
+  function closeLightbox() {
+    lightbox.classList.remove("active");
+  }
+
+  btnClose.addEventListener("click", function (e) {
+    e.stopPropagation();
+    closeLightbox();
+  });
+
+  backdrop.addEventListener("click", closeLightbox);
+
+  document.addEventListener("keydown", function (e) {
+    if (!lightbox.classList.contains("active")) return;
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowLeft") showPrev();
+    if (e.key === "ArrowRight") showNext();
+  });
+});
+</script>
+
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             // === АНИМАЦИЯ ПОЯВЛЕНИЯ БЛОКОВ ===
             const animated = document.querySelectorAll('.animate-on-scroll');
@@ -1029,78 +1102,7 @@
         });
     </script>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  // --- Галерея: каскад -> лайтбокс ---
-  const stackItems = Array.from(document.querySelectorAll(".gallery-stack-item"));
-  const lightbox = document.getElementById("gallery-lightbox");
-  if (!lightbox || stackItems.length === 0) return;
 
-  const imgEl = document.getElementById("gallery-lightbox-image");
-  const titleEl = document.getElementById("gallery-lightbox-title");
-  const descEl = document.getElementById("gallery-lightbox-desc");
-  const btnClose = lightbox.querySelector(".gallery-lightbox-close");
-  const btnPrev = lightbox.querySelector(".gallery-lightbox-prev");
-  const btnNext = lightbox.querySelector(".gallery-lightbox-next");
-  const backdrop = lightbox.querySelector(".gallery-lightbox-backdrop");
-
-  // Соберём все фото (включая те, что не в первых 5, если они тоже есть в разметке)
-  // Но мы уже положили все нужные data-* в stackItems, так что используем их
-  let currentIndex = 0;
-
-  function showIndex(index) {
-    const item = stackItems[index];
-    if (!item) return;
-    currentIndex = index;
-    imgEl.src = item.dataset.src || "";
-    imgEl.alt = item.dataset.title || "";
-    titleEl.textContent = item.dataset.title || "";
-    descEl.textContent = item.dataset.desc || "";
-    lightbox.classList.add("active");
-  }
-
-  stackItems.forEach((btn, idx) => {
-    btn.addEventListener("click", () => showIndex(idx));
-  });
-
-  function showPrev() {
-    const prev = (currentIndex - 1 + stackItems.length) % stackItems.length;
-    showIndex(prev);
-  }
-  function showNext() {
-    const next = (currentIndex + 1) % stackItems.length;
-    showIndex(next);
-  }
-
-  btnPrev && btnPrev.addEventListener("click", function (e) {
-    e.stopPropagation();
-    showPrev();
-  });
-
-  btnNext && btnNext.addEventListener("click", function (e) {
-    e.stopPropagation();
-    showNext();
-  });
-
-  function closeLightbox() {
-    lightbox.classList.remove("active");
-  }
-
-  btnClose.addEventListener("click", function (e) {
-    e.stopPropagation();
-    closeLightbox();
-  });
-
-  backdrop.addEventListener("click", closeLightbox);
-
-  document.addEventListener("keydown", function (e) {
-    if (!lightbox.classList.contains("active")) return;
-    if (e.key === "Escape") closeLightbox();
-    if (e.key === "ArrowLeft") showPrev();
-    if (e.key === "ArrowRight") showNext();
-  });
-});
-</script>
 
 
 </body>
