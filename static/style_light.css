@@ -814,4 +814,30 @@ section[id] {
     transform: scale(0.4) translateY(-4px) rotate(-8deg);
   }
 }
+.sparkle-word::before,
+.sparkle-word::after {
+  content: "✨";
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  font-size: 0.9em;
+}
+
+.sparkle-word::before {
+  top: -0.8em;
+  left: -0.3em;
+}
+
+.sparkle-word::after {
+  top: -1.1em;
+  right: -0.3em;
+}
+
+.sparkle-word:hover::before {
+  animation: sparkle-pop 0.7s ease-out forwards;
+}
+
+.sparkle-word:hover::after {
+  animation: sparkle-pop 0.7s ease-out 0.1s forwards; /* маленькая задержка */
+}
 
