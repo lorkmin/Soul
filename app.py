@@ -714,18 +714,25 @@ def admin_courses_edit(cid):
     conn.close()
     return render_template("admin_course_edit.html", course=course)
 
+#@app.get("/admin/gallery")
+#@login_required
+#def admin_gallery():
+#    conn = get_db()
+#    conn.row_factory = sqlite3.Row        # ← вот этого не хватало
+#    images = conn.execute(
+#        "SELECT * FROM gallery ORDER BY created_at DESC"
+#    ).fetchall()
+#    conn.close()
+#    return render_template("admin_gallery.html", images=images)
+
 @app.get("/admin/gallery")
 @login_required
-def admin_gallery():
+def admin_courses():
     conn = get_db()
-    conn.row_factory = sqlite3.Row        # ← вот этого не хватало
-    images = conn.execute(
-        "SELECT * FROM gallery ORDER BY created_at DESC"
-    ).fetchall()
+    #conn.row_factory = sqlite3.Row
+    rows = conn.execute("SELECT * FROM gallery ORDER BY created_at DESC").fetchall()
     conn.close()
-    return render_template("admin_gallery.html", images=images)
-
-
+    return render_template("admin_gallery.html", courses=rows)
 
 @app.post("/admin/gallery/add")
 @login_required
