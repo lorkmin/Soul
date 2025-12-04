@@ -377,6 +377,10 @@
 				</select>
 			  </div>
             <textarea name="comment" placeholder="Расскажите пару слов о себе и целях (по желанию)"></textarea>
+			  <div>
+				<label for="comment">Комментарии или пожелания (по времени, форматам и т.д.)</label>
+				<textarea id="comment" name="comment" placeholder="Удобное время, цель обучения, формат занятий…"></textarea>
+			  </div>
             <select name="tariff" required>
               <option value="">Выберите курс</option>
               {% for c in courses %}
@@ -389,10 +393,7 @@
 
 
 
-			  <div>
-				<label for="comment">Комментарии или пожелания (по времени, форматам и т.д.)</label>
-				<textarea id="comment" name="comment" placeholder="Удобное время, цель обучения, формат занятий…"></textarea>
-			  </div>
+
 
 			  <p class="form-note">
 				Нажимая «Отправить», вы соглашаетесь на обработку введённых данных
