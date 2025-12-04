@@ -1022,3 +1022,45 @@ section[id] {
         transform: rotate(0deg);
     }
 }
+/* ---------- HERO MOBILE FIX ---------- */
+
+@media (max-width: 768px) {
+
+    /* Контейнер с текстом и карточками — вертикально */
+    .hero-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Карточки уезжают под текст */
+    .hero-notes {
+        margin-top: 24px !important;
+        align-items: center;
+        width: 100%;
+        gap: 16px;
+    }
+
+    /* Карточки становятся ровными, без наклонов */
+    .note-card {
+        width: 90% !important;
+        transform: rotate(0deg) !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    /* Заголовок становится компактнее */
+    .hero h1,
+    .section-title h1,
+    .hero-title,
+    .hero .section-title h3 {
+        font-size: 1.9rem !important;
+        line-height: 1.25 !important;
+    }
+
+    /* Подзаголовок не прилипает к карточкам */
+    .hero p {
+        font-size: 1rem;
+        line-height: 1.45;
+        margin-bottom: 18px;
+    }
+}
