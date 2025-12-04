@@ -616,7 +616,7 @@ section[id] {
 }
 
 .review-form-field textarea {
-  min-height: 90px;
+  min-height: 80px;
 }
 
 /* кнопка отправки — во всю ширину, как в форме записи */
