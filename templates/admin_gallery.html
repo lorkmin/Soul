@@ -1,53 +1,108 @@
-{% extends "admin_layout.html" %}
+﻿{% extends "admin_layout.html" %}
 
 {% block content %}
-<h2>�������</h2>
+<p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:10px;">
+  Новые отзывы по умолчанию скрыты, пока вы их не одобрите. На главной видны только одобренные.
+</p>
+
+<div class="reviews-admin-grid">
+  {% for r in reviews %}
+    <div class="review-admin-card">
+      <div class="review-admin-header">
+        <div>
+          <div class="review-admin-name">{{ r.name }}</div>
+          <div class="review-admin-meta">
+            {{ r.created_at }} · {{ r.package or "Пакет не указан" }} · ★{{ r.rating or 0 }}
+          </div>
+        </div>
+        <div>
+          {% if r.approved %}
+            <span class="badge approved">Опубликован</span>
+          {% else %}
+            <span class="badge pending">Скрыт</span>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="review-admin-text">
+        {{ r.text }}
+      </div>
+
+    <div class="review-admin-actions">
+        {% if not r.approved %}
+        <form method="post" action="{{ url_for('admin_review_approve', review_id=r.id) }}">
+            <button type="submit" class="btn btn-primary btn-mini">Одобрить</button>
+        </form>
+        {% else %}
+        <form method="post" action="{{ url_for('admin_review_hide', review_id=r.id) }}">
+            <button type="submit" class="btn btn-outline btn-mini">Скрыть</button>
+        </form>
+        {% endif %}
+
+        <form method="post"
+            action="{{ url_for('admin_review_delete', review_id=r.id) }}"
+            onsubmit="return confirm('Точно удалить этот отзыв?');">
+        <button type="submit" class="admin-delete-btn btn-mini">Удалить</button>
+        </form>
+    </div>
+
+    </div>
+  {% else %}
+    <p>Отзывов пока нет.</p>
+  {% endfor %}
+</div>
+{% endblock %}
+
+<!--{% extends "admin_layout.html" %}
+
+{% block content %}
+<h2>Галерея</h2>
 
 <div class="admin-form">
   <form action="{{ url_for('admin_gallery_add') }}" method="post" enctype="multipart/form-data">
-    <h3>�������� ����</h3>
+    <h3>Добавить фото</h3>
 
-    <input type="text" name="title" placeholder="������� (�� �������)">
-    <textarea name="description" rows="2" placeholder="�������� �������� (�� �������)"></textarea>
+    <input type="text" name="title" placeholder="Подпись (по желанию)">
+    <textarea name="description" rows="2" placeholder="Короткое описание (по желанию)"></textarea>
 
-    <label style="margin-top:10px;">���� �����������</label>
+    <label style="margin-top:10px;">Файл изображения</label>
     <input type="file" name="photo" accept="image/*" required>
 
-    <button class="admin-btn" type="submit">��������</button>
+    <button class="admin-btn" type="submit">Добавить</button>
   </form>
 </div>
 
 <table class="admin-table">
   <thead>
     <tr>
-      <th>������</th>
-      <th>�������</th>
-      <th>��������</th>
-      <th>�������</th>
+      <th>Превью</th>
+      <th>Подпись</th>
+      <th>Описание</th>
+      <th>Создано</th>
       <th></th>
     </tr>
   </thead>
-  <!--<tbody>
+  <tbody>
     {% for img in images %}
       <tr>
         <td>
           <img src="{{ url_for('static', filename='uploads/gallery/' ~ img['photo']) }}"
                style="width:120px;height:70px;object-fit:cover;border-radius:6px;">
         </td>
-        <td>{{ img['title'] or '�' }}</td>
-        <td>{{ img['description'] or '�' }}</td>
+        <td>{{ img['title'] or '—' }}</td>
+        <td>{{ img['description'] or '—' }}</td>
         <td>{{ img['created_at'] }}</td>
         <td>
           <form action="{{ url_for('admin_gallery_delete', gid=img['id']) }}"
                 method="post"
-                onsubmit="return confirm('������� ��� ����?');">
-            <button class="admin-delete-btn">�������</button>
+                onsubmit="return confirm('Удалить это фото?');">
+            <button class="admin-delete-btn">Удалить</button>
           </form>
         </td>
       </tr>
     {% else %}
-      <tr><td colspan="5">���� ��� ����������.</td></tr>
-    {% endfor %}-->
+      <tr><td colspan="5">Пока нет фотографий.</td></tr>
+    {% endfor %}
   </tbody>
 </table>
-{% endblock %}
+{% endblock %}-->
