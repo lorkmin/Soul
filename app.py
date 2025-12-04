@@ -41,8 +41,9 @@ ENROLL_SPAM_SECONDS = 60  # интервал между заявками с од
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads")
 TEACHER_UPLOAD = os.path.join(UPLOAD_FOLDER, "teachers")
 COURSE_UPLOAD  = os.path.join(UPLOAD_FOLDER, "courses")
+GALLERY_UPLOAD = os.path.join(UPLOAD_FOLDER, "gallery")  # НОВОЕ
 
-for path in (UPLOAD_FOLDER, TEACHER_UPLOAD, COURSE_UPLOAD):
+for path in (UPLOAD_FOLDER, TEACHER_UPLOAD, COURSE_UPLOAD, GALLERY_UPLOAD):
     os.makedirs(path, exist_ok=True)
 
 ALLOWED_EXT = {"png", "jpg", "jpeg", "webp"}
@@ -120,6 +121,18 @@ def init_db():
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
     """)
+
+    # ---- GALLERY ----
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS gallery (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT,
+            description TEXT,
+            photo TEXT NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+    """)
+
 
     conn.commit()
     conn.close()
@@ -208,23 +221,29 @@ def send_enroll_email_to_user(payload: dict):
 def index():
     conn = get_db()
 
-    reviews = conn.execute(
-        """
+    reviews = conn.execute("""
         SELECT name, package, rating, text, created_at
         FROM reviews
         WHERE approved = 1
         ORDER BY created_at DESC
         LIMIT 9;
-        """
-    ).fetchall()
+    """).fetchall()
 
-    teachers = conn.execute(
-        "SELECT * FROM teachers ORDER BY created_at ASC"
-    ).fetchall()
+    teachers = conn.execute("""
+        SELECT * FROM teachers
+        ORDER BY created_at DESC
+    """).fetchall()
 
-    courses = conn.execute(
-        "SELECT * FROM courses ORDER BY created_at ASC"
-    ).fetchall()
+    courses = conn.execute("""
+        SELECT * FROM courses
+        ORDER BY created_at ASC
+    """).fetchall()
+
+    gallery = conn.execute("""
+        SELECT * FROM gallery
+        ORDER BY created_at DESC
+        LIMIT 12
+    """).fetchall()
 
     conn.close()
     return render_template(
@@ -232,7 +251,9 @@ def index():
         reviews=reviews,
         teachers=teachers,
         courses=courses,
+        gallery=gallery,
     )
+
 
 
 
@@ -692,6 +713,47 @@ def admin_courses_edit(cid):
 
     conn.close()
     return render_template("admin_course_edit.html", course=course)
+
+@app.get("/admin/gallery")
+@login_required
+def admin_gallery():
+    conn = get_db()
+    images = conn.execute(
+        "SELECT * FROM gallery ORDER BY created_at DESC"
+    ).fetchall()
+    conn.close()
+    return render_template("admin_gallery.html", images=images)
+
+
+@app.post("/admin/gallery/add")
+@login_required
+def admin_gallery_add():
+    title = (request.form.get("title") or "").strip()
+    description = (request.form.get("description") or "").strip()
+    photo = save_upload(request.files.get("photo"), GALLERY_UPLOAD)
+
+    # без фото ничего добавлять не будем
+    if not photo:
+        return redirect(url_for("admin_gallery"))
+
+    conn = get_db()
+    conn.execute(
+        "INSERT INTO gallery (title, description, photo) VALUES (?, ?, ?)",
+        (title or None, description or None, photo),
+    )
+    conn.commit()
+    conn.close()
+    return redirect(url_for("admin_gallery"))
+
+
+@app.post("/admin/gallery/delete/<int:gid>")
+@login_required
+def admin_gallery_delete(gid):
+    conn = get_db()
+    conn.execute("DELETE FROM gallery WHERE id=?", (gid,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for("admin_gallery"))
 
 
 

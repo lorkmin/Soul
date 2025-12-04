@@ -26,6 +26,7 @@
                     <a href="#about">О нас</a>
                     <a href="#teachers">Преподаватели</a>
                     <a href="#courses">Курсы</a>
+                    <a href="#tools">Инструменты</a>
                     <a href="#enroll" class="nav-cta">Записаться</a>
                 </nav>
 
@@ -104,6 +105,36 @@
                 </div>
 
             </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!--                         ГАЛЕРЕЯ                           -->
+        <!-- ========================================================= -->
+        <section id="gallery">
+          <div class="section-inner">
+            <div class="section-title">
+              <h3>Галерея</h3>
+              <span>Немного кадров из нашей онлайн-школы</span>
+            </div>
+
+            {% if gallery %}
+              <div class="gallery-grid">
+                {% for img in gallery %}
+                  <figure class="gallery-item animate-on-scroll">
+                    <div class="gallery-image-wrap">
+                      <img src="{{ url_for('static', filename='uploads/gallery/' ~ img['photo']) }}"
+                           alt="{{ img['title'] or 'Soul Korean School' }}">
+                    </div>
+                    {% if img['title'] %}
+                      <figcaption>{{ img['title'] }}</figcaption>
+                    {% endif %}
+                  </figure>
+                {% endfor %}
+              </div>
+            {% else %}
+              <p>Скоро здесь появятся фотографии с занятий, конспектов и уютных онлайн-встреч.</p>
+            {% endif %}
+          </div>
         </section>
 
 
@@ -329,90 +360,107 @@
             </div>
         </section>
 
+        <!-- ========================================================= -->
+        <!--                 ИНСТРУМЕНТЫ ОБУЧЕНИЯ                      -->
+        <!-- ========================================================= -->
+        <section id="tools">
+          <div class="section-inner">
+            <div class="section-title">
+              <h3>Как проходит обучение</h3>
+              <span>Инструменты, которые мы используем на занятиях</span>
+            </div>
+
+            <div class="tools-grid">
+              <article class="tool-card animate-on-scroll">
+                <h4>Zoom / Skype</h4>
+                <p>Онлайн-занятия в удобных сервисах: стабильная связь, чат и запись урока по запросу.</p>
+              </article>
+
+              <article class="tool-card animate-on-scroll">
+                <h4>Методические материалы</h4>
+                <p>Авторские презентации, PDF-конспекты и тренажёры, чтобы повторять материал между уроками.</p>
+              </article>
+
+              <article class="tool-card animate-on-scroll">
+                <h4>Поддержка с ИИ</h4>
+                <p>Дополнительные упражнения, проверка фраз и разбор ошибок с помощью современных ИИ-инструментов.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
 
         <!-- ЗАПИСЬ НА ЗАНЯТИЯ -->
         <section id="enroll">
             <div class="section-inner">
-                <div class="section-title">
-                    <h3>Записаться на занятия</h3>
-                    <span>1 пробный урок — чтобы познакомиться с форматом</span>
-                </div>
+            <div class="section-title">
+                <h3>Записаться на занятия</h3>
+                <span>Оставьте заявку — подберём формат и группу</span>
+            </div>
 
-                <div class="enroll-layout">
-                    <!-- Инфо блок -->
-                    <div class="enroll-info">
-                        <p>
-                            Оставьте заявку — мы свяжемся с вами, уточним уровень корейского
-                            и подберём удобное время для пробного занятия.
-                        </p>
-                        <ul class="enroll-steps">
-                            <li>
-                                <div class="enroll-step-num">1</div>
-                                <div>Заполните короткую форму рядом: как к вам обращаться и как с вами связаться.</div>
-                            </li>
-                            <li>
-                                <div class="enroll-step-num">2</div>
-                                <div>Мы напишем вам в выбранный мессенджер, уточним детали и предложим время урока.</div>
-                            </li>
-                            <li>
-                                <div class="enroll-step-num">3</div>
-                                <div>Проходите пробный урок и решаете, какой пакет вам подходит.</div>
-                            </li>
-                        </ul>
-
-                        <div class="enroll-contacts">
-                            <div><span>Telegram: </span><a href="https://t.me/your_soul_korean" target="_blank">@pmila</a></div>
-                            <!--<div><span>E-mail: </span><a href="mailto:school@soul-korean.ru">school@soul-korean.ru</a></div>-->
-                        </div>
-
-                        <p style="margin-top:8px;">
-                            Если удобнее, можете написать сразу в Telegram — пришлём краткий тест
-                            и список ближайших свободных слотов.
-                        </p>
+            <div class="enroll-wrapper">
+                <div class="enroll-box">
+                <form action="{{ url_for('enroll') }}" method="post">
+                    <div class="form-row">
+                    <div class="form-field">
+                        <label for="enroll-name">Имя</label>
+                        <input id="enroll-name" type="text" name="name"
+                                placeholder="Как к вам обращаться?" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="enroll-contact">Контакт</label>
+                        <input id="enroll-contact" type="text" name="contact"
+                                placeholder="Телеграм, WhatsApp или телефон" required>
+                    </div>
                     </div>
 
-                    <!-- Форма заявки (пока без бэкенда) -->
-                    <div>
-                        <form action="{{ url_for('enroll') }}" method="post">
-                            <input type="text" name="name" placeholder="Как к вам обращаться?" required>
-                            <input type="text" name="contact" placeholder="Телеграм, WhatsApp или телефон" required>
-                            <div>
-                                <label for="level">Ваш уровень корейского</label>
-                                <select id="level" name="level">
-                                    <option value="Никогда не изучал(а)">Полный ноль</option>
-                                    <option value="Знаю алфавит">Знаю алфавит, немного слов</option>
-                                    <option value="Могу поддержать простой диалог">Уже немного говорю</option>
-                                </select>
-                            </div>
-                            <select name="tariff" required>
-                                <option value="">Выберите курс</option>
-                                {% for c in courses %}
-                                <option value="{{ c['title'] }}">{{ c['title'] }}</option>
-                                {% endfor %}
-                            </select>
-
-                            <div class="form-field">
-                                <label for="comment">Комментарии или пожелания (по времени, форматам и т.д.)</label>
-                                <textarea id="comment" name="comment" placeholder="Удобное время, цель обучения, формат занятий… (необязательно)"></textarea>
-                            </div>
+                    <div class="form-row">
+                    <div class="form-field">
+                        <label for="enroll-level">Ваш уровень корейского</label>
+                        <select id="enroll-level" name="level">
+                        <option value="Никогда не изучал(а)">Полный ноль</option>
+                        <option value="Знаю алфавит">Знаю алфавит, немного слов</option>
+                        <option value="Могу поддержать простой диалог">Уже немного говорю</option>
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <label for="enroll-tariff">Курс</label>
+                        <select id="enroll-tariff" name="tariff" required>
+                        <option value="">Выберите курс</option>
+                        {% for c in courses %}
+                            <option value="{{ c['title'] }}">{{ c['title'] }}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
                     </div>
 
-
-
-
+                    <div class="form-field">
+                    <label for="enroll-comment">Пара слов о вас (по желанию)</label>
+                    <textarea id="enroll-comment" name="comment" rows="3"
+                                placeholder="Удобное время, цель обучения, важные пожелания…"></textarea>
+                    </div>
 
                     <p class="form-note">
-                        Нажимая «Отправить», вы соглашаетесь на обработку введённых данных
-                        для связи по вопросам обучения.
+                    Нажимая «Отправить», вы соглашаетесь на обработку введённых данных
+                    для связи по вопросам обучения.
                     </p>
 
-                    <button class="btn btn-primary form-submit" type="submit">Отправить заявку</button>
-                    </form>
+                    <button class="btn-primary form-submit" type="submit">
+                    Отправить заявку
+                    </button>
+                </form>
+                </div>
 
+                <div class="enroll-note">
+                <p>Обычно мы отвечаем в течение дня и помогаем подобрать удобный формат —
+                    индивидуально или в небольшой группе.</p>
+                <p>Если вы сомневаетесь, какой курс выбрать, просто напишите
+                    «хочу попробовать» — мы зададим пару вопросов и посоветуем подходящий вариант.</p>
                 </div>
             </div>
-    </div>
-    </section>
+            </div>
+        </section>
+
 
     <footer>
         © <span id="year"></span> Онлайн школа корейского языка «Soul».
