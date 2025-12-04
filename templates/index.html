@@ -382,30 +382,44 @@
                     <span>Живые впечатления о занятиях</span>
                 </div>
 
-                <div class="reviews-grid">
-                    {% if reviews %}
-                    {% for r in reviews %}
-                    <article class="review-card animate-on-scroll">
-                        <div class="review-stars">
-                            {% if r.rating %}
-                            {{ "★" * r.rating }}
-                            {% else %}
-                            ★★★★★
-                            {% endif %}
-                        </div>
-                        <div class="review-name">{{ r.name }}</div>
-                        <div class="review-meta">
-                            {{ r.package if r.package else "Пакет не указан" }}
-                        </div>
-                        <p class="review-text">
-                            {{ r.text }}
-                        </p>
-                    </article>
-                    {% endfor %}
-                    {% else %}
-                    <p>Пока нет отзывов. Станьте первым, кому корейский понравился с «K-Spark» 😊</p>
-                    {% endif %}
-                </div>
+                    <div class="reviews-grid">
+                      {% if reviews %}
+                        {% for r in reviews %}
+                          <article class="review-card animate-on-scroll">
+                            <div class="review-card-header">
+                              <div class="review-avatar">
+                                {{ r.name[0] if r.name else "🙂" }}
+                              </div>
+                              <div class="review-head-text">
+                                <div class="review-name">{{ r.name }}</div>
+                                <div class="review-meta-row">
+                                  {% if r.package %}
+                                    <span class="review-badge">{{ r.package }}</span>
+                                  {% endif %}
+                                  <span class="review-date">
+                                    {{ r.created_at[:10] }}
+                                  </span>
+                                </div>
+                                <div class="review-stars">
+                                  {% if r.rating %}
+                                    {{ "★" * r.rating }}{{ "☆" * (5 - r.rating) }}
+                                  {% else %}
+                                    ★★★★★
+                                  {% endif %}
+                                </div>
+                              </div>
+                            </div>
+
+                            <p class="review-text">
+                              {{ r.text }}
+                            </p>
+                          </article>
+                        {% endfor %}
+                      {% else %}
+                        <p>Пока нет отзывов. Станьте первым, кому корейский понравился с «K-Spark» 😊</p>
+                      {% endif %}
+                    </div>
+
 
                 <!-- ФОРМА ОТЗЫВА -->
                 <div class="review-form-wrapper collapsed" id="reviewFormWrapper">
