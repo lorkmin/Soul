@@ -299,27 +299,27 @@
       </div>
     </section>
 
-    <section id="faq">
-  <div class="section-inner">
-    <div class="section-title">
-      <h3>Частые вопросы</h3>
-    </div>
-    <div class="faq-grid">
-      <div class="faq-item">
-        <h4>Подходит ли курс, если я совсем с нуля?</h4>
-        <p>Да, у нас есть группы для полного нуля — мы спокойно объясняем базу и не торопим.</p>
+     <section id="faq">
+      <div class="section-inner">
+        <div class="section-title">
+          <h3>Частые вопросы</h3>
+        </div>
+        <div class="faq-grid">
+          <div class="faq-item">
+            <h4>Подходит ли курс, если я совсем с нуля?</h4>
+            <p>Да, у нас есть группы для полного нуля — мы спокойно объясняем базу и не торопим.</p>
+          </div>
+          <div class="faq-item">
+            <h4>Сколько человек в группе?</h4>
+            <p>Обычно 4–6 человек, чтобы преподаватель успевал уделить внимание каждому.</p>
+          </div>
+          <div class="faq-item">
+            <h4>Можно ли сначала попробовать?</h4>
+            <p>Конечно, вы можете записаться на пробное занятие и посмотреть, подходит ли вам формат.</p>
+          </div>
+        </div>
       </div>
-      <div class="faq-item">
-        <h4>Сколько человек в группе?</h4>
-        <p>Обычно 4–6 человек, чтобы преподаватель успевал уделить внимание каждому.</p>
-      </div>
-      <div class="faq-item">
-        <h4>Можно ли сначала попробовать?</h4>
-        <p>Конечно, вы можете записаться на пробное занятие и посмотреть, подходит ли вам формат.</p>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
 
     <!-- ЗАПИСЬ НА ЗАНЯТИЯ -->
@@ -368,17 +368,6 @@
 			<form action="{{ url_for('enroll') }}" method="post">
             <input type="text" name="name" placeholder="Как к вам обращаться?" required>
             <input type="text" name="contact" placeholder="Телеграм, WhatsApp или телефон" required>
-            <select name="tariff" required>
-              <option value="">Выберите курс</option>
-              {% for c in courses %}
-                <option value="{{ c['title'] }}">{{ c['title'] }}</option>
-              {% endfor %}
-            </select>
-            <textarea name="comment" placeholder="Расскажите пару слов о себе и целях (по желанию)"></textarea>
-
-
-			  </div>
-
 			  <div>
 				<label for="level">Ваш уровень корейского</label>
 				<select id="level" name="level">
@@ -387,6 +376,18 @@
 				  <option value="Могу поддержать простой диалог">Уже немного говорю</option>
 				</select>
 			  </div>
+            <textarea name="comment" placeholder="Расскажите пару слов о себе и целях (по желанию)"></textarea>
+            <select name="tariff" required>
+              <option value="">Выберите курс</option>
+              {% for c in courses %}
+                <option value="{{ c['title'] }}">{{ c['title'] }}</option>
+              {% endfor %}
+            </select>
+
+
+			  </div>
+
+
 
 			  <div>
 				<label for="comment">Комментарии или пожелания (по времени, форматам и т.д.)</label>
