@@ -766,4 +766,52 @@ section[id] {
   margin-top: 4px;
 }
 
+/* СЛОВО С ИСКОРКОЙ */
+.sparkle-word {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+/* Основная искорка */
+.sparkle-word::after {
+  content: "✨";
+  position: absolute;
+  top: -0.9em;
+  right: -0.2em;
+  font-size: 1em;
+  opacity: 0;
+  transform: scale(0.4) translateY(4px);
+  pointer-events: none;
+}
+
+/* Лёгкое свечение самого слова */
+.sparkle-word:hover {
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+/* Анимация при наведении */
+.sparkle-word:hover::after {
+  animation: sparkle-pop 0.7s ease-out forwards;
+}
+
+/* Ключевые кадры анимации */
+@keyframes sparkle-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(4px) rotate(-10deg);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1) translateY(-2px) rotate(8deg);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(0.9) translateY(0) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.4) translateY(-4px) rotate(-8deg);
+  }
+}
 
