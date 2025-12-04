@@ -1338,3 +1338,70 @@ section[id] {
     max-width: 320px;
   }
 }
+/* ===================== БЛОК "О НАС" ===================== */
+
+#about .about-box {
+  margin-top: 18px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 24px 24px 22px;
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-soft);
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: flex-start;
+}
+
+#about .about-text p {
+  margin: 0 0 12px;
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--text-main);
+}
+
+/* Правая колонка — мини-карточки */
+
+.about-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.about-card {
+  border-radius: 18px;
+  padding: 12px 14px;
+  background: #fffaf2;
+  border: 1px solid rgba(244, 201, 76, 0.35);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+}
+
+.about-card-icon {
+  font-size: 1.3rem;
+  margin-bottom: 4px;
+}
+
+.about-card h4 {
+  margin: 0 0 4px;
+  font-size: 0.95rem;
+}
+
+.about-card p {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+/* Адаптив для мобильных */
+
+@media (max-width: 860px) {
+  #about .about-box {
+    grid-template-columns: 1fr;
+    padding: 18px 16px 16px;
+  }
+
+  .about-cards {
+    grid-template-columns: 1fr;
+  }
+}
