@@ -193,25 +193,51 @@
               <span>Немного кадров из нашей онлайн-школы</span>
             </div>
 
-            {% if gallery %}
-              <div class="gallery-grid">
-                {% for img in gallery %}
-                  <figure class="gallery-item animate-on-scroll">
-                    <div class="gallery-image-wrap">
-                      <img src="{{ url_for('static', filename='uploads/gallery/' ~ img['photo']) }}"
-                           alt="{{ img['title'] or 'K-Spark Korean School' }}">
-                    </div>
-                    {% if img['title'] %}
-                      <figcaption>{{ img['title'] }}</figcaption>
-                    {% endif %}
-                  </figure>
+            {% if images %}
+              <!-- КАСКАД ИЗ ФОТО -->
+              <div class="gallery-stack" id="gallery-stack">
+                {% for img in images %}
+                  {% if loop.index <= 5 %}
+                  <button
+                    class="gallery-stack-item"
+                    type="button"
+                    data-index="{{ loop.index0 }}"
+                    data-src="{{ url_for('static', filename='uploads/gallery/' ~ img['photo']) }}"
+                    data-title="{{ img['title'] or '' }}"
+                    data-desc="{{ img['description'] or '' }}"
+                  >
+                    <img src="{{ url_for('static', filename='uploads/gallery/' ~ img['photo']) }}"
+                         alt="{{ img['title'] or 'Фото из занятий' }}">
+                  </button>
+                  {% endif %}
                 {% endfor %}
               </div>
+
+              {% if images|length > 5 %}
+                <p class="gallery-hint">В галерее больше фотографий — откройте просмотр, чтобы полистать всё 📸</p>
+              {% endif %}
             {% else %}
-              <p>Скоро здесь появятся фотографии с занятий, конспектов и уютных онлайн-встреч.</p>
+              <p>Пока мы только начинаем собирать фото, но скоро здесь будет тепло и многолюдно 😊</p>
             {% endif %}
+
+            <!-- ЛАЙТБОКС С ЛИСТАНИЕМ -->
+            <div class="gallery-lightbox" id="gallery-lightbox">
+              <div class="gallery-lightbox-backdrop"></div>
+              <div class="gallery-lightbox-content">
+                <button class="gallery-lightbox-close" type="button" aria-label="Закрыть">×</button>
+                <button class="gallery-lightbox-prev" type="button">‹</button>
+                <button class="gallery-lightbox-next" type="button">›</button>
+
+                <img id="gallery-lightbox-image" src="" alt="">
+                <div class="gallery-lightbox-caption">
+                  <div id="gallery-lightbox-title"></div>
+                  <div id="gallery-lightbox-desc"></div>
+                </div>
+              </div>
+            </div>
           </div>
-        </section>
+</section>
+
 
 
         <!-- ========================================================= -->
@@ -1003,6 +1029,78 @@
         });
     </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // --- Галерея: каскад -> лайтбокс ---
+  const stackItems = Array.from(document.querySelectorAll(".gallery-stack-item"));
+  const lightbox = document.getElementById("gallery-lightbox");
+  if (!lightbox || stackItems.length === 0) return;
+
+  const imgEl = document.getElementById("gallery-lightbox-image");
+  const titleEl = document.getElementById("gallery-lightbox-title");
+  const descEl = document.getElementById("gallery-lightbox-desc");
+  const btnClose = lightbox.querySelector(".gallery-lightbox-close");
+  const btnPrev = lightbox.querySelector(".gallery-lightbox-prev");
+  const btnNext = lightbox.querySelector(".gallery-lightbox-next");
+  const backdrop = lightbox.querySelector(".gallery-lightbox-backdrop");
+
+  // Соберём все фото (включая те, что не в первых 5, если они тоже есть в разметке)
+  // Но мы уже положили все нужные data-* в stackItems, так что используем их
+  let currentIndex = 0;
+
+  function showIndex(index) {
+    const item = stackItems[index];
+    if (!item) return;
+    currentIndex = index;
+    imgEl.src = item.dataset.src || "";
+    imgEl.alt = item.dataset.title || "";
+    titleEl.textContent = item.dataset.title || "";
+    descEl.textContent = item.dataset.desc || "";
+    lightbox.classList.add("active");
+  }
+
+  stackItems.forEach((btn, idx) => {
+    btn.addEventListener("click", () => showIndex(idx));
+  });
+
+  function showPrev() {
+    const prev = (currentIndex - 1 + stackItems.length) % stackItems.length;
+    showIndex(prev);
+  }
+  function showNext() {
+    const next = (currentIndex + 1) % stackItems.length;
+    showIndex(next);
+  }
+
+  btnPrev && btnPrev.addEventListener("click", function (e) {
+    e.stopPropagation();
+    showPrev();
+  });
+
+  btnNext && btnNext.addEventListener("click", function (e) {
+    e.stopPropagation();
+    showNext();
+  });
+
+  function closeLightbox() {
+    lightbox.classList.remove("active");
+  }
+
+  btnClose.addEventListener("click", function (e) {
+    e.stopPropagation();
+    closeLightbox();
+  });
+
+  backdrop.addEventListener("click", closeLightbox);
+
+  document.addEventListener("keydown", function (e) {
+    if (!lightbox.classList.contains("active")) return;
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowLeft") showPrev();
+    if (e.key === "ArrowRight") showNext();
+  });
+});
+</script>
 
 
 </body>

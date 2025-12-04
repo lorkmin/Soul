@@ -1979,3 +1979,199 @@ section[id] {
     margin-left: 20px;
   }
 }
+/* ===================== ГАЛЕРЕЯ: КАСКАД + ЛАЙТБОКС ===================== */
+
+/* каскад на главной */
+.gallery-stack {
+  position: relative;
+  margin-top: 24px;
+  height: 260px;
+}
+
+.gallery-stack-item {
+  position: absolute;
+  border: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  width: 220px;
+  height: 160px;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* чуть разный наклон и смещение для первых пяти */
+.gallery-stack-item:nth-child(1) {
+  left: 0;
+  top: 30px;
+  transform: rotate(-5deg);
+  z-index: 1;
+}
+.gallery-stack-item:nth-child(2) {
+  left: 80px;
+  top: 10px;
+  transform: rotate(2deg);
+  z-index: 2;
+}
+.gallery-stack-item:nth-child(3) {
+  left: 160px;
+  top: 40px;
+  transform: rotate(-2deg);
+  z-index: 3;
+}
+.gallery-stack-item:nth-child(4) {
+  left: 240px;
+  top: 20px;
+  transform: rotate(4deg);
+  z-index: 4;
+}
+.gallery-stack-item:nth-child(5) {
+  left: 320px;
+  top: 35px;
+  transform: rotate(-3deg);
+  z-index: 5;
+}
+
+/* hover — карточка чуть выезжает */
+.gallery-stack-item:hover {
+  transform: translateY(-6px) scale(1.02) rotate(0deg);
+  box-shadow: 0 16px 36px rgba(0,0,0,0.18);
+}
+
+.gallery-stack-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-hint {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* мобильная версия: просто ряд карточек без сильного наложения */
+@media (max-width: 780px) {
+  .gallery-stack {
+    height: auto;
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+
+  .gallery-stack-item {
+    position: relative;
+    left: 0;
+    top: 0;
+    transform: rotate(0);
+    width: 180px;
+    height: 130px;
+    flex-shrink: 0;
+  }
+}
+
+/* ---------- Лайтбокс ---------- */
+
+.gallery-lightbox {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+}
+
+.gallery-lightbox.active {
+  display: flex;
+}
+
+.gallery-lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+}
+
+.gallery-lightbox-content {
+  position: relative;
+  background: #ffffff;
+  border-radius: 24px;
+  max-width: 860px;
+  width: 100%;
+  margin: 0 16px;
+  padding: 18px 20px 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+  z-index: 1;
+}
+
+.gallery-lightbox-close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  border: none;
+  background: transparent;
+  font-size: 1.6rem;
+  cursor: pointer;
+  line-height: 1;
+  color: #444;
+}
+
+.gallery-lightbox-prev,
+.gallery-lightbox-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: rgba(255,255,255,0.9);
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-lightbox-prev { left: 8px; }
+.gallery-lightbox-next { right: 8px; }
+
+#gallery-lightbox-image {
+  width: 100%;
+  max-height: 480px;
+  object-fit: contain;
+  border-radius: 16px;
+  background: #fff7e9;
+}
+
+.gallery-lightbox-caption {
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+#gallery-lightbox-title {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+#gallery-lightbox-desc {
+  color: var(--text-muted);
+}
+
+/* мобилка: кнопки-навигации поменьше */
+@media (max-width: 640px) {
+  .gallery-lightbox-content {
+    padding: 14px 12px 14px;
+  }
+
+  #gallery-lightbox-image {
+    max-height: 320px;
+  }
+
+  .gallery-lightbox-prev,
+  .gallery-lightbox-next {
+    display: none;
+  }
+}
