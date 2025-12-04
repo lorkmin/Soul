@@ -288,67 +288,87 @@
         <!--                     НАШИ КУРСЫ                            -->
         <!-- ========================================================= -->
         <section id="courses">
-            <div class="section-inner">
-                <div class="section-title">
-                    <h3>Наши курсы</h3>
-                    <span>Подберите подходящий вариант обучения</span>
+          <div class="section-inner">
+            <div class="section-title">
+              <h3>Наши курсы</h3>
+              <span>Подберите формат под свои цели и темп</span>
+            </div>
+
+            <div class="courses-grid">
+              {% for c in courses %}
+              <!-- КАРТОЧКА КУРСА -->
+              <article class="course-card animate-on-scroll"
+                       data-course-id="{{ c['id'] }}"
+                       data-course-title="{{ c['title'] }}">
+                <div class="course-card-inner">
+                  <div class="course-image-wrap">
+                    {% if c['photo'] %}
+                      <img src="{{ url_for('static', filename='uploads/courses/' ~ c['photo']) }}"
+                           alt="{{ c['title'] }}">
+                    {% endif %}
+                  </div>
+
+                  <div class="course-body">
+                    <h4 class="course-title">{{ c['title'] }}</h4>
+                    <p class="course-meta">
+                      {{ c['lessons'] }} уроков · {{ c['price'] }} ₽
+                    </p>
+                    <p class="course-snippet">
+                      {{ (c['description'] or '')[:120] }}{% if c['description'] and c['description']|length > 120 %}…{% endif %}
+                    </p>
+                    <div class="course-pill-row">
+                      <span class="course-pill">🌸 уютные занятия</span>
+                      <span class="course-pill">📚 своя программа</span>
+                    </div>
+                  </div>
                 </div>
+              </article>
 
-                <div class="courses-grid">
-                    {% for c in courses %}
-                    <!-- КАРТОЧКА КУРСА -->
-                    <article class="course-card animate-on-scroll" data-course-id="{{ c['id'] }}" data-course-title="{{ c['title'] }}">
-                        <div class="course-image-wrap">
-                            {% if c['photo'] %}
-                            <img src="{{ url_for('static', filename='uploads/courses/' ~ c['photo']) }}" alt="{{ c['title'] }}">
-                            {% endif %}
-                        </div>
+              <!-- МОДАЛКА КУРСА -->
+              <div class="course-modal"
+                   id="course-modal-{{ c['id'] }}"
+                   data-course-id="{{ c['id'] }}"
+                   data-course-title="{{ c['title'] }}">
+                <div class="course-modal-backdrop"></div>
+                <div class="course-modal-content">
+                  <!-- Кнопки навигации -->
+                  <button class="course-modal-prev" type="button">‹</button>
+                  <button class="course-modal-next" type="button">›</button>
 
-                        <h4 class="course-title">{{ c['title'] }}</h4>
-                        <p class="course-meta">
-                            {{ c['lessons'] }} уроков · {{ c['price'] }} ₽
-                        </p>
-                    </article>
+                  <button class="course-modal-close" aria-label="Закрыть">×</button>
 
-                    <!-- МОДАЛКА КУРСА -->
-                    <div class="course-modal"
-                         id="course-modal-{{ c['id'] }}"
-                         data-course-id="{{ c['id'] }}"
-                         data-course-title="{{ c['title'] }}">
-                      <div class="course-modal-backdrop"></div>
-                      <div class="course-modal-content">
-                        <!-- Кнопки навигации -->
-                        <button class="course-modal-prev" type="button">‹</button>
-                        <button class="course-modal-next" type="button">›</button>
+                  <div class="course-modal-inner">
+                    {% if c['photo'] %}
+                      <img src="{{ url_for('static', filename='uploads/courses/' ~ c['photo']) }}"
+                           class="course-modal-image"
+                           alt="{{ c['title'] }}">
+                    {% endif %}
 
-                        <button class="course-modal-close" aria-label="Закрыть">×</button>
-
-                        <div class="course-modal-inner">
-                          {% if c['photo'] %}
-                            <img src="{{ url_for('static', filename='uploads/courses/' ~ c['photo']) }}"
-                                 class="course-modal-image"
-                                 alt="{{ c['title'] }}">
-                          {% endif %}
-
-                          <h3 class="course-modal-title">{{ c['title'] }}</h3>
-                          <p class="course-modal-meta">
-                            {{ c['lessons'] }} уроков · {{ c['price'] }} ₽
-                          </p>
-                          <div class="course-modal-desc">
-                            {{ c['description'] }}
-                          </div>
-
-                          <button class="course-modal-enroll-btn" type="button">
-                            Записаться на этот курс
-                          </button>
-                        </div>
-                      </div>
+                    <h3 class="course-modal-title">{{ c['title'] }}</h3>
+                    <p class="course-modal-meta">
+                      {{ c['lessons'] }} уроков · {{ c['price'] }} ₽
+                    </p>
+                    <div class="course-modal-desc">
+                      {{ c['description'] }}
                     </div>
 
-                    {% endfor %}
+                    <div class="course-modal-footer">
+                      <p class="course-modal-note">
+                        Если сомневаетесь, подойдёт ли курс — оставьте заявку, мы зададим пару вопросов
+                        и поможем выбрать подходящий уровень.
+                      </p>
+                      <button class="course-modal-enroll-btn" type="button">
+                        Записаться на этот курс
+                      </button>
+                    </div>
+                  </div>
                 </div>
+              </div>
+              {% endfor %}
             </div>
+          </div>
         </section>
+
 
 
 
