@@ -239,20 +239,12 @@ def index():
         ORDER BY created_at ASC
     """).fetchall()
 
-    gallery = conn.execute("""
-        SELECT * FROM gallery
-        ORDER BY created_at DESC
-        LIMIT 12
-    """).fetchall()
+    gallery = conn.execute("SELECT * FROM gallery ORDER BY created_at DESC LIMIT 12").fetchall()
 
     conn.close()
-    return render_template(
-        "index.html",
-        reviews=reviews,
-        teachers=teachers,
-        courses=courses,
-        gallery=gallery,
-    )
+    return render_template("index.html", reviews=reviews,
+                           teachers=teachers, courses=courses,
+                           gallery=gallery)
 
 
 
