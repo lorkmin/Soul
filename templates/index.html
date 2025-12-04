@@ -180,32 +180,40 @@
                     </article>
 
                     <!-- МОДАЛКА КУРСА -->
-                    <div class="course-modal" id="course-modal-{{ c['id'] }}" data-course-id="{{ c['id'] }}" data-course-title="{{ c['title'] }}">
-                        <div class="course-modal-backdrop"></div>
-                        <div class="course-modal-content">
-                            <!-- Кнопки навигации -->
-                            <button class="course-modal-prev" type="button">‹</button>
-                            <button class="course-modal-next" type="button">›</button>
+                    <div class="course-modal"
+                         id="course-modal-{{ c['id'] }}"
+                         data-course-id="{{ c['id'] }}"
+                         data-course-title="{{ c['title'] }}">
+                      <div class="course-modal-backdrop"></div>
+                      <div class="course-modal-content">
+                        <!-- Кнопки навигации -->
+                        <button class="course-modal-prev" type="button">‹</button>
+                        <button class="course-modal-next" type="button">›</button>
 
-                            <button class="course-modal-close" aria-label="Закрыть">×</button>
+                        <button class="course-modal-close" aria-label="Закрыть">×</button>
 
-                            {% if c['photo'] %}
-                            <img src="{{ url_for('static', filename='uploads/courses/' ~ c['photo']) }}" class="course-modal-image" alt="{{ c['title'] }}">
-                            {% endif %}
+                        <div class="course-modal-inner">
+                          {% if c['photo'] %}
+                            <img src="{{ url_for('static', filename='uploads/courses/' ~ c['photo']) }}"
+                                 class="course-modal-image"
+                                 alt="{{ c['title'] }}">
+                          {% endif %}
 
-                            <h3 class="course-modal-title">{{ c['title'] }}</h3>
-                            <p class="course-modal-meta">
-                                {{ c['lessons'] }} уроков · {{ c['price'] }} ₽
-                            </p>
-                            <div class="course-modal-desc">
-                                {{ c['description'] }}
-                            </div>
+                          <h3 class="course-modal-title">{{ c['title'] }}</h3>
+                          <p class="course-modal-meta">
+                            {{ c['lessons'] }} уроков · {{ c['price'] }} ₽
+                          </p>
+                          <div class="course-modal-desc">
+                            {{ c['description'] }}
+                          </div>
 
-                            <button class="course-modal-enroll-btn" type="button">
-                                Записаться на этот курс
-                            </button>
+                          <button class="course-modal-enroll-btn" type="button">
+                            Записаться на этот курс
+                          </button>
                         </div>
+                      </div>
                     </div>
+
                     {% endfor %}
                 </div>
             </div>
@@ -444,6 +452,10 @@
             const navToggle = document.querySelector('.nav-toggle');
             const navLinks = document.querySelectorAll('.top-nav a');
 
+            function updateBodyModalState() {
+            const anyOpen = document.querySelector('.teacher-modal.active, .course-modal.active');
+            document.body.classList.toggle('modal-open', Boolean(anyOpen));
+            }
 
             // --- Плавное появление шапки ---
             if (header) {
@@ -587,25 +599,35 @@
             const teacherModals = document.querySelectorAll('.teacher-modal');
 
             teacherCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    const id = card.dataset.teacherId;
-                    const modal = document.getElementById('teacher-modal-' + id);
-                    if (modal) modal.classList.add('active');
-                });
+            card.addEventListener('click', () => {
+                const id = card.dataset.teacherId;
+                const modal = document.getElementById('teacher-modal-' + id);
+                if (modal) {
+                modal.classList.add('active');
+                updateBodyModalState();
+                }
+            });
             });
 
             document.querySelectorAll('.teacher-modal-close').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const modal = btn.closest('.teacher-modal');
-                    if (modal) modal.classList.remove('active');
-                });
+            btn.addEventListener('click', () => {
+                const modal = btn.closest('.teacher-modal');
+                if (modal) {
+                modal.classList.remove('active');
+                updateBodyModalState();
+                }
+            });
             });
 
             teacherModals.forEach(modal => {
-                modal.addEventListener('click', e => {
-                    if (e.target === modal) modal.classList.remove('active');
-                });
+            modal.addEventListener('click', e => {
+                if (e.target === modal) {
+                modal.classList.remove('active');
+                updateBodyModalState();
+                }
             });
+            });
+
 
             // ====================================================================
             //                          МОДАЛКА КУРСОВ
@@ -615,11 +637,13 @@
             let currentCourseIndex = null;
 
             function openCourseModalByIndex(index) {
-                if (index < 0 || index >= courseModals.length) return;
-                courseModals.forEach(m => m.classList.remove('active'));
-                currentCourseIndex = index;
-                courseModals[index].classList.add('active');
+            if (index < 0 || index >= courseModals.length) return;
+            courseModals.forEach(m => m.classList.remove('active'));
+            currentCourseIndex = index;
+            courseModals[index].classList.add('active');
+            updateBodyModalState();
             }
+
 
             function openCourseModalById(id) {
                 const modal = document.getElementById('course-modal-' + id);
@@ -638,23 +662,29 @@
 
             // закрытие по крестику
             document.querySelectorAll('.course-modal-close').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const modal = btn.closest('.course-modal');
-                    if (modal) modal.classList.remove('active');
-                    currentCourseIndex = null;
-                });
+            btn.addEventListener('click', () => {
+                const modal = btn.closest('.course-modal');
+                if (modal) {
+                modal.classList.remove('active');
+                updateBodyModalState();
+                }
+                currentCourseIndex = null;
             });
+            });
+
 
             // закрытие по фону
             courseModals.forEach(modal => {
-                const backdrop = modal.querySelector('.course-modal-backdrop');
-                if (backdrop) {
-                    backdrop.addEventListener('click', () => {
-                        modal.classList.remove('active');
-                        currentCourseIndex = null;
-                    });
-                }
+            const backdrop = modal.querySelector('.course-modal-backdrop');
+            if (backdrop) {
+                backdrop.addEventListener('click', () => {
+                modal.classList.remove('active');
+                updateBodyModalState();
+                currentCourseIndex = null;
+                });
+            }
             });
+
 
             // стрелка "влево"
             document.querySelectorAll('.course-modal-prev').forEach(btn => {
@@ -676,12 +706,14 @@
 
             // Esc — закрыть все модалки курсов и преподавателей
             document.addEventListener('keydown', e => {
-                if (e.key === 'Escape') {
-                    teacherModals.forEach(m => m.classList.remove('active'));
-                    courseModals.forEach(m => m.classList.remove('active'));
-                    currentCourseIndex = null;
-                }
+            if (e.key === 'Escape') {
+                teacherModals.forEach(m => m.classList.remove('active'));
+                courseModals.forEach(m => m.classList.remove('active'));
+                currentCourseIndex = null;
+                updateBodyModalState();
+            }
             });
+
 
             // ====================================================================
             //      "Записаться на этот курс" — автоподстановка + скролл к форме
