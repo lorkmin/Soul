@@ -376,17 +376,18 @@
 				  <option value="Могу поддержать простой диалог">Уже немного говорю</option>
 				</select>
 			  </div>
-            <textarea name="comment" placeholder="Расскажите пару слов о себе и целях (по желанию)"></textarea>
-			  <div>
-				<label for="comment">Комментарии или пожелания (по времени, форматам и т.д.)</label>
-				<textarea id="comment" name="comment" placeholder="Удобное время, цель обучения, формат занятий…"></textarea>
-			  </div>
             <select name="tariff" required>
               <option value="">Выберите курс</option>
               {% for c in courses %}
                 <option value="{{ c['title'] }}">{{ c['title'] }}</option>
               {% endfor %}
             </select>
+            <textarea name="comment" placeholder="Расскажите пару слов о себе и целях (по желанию)"></textarea>
+			  <div>
+				<label for="comment">Комментарии или пожелания (по времени, форматам и т.д.)</label>
+				<textarea id="comment" name="comment" placeholder="Удобное время, цель обучения, формат занятий…"></textarea>
+			  </div>
+
 
 
 			  </div>
