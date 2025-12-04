@@ -12,30 +12,29 @@
 <body>
   <div class="wrapper">
     <!-- ШАПКА -->
-	<header id="mainHeader">
-	  <div class="logo">
-		<div class="logo-mark"></div>
-		<div class="logo-text">
-		  <h1>SOUL</h1>
-		  <span>Онлайн школа корейского языка</span>
-		</div>
-	  </div>
+    <header id="mainHeader" class="top-bar">
+      <div class="top-bar-inner">
+        <div class="logo">
+          <div class="logo-main">SOUL</div>
+          <div class="logo-tagline">Онлайн школа корейского языка</div>
+        </div>
 
-    <nav class="top-nav">
-        <a href="#">Главная</a>
-        <a href="#about">О нас</a>        <!-- НОВОЕ -->
-        <a href="#teachers">Преподаватели</a>  <!-- НОВОЕ -->
-        <a href="#courses">Курсы</a>
-        <a href="#enroll">Записаться</a>
-    </nav>
+        <nav class="top-nav">
+          <a href="#hero">Главная</a>
+          <a href="#about">О нас</a>
+          <a href="#teachers">Преподаватели</a>
+          <a href="#courses">Курсы</a>
+          <a href="#enroll" class="nav-cta">Записаться</a>
+        </nav>
 
+        <!-- Кнопка для мобильного меню -->
+        <button class="nav-toggle" type="button" aria-label="Меню">
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
 
-	  <!-- Кнопка для мобильного меню -->
-	  <button class="nav-toggle" type="button" aria-label="Меню">
-		<span></span>
-		<span></span>
-	  </button>
-	</header>
 
 
     <!-- ГЕРО -->
@@ -445,7 +444,8 @@
   document.addEventListener('DOMContentLoaded', function () {
     const header = document.getElementById('mainHeader');
     const navToggle = document.querySelector('.nav-toggle');
-    const navLinks = document.querySelectorAll('.main-nav a');
+    const navLinks = document.querySelectorAll('.top-nav a');
+
 
     // --- Плавное появление шапки ---
     if (header) {
@@ -469,11 +469,12 @@
       navToggle.addEventListener('click', function () {
         header.classList.toggle('nav-open');
       });
-      document.querySelectorAll('.main-nav a').forEach((link) => {
+    document.querySelectorAll('.main-nav a').forEach((link) => {
         link.addEventListener('click', () => {
-          header.classList.remove('nav-open');
+        header.classList.remove('nav-open');
         });
-      });
+    });
+
     }
 
     // --- Подсветка активного пункта меню при скролле ---
