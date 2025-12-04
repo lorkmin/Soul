@@ -124,18 +124,14 @@ def init_db():
 
     # ---- GALLERY ----
     cur.execute("""
-        CREATE TABLE IF NOT EXISTS enrolls (
+        CREATE TABLE IF NOT EXISTS gallery (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            ip TEXT,
-            name TEXT NOT NULL,
-            contact TEXT NOT NULL,
-            tariff TEXT,
-            level TEXT,
-            comment TEXT,
+            title TEXT,
+            description TEXT,
+            photo TEXT NOT NULL,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
     """)
-
 
 
     conn.commit()
