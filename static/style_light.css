@@ -607,7 +607,7 @@ section[id] {
 .review-form-field input,
 .review-form-field select,
 .review-form-field textarea {
-  width: 100%;
+  width: 90%;
   border-radius: 10px;
   border: 1px solid rgba(0,0,0,0.12);
   padding: 8px 10px;
