@@ -1,18 +1,42 @@
-{% extends "admin_layout.html" %}
-
-{% block content %}
+{% extends "admin_layout.html" %} {% block content %}
 <h2>Преподаватели</h2>
 
 <div class="admin-form">
-  <form action="{{ url_for('admin_teachers_add') }}" method="post" enctype="multipart/form-data">
-    <h3>Добавить преподавателя</h3>
+  <form
+    action="{{ url_for('admin_teachers_add') }}"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <input type="text" name="name" placeholder="Имя" required />
+    <input type="text" name="role" placeholder="Роль / уровень" />
 
-    <input type="text" name="name" placeholder="Имя" required>
-    <input type="text" name="role" placeholder="Роль / уровень" required>
     <textarea name="bio" rows="4" placeholder="Биография / опыт"></textarea>
 
-    <label>Фото:</label>
-    <input type="file" name="photo" accept="image/*">
+    <label style="margin-top: 10px"
+      >Основное (буллеты, по строке на пункт)</label
+    >
+    <textarea
+      name="highlights"
+      rows="3"
+      placeholder="Например:
+✨ Тёплый, поддерживающий формат
+📚 Простые объяснения грамматики
+💬 Много живой практики"
+    ></textarea>
+
+    <label style="margin-top: 10px"
+      >Ачивки / мини-иконки (каждая с новой строки)</label
+    >
+    <textarea
+      name="badges"
+      rows="2"
+      placeholder="✨ TOPIK 5
+🎓 Училась в Корее
+🌸 Индивидуальный подход"
+    ></textarea>
+
+    <label style="margin-top: 10px">Фото:</label>
+    <input type="file" name="photo" accept="image/*" />
 
     <button class="admin-btn" type="submit">Добавить</button>
   </form>
@@ -34,30 +58,37 @@
     <tr>
       <td>
         {% if t.photo %}
-          <img src="{{ url_for('static', filename='uploads/teachers/' ~ t.photo) }}">
-        {% else %}
-          —
-        {% endif %}
+        <img
+          src="{{ url_for('static', filename='uploads/teachers/' ~ t.photo) }}"
+        />
+        {% else %} — {% endif %}
       </td>
       <td>{{ t.name }}</td>
       <td>{{ t.role }}</td>
       <td>{{ t.bio }}</td>
 
-    <td style="white-space: nowrap;">
-        <a href="{{ url_for('admin_teachers_edit', tid=t.id) }}" class="btn-link" style="margin-right:6px;">
-        Редактировать
+      <td style="white-space: nowrap">
+        <a
+          href="{{ url_for('admin_teachers_edit', tid=t.id) }}"
+          class="btn-link"
+          style="margin-right: 6px"
+        >
+          Редактировать
         </a>
-        <form action="{{ url_for('admin_teachers_delete', tid=t.id) }}"
-            method="post"
-            style="display:inline-block;"
-            onsubmit="return confirm('Удалить преподавателя {{ t.name }}?');">
-        <button class="admin-delete-btn">Удалить</button>
-        </form> 
-    </td>
-
+        <form
+          action="{{ url_for('admin_teachers_delete', tid=t.id) }}"
+          method="post"
+          style="display: inline-block"
+          onsubmit="return confirm('Удалить преподавателя {{ t.name }}?');"
+        >
+          <button class="admin-delete-btn">Удалить</button>
+        </form>
+      </td>
     </tr>
     {% else %}
-      <tr><td colspan="5">Пока нет преподавателей.</td></tr>
+    <tr>
+      <td colspan="5">Пока нет преподавателей.</td>
+    </tr>
     {% endfor %}
   </tbody>
 </table>
