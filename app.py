@@ -308,7 +308,6 @@ def index():
 
 
 
-
 @app.post("/add-review")
 def add_review():
     name = request.form.get("name", "").strip()
@@ -817,38 +816,6 @@ def admin_gallery_delete(gid):
     return redirect(url_for("admin_gallery"))
 
 
-def change_lessons_left(conn, student_id: int, delta: int):
-    """
-    Сдвигает lessons_left для ученика на delta (может быть отрицательным).
-    Если lessons_left = NULL, ничего не делаем.
-    Не даём уйти ниже нуля.
-    """
-    conn.row_factory = sqlite3.Row
-    row = conn.execute(
-        "SELECT lessons_left FROM student_accounts WHERE id = ?",
-        (student_id,),
-    ).fetchone()
-    if not row:
-        return
-
-    current = row["lessons_left"]
-    if current is None:
-        return
-
-    try:
-        new_val = int(current) + int(delta)
-    except (TypeError, ValueError):
-        return
-
-    if new_val < 0:
-        new_val = 0
-
-    conn.execute(
-        "UPDATE student_accounts SET lessons_left = ? WHERE id = ?",
-        (new_val, student_id),
-    )
-
-
 # ================== TEACHER DASHBOARD ==================
 
 @app.get("/teacher/login")
@@ -1092,7 +1059,6 @@ def teacher_student_lessons(sid):
 def teacher_student_lesson_add(sid):
     conn = get_db()
     conn.row_factory = sqlite3.Row
-
     student = conn.execute(
         "SELECT * FROM student_accounts WHERE id = ?",
         (sid,),
@@ -1122,11 +1088,6 @@ def teacher_student_lesson_add(sid):
                 comment or None,
             ),
         )
-
-        # если сразу пометили как "проведено" — минус один урок
-        if status.lower() == "done":
-            change_lessons_left(conn, sid, -1)
-
         conn.commit()
         conn.close()
         return redirect(url_for("teacher_student_lessons", sid=sid))
@@ -1134,17 +1095,16 @@ def teacher_student_lesson_add(sid):
     conn.close()
     return render_template("teacher_lesson_form.html", student=student, lesson=None)
 
-
 @app.route("/teacher/lessons/<int:lid>/edit", methods=["GET", "POST"])
 @teacher_login_required
 def teacher_lesson_edit(lid):
     conn = get_db()
     conn.row_factory = sqlite3.Row
-
     lesson = conn.execute(
         "SELECT * FROM student_lessons WHERE id = ?",
         (lid,),
     ).fetchone()
+
     if not lesson:
         conn.close()
         return redirect(url_for("teacher_students"))
@@ -1154,12 +1114,9 @@ def teacher_lesson_edit(lid):
         (lesson["student_id"],),
     ).fetchone()
 
-    old_status = (lesson["status"] or "planned").lower()
-
     if request.method == "POST":
         start_at = (request.form.get("start_at") or "").strip()
         status = (request.form.get("status") or "planned").strip()
-        new_status = status.lower()
         rescheduled_to = (request.form.get("rescheduled_to") or "").strip()
         topic = (request.form.get("topic") or "").strip()
         comment = (request.form.get("comment") or "").strip()
@@ -1180,15 +1137,6 @@ def teacher_lesson_edit(lid):
                 lid,
             ),
         )
-
-        # логика: смена статуса влияет на lessons_left
-        if old_status != "done" and new_status == "done":
-            # стало проведённым -> минус один урок
-            change_lessons_left(conn, lesson["student_id"], -1)
-        elif old_status == "done" and new_status != "done":
-            # раньше было проведённым, теперь нет -> возвращаем урок
-            change_lessons_left(conn, lesson["student_id"], +1)
-
         conn.commit()
         conn.close()
         return redirect(url_for("teacher_student_lessons", sid=lesson["student_id"]))
@@ -1197,33 +1145,23 @@ def teacher_lesson_edit(lid):
     return render_template("teacher_lesson_form.html", student=student, lesson=lesson)
 
 
-
 @app.post("/teacher/lessons/<int:lid>/delete")
 @teacher_login_required
 def teacher_lesson_delete(lid):
     conn = get_db()
-    conn.row_factory = sqlite3.Row
-
-    lesson = conn.execute(
-        "SELECT student_id, status FROM student_lessons WHERE id = ?",
+    row = conn.execute(
+        "SELECT student_id FROM student_lessons WHERE id = ?",
         (lid,),
     ).fetchone()
-    if not lesson:
+    if not row:
         conn.close()
         return redirect(url_for("teacher_students"))
-
-    sid = lesson["student_id"]
-    status = (lesson["status"] or "planned").lower()
-
-    # если удаляем проведённое занятие — вернём урок
-    if status == "done":
-        change_lessons_left(conn, sid, +1)
+    sid = row["student_id"]
 
     conn.execute("DELETE FROM student_lessons WHERE id = ?", (lid,))
     conn.commit()
     conn.close()
     return redirect(url_for("teacher_student_lessons", sid=sid))
-
 
 
 # ================== DEV-запуск ==================
