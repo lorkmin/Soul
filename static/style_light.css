@@ -1683,16 +1683,26 @@ section[id] {
 }
 
 .course-image-wrap {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  background: #fff7e9;
+  /* убираем фиксированную высоту */
+  border-radius: var(--radius-md);
   overflow: hidden;
+  margin-bottom: 10px;
+
+  /* аккуратно центрируем картинку */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff; /* можно другой мягкий фон */
+  padding: 8px 0; /* чтобы была «воздушность» */
 }
 
 .course-image-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 100%;
+  max-height: 260px; /* чтобы карточка не разъезжалась слишком высоко */
+  height: auto;
+  width: auto;
+  object-fit: contain; /* теперь всегда показывается целиком */
+  display: block;
 }
 
 .course-body {
@@ -1808,9 +1818,9 @@ section[id] {
 
 .course-modal-image {
   width: 100%;
-  max-height: 260px;
-  object-fit: cover;
-  border-radius: 16px;
+  height: auto;
+  max-height: 360px;
+  object-fit: contain;
 }
 
 .course-modal-title {
