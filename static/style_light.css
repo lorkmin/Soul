@@ -572,7 +572,7 @@ body.modal-open {
     width: 110px;
     height: 110px;
     border-radius: 20px;
-  }  
+  }
 }
 
 /* чуть увеличиваем отступы у секций, чтобы хедер не перекрывал якоря */
@@ -1554,6 +1554,11 @@ section[id] {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.teacher-card:hover .teacher-photo-wrap img {
+  transform: scale(1.06);
 }
 
 .teacher-info {
@@ -3420,4 +3425,77 @@ body.admin-page {
 .teacher-bio-inner p,
 .teacher-bio-inner li {
   margin-bottom: 4px;
+}
+.teacher-photo-wrap {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  border-radius: 32px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* сияние вокруг фото */
+.teacher-photo-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  background: radial-gradient(circle at 20% 0%, #ffe9c0, transparent 55%),
+    radial-gradient(circle at 80% 120%, #ffd1f3, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: -1;
+}
+
+/* слегка выдвигаем блок, чтобы сияние было видно */
+.teacher-card {
+  position: relative;
+}
+
+/* при ховере — проявляем ореол */
+.teacher-card:hover .teacher-photo-wrap::before {
+  opacity: 1;
+}
+/* контейнер карточки уже есть, просто усилим стили */
+.teacher-card {
+  position: relative;
+  overflow: visible;
+}
+
+/* две искорки */
+.teacher-card::before,
+.teacher-card::after {
+  content: "✨";
+  position: absolute;
+  font-size: 1.1rem;
+  color: #fbbf24;
+  opacity: 0;
+  transform: translateY(0);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+/* первая — ближе к заголовку */
+.teacher-card::before {
+  top: 10px;
+  right: 26px;
+}
+
+/* вторая — чуть ниже и левее */
+.teacher-card::after {
+  top: 34px;
+  right: 10px;
+  font-size: 0.95rem;
+}
+
+/* при наведении плавно "всплывают" */
+.teacher-card:hover::before {
+  opacity: 1;
+  transform: translateY(-3px);
+}
+
+.teacher-card:hover::after {
+  opacity: 0.9;
+  transform: translateY(-2px);
 }
