@@ -800,6 +800,51 @@ section[id] {
   font-size: 0.92rem;
   color: var(--text-muted);
 }
+/* ====== Модалка преподавателя: красивый блок описания ====== */
+
+.teacher-bio {
+  margin-top: 10px;
+  padding: 10px 12px 12px;
+  border-radius: 16px;
+  background: #fffaf2;
+  border: 1px solid rgba(244, 201, 76, 0.35);
+}
+
+.teacher-bio-title {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #564016;
+}
+
+.teacher-bio-list {
+  margin: 0 0 6px;
+  padding-left: 1.1rem;
+  font-size: 0.9rem;
+  color: #6c5a2a;
+}
+
+.teacher-bio-list li {
+  margin-bottom: 3px;
+}
+
+.teacher-bio-note {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #7c6b3a;
+}
+
+/* мобилка: чуть плотнее */
+@media (max-width: 600px) {
+  .teacher-bio {
+    padding: 8px 10px 10px;
+  }
+  .teacher-bio-title,
+  .teacher-bio-list,
+  .teacher-bio-note {
+    font-size: 0.85rem;
+  }
+}
 
 /* ---------- Форма записи (обновлено) ---------- */
 
