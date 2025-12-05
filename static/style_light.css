@@ -568,6 +568,11 @@ body.modal-open {
   #mainHeader.nav-open .nav-toggle span:nth-child(2) {
     transform: translateY(-3px) rotate(-45deg);
   }
+  .teacher-photo-wrap {
+    width: 110px;
+    height: 110px;
+    border-radius: 20px;
+  }  
 }
 
 /* чуть увеличиваем отступы у секций, чтобы хедер не перекрывал якоря */
@@ -3374,8 +3379,12 @@ body.admin-page {
   }
 
   .teacher-photo-wrap {
-    width: 80px;
-    height: 80px;
+    width: 180px;
+    height: 180px;
+    border-radius: 32px;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
   }
 }
 /* Контейнер текста "О себе" */
