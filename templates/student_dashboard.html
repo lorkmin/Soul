@@ -31,6 +31,13 @@
           {% endif %}
 
           {% if student %}
+          <p style="font-size:0.8rem; color:#999;">
+            debug: planned={{ lessons_planned|length }},
+            done={{ lessons_done|length }},
+            canceled={{ lessons_canceled|length }},
+            rescheduled={{ lessons_rescheduled|length }}
+          </p>
+
             <hr style="margin:20px 0; border:none; border-top:1px solid rgba(0,0,0,0.06);">
 
             <h4 style="margin-bottom:10px;">{{ student['name'] or 'Ученик' }}</h4>
