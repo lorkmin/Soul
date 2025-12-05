@@ -29,6 +29,9 @@ DB_PATH = os.path.join(BASE_DIR, "soul.db")
 
 # ================== НАСТРОЙКИ ==================
 
+app.jinja_env.filters["paragraphs"] = format_paragraphs
+
+
 # секретный ключ для сессий (логин в админку)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
@@ -209,6 +212,16 @@ def login_required(f):
 
 # Преподаватель = тот же админ, отдельная авторизация не нужна
 teacher_login_required = login_required
+
+def format_paragraphs(text: str) -> str:
+    """Преобразует текст с пустыми строками в HTML-абзацы."""
+    if not text:
+        return ""
+    # убираем \r и делим по пустым строкам
+    parts = [p.strip() for p in text.replace("\r", "").split("\n\n")]
+    # оборачиваем в <p> только непустые куски
+    html = "".join(f"<p>{p}</p>" for p in parts if p)
+    return html
 
 
 
