@@ -640,21 +640,28 @@ def admin_teachers():
 @login_required
 def admin_teachers_add():
     name = request.form["name"]
-    role = request.form["role"]
+    role = request.form.get("role", "")
     bio = request.form.get("bio", "")
-    highlights = request.form.get("highlights", "")   # НОВОЕ
-    badges = request.form.get("badges", "")           # НОВОЕ
-    photo = save_upload(request.files.get("photo"), TEACHER_UPLOAD)
+    highlights = request.form.get("highlights", "")  # новые буллеты
+    badges = request.form.get("badges", "")          # ачивки
+
+    photo = None
+    file = request.files.get("photo")
+    if file and file.filename:
+        photo = save_upload(file, TEACHER_UPLOAD)
 
     conn = get_db()
     conn.execute(
-        "INSERT INTO teachers (name, role, bio, photo, highlights, badges) "
-        "VALUES (?, ?, ?, ?, ?, ?)",
+        """
+        INSERT INTO teachers (name, role, bio, photo, highlights, badges)
+        VALUES (?, ?, ?, ?, ?, ?)
+        """,
         (name, role, bio, photo, highlights, badges),
     )
     conn.commit()
     conn.close()
     return redirect(url_for("admin_teachers"))
+
 
 
 
@@ -674,38 +681,43 @@ def admin_teachers_edit(tid):
         conn.close()
         return redirect(url_for("admin_teachers"))
 
-if request.method == "POST":
-    name = request.form["name"]
-    role = request.form["role"]
-    bio = request.form.get("bio", "")
-    highlights = request.form.get("highlights", "")   # НОВОЕ
-    badges = request.form.get("badges", "")           # НОВОЕ
+    if request.method == "POST":
+        name = request.form["name"]
+        role = request.form.get("role", "")
+        bio = request.form.get("bio", "")
+        highlights = request.form.get("highlights", "")
+        badges = request.form.get("badges", "")
 
-    file = request.files.get("photo")
-    new_photo = save_upload(file, TEACHER_UPLOAD) if file and file.filename else None
+        file = request.files.get("photo")
+        new_photo = save_upload(file, TEACHER_UPLOAD) if file and file.filename else None
 
-    if new_photo:
-        conn.execute(
-            """
-            UPDATE teachers
-            SET name = ?, role = ?, bio = ?, photo = ?, highlights = ?, badges = ?
-            WHERE id = ?
-            """,
-            (name, role, bio, new_photo, highlights, badges, tid),
-        )
-    else:
-        conn.execute(
-            """
-            UPDATE teachers
-            SET name = ?, role = ?, bio = ?, highlights = ?, badges = ?
-            WHERE id = ?
-            """,
-            (name, role, bio, highlights, badges, tid),
-        )
+        if new_photo:
+            conn.execute(
+                """
+                UPDATE teachers
+                SET name = ?, role = ?, bio = ?, photo = ?, highlights = ?, badges = ?
+                WHERE id = ?
+                """,
+                (name, role, bio, new_photo, highlights, badges, tid),
+            )
+        else:
+            conn.execute(
+                """
+                UPDATE teachers
+                SET name = ?, role = ?, bio = ?, highlights = ?, badges = ?
+                WHERE id = ?
+                """,
+                (name, role, bio, highlights, badges, tid),
+            )
 
-    conn.commit()
+        conn.commit()
+        conn.close()
+        return redirect(url_for("admin_teachers"))
+
+    # GET-запрос — просто показать форму
     conn.close()
-    return redirect(url_for("admin_teachers"))
+    return render_template("admin_teacher_edit.html", teacher=teacher)
+
 
 
 
