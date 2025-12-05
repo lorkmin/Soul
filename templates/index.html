@@ -1,1112 +1,1204 @@
 <!DOCTYPE html>
 <html lang="ru">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <title>Онлайн школа корейского языка "K-Spark"</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Онлайн школа корейского языка K-Spark — занятия по скайпу и Zoom для начинающих и продолжающих.">
+    <meta
+      name="description"
+      content="Онлайн школа корейского языка K-Spark — занятия по скайпу и Zoom для начинающих и продолжающих."
+    />
     <!--<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">-->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style_light.css') }}">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style_light.css') }}"
+    />
+  </head>
 
-</head>
-
-<body>
+  <body>
     <div class="wrapper">
-        <!-- ШАПКА -->
-        <header id="mainHeader" class="top-bar">
-            <div class="top-bar-inner">
-                <div class="logo">
-                    <div class="logo-main">K-Spark</div>
-                    <div class="logo-tagline">Онлайн школа корейского языка</div>
-                </div>
+      <!-- ШАПКА -->
+      <header id="mainHeader" class="top-bar">
+        <div class="top-bar-inner">
+          <div class="logo">
+            <div class="logo-main">K-Spark</div>
+            <div class="logo-tagline">Онлайн школа корейского языка</div>
+          </div>
 
-                <nav class="top-nav">
-                    <a href="#hero">Главная</a>
-                    <a href="#about">О нас</a>
-                    <a href="#teachers">Преподаватели</a>
-                    <a href="#courses">Курсы</a>
-                    <a href="#tools">Инструменты</a>
-                    <a href="#enroll" class="nav-cta">Записаться</a>
-                </nav>
+          <nav class="top-nav">
+            <a href="#hero">Главная</a>
+            <a href="#about">О нас</a>
+            <a href="#teachers">Преподаватели</a>
+            <a href="#courses">Курсы</a>
+            <a href="#tools">Инструменты</a>
+            <a href="#enroll" class="nav-cta">Записаться</a>
+          </nav>
 
-                <!-- Кнопка для мобильного меню -->
-                <button class="nav-toggle" type="button" aria-label="Меню">
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-        </header>
+          <!-- Кнопка для мобильного меню -->
+          <button class="nav-toggle" type="button" aria-label="Меню">
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </header>
 
+      <!-- ГЕРО -->
+      <section id="hero" class="hero-kawaii">
+        <div class="section-inner hero-inner">
+          <!-- ЛЕВАЯ КОЛОНКА: ТЕКСТ -->
+          <div class="hero-col hero-col-text">
+            <p class="hero-label">Уютная онлайн-школа корейского языка</p>
 
+            <h1 class="hero-title">
+              Корейский, в который<br />
+              хочется возвращаться<span class="sparkle-emoji">✨</span>
+            </h1>
 
-        <!-- ГЕРО -->
-        <section id="hero" class="hero-kawaii">
-            <div class="section-inner hero-inner">
-            <!-- ЛЕВАЯ КОЛОНКА: ТЕКСТ -->
-            <div class="hero-col hero-col-text">
-                <p class="hero-label">Уютная онлайн-школа корейского языка</p>
+            <p class="hero-sub">
+              Для тех, кто мечтает об учёбе или жизни в Корее, но хочет начинать
+              в&nbsp;своём темпе — с поддержкой и без стресса.
+            </p>
 
-                <h1 class="hero-title">
-                Корейский, в который<br>
-                хочется возвращаться<span class="sparkle-emoji">✨</span>
-                </h1>
-
-                <p class="hero-sub">
-                Для тех, кто мечтает об учёбе или жизни в Корее,
-                но хочет начинать в&nbsp;своём темпе — с поддержкой и без стресса.
-                </p>
-
-                <!-- ДВЕ ЦЕЛЕВЫЕ АУДИТОРИИ -->
-                <div class="hero-audience-pills">
-                <div class="hero-pill">
-                    15–25 лет<br><span>готовимся к учёбе и поступлению</span>
-                </div>
-                <div class="hero-pill">
-                    40+<br><span>учим язык для души и переезда</span>
-                </div>
-                </div>
-
-                <!-- КНОПКИ -->
-                <div class="hero-actions">
-                <a href="#enroll" class="btn-primary">Записаться на пробный урок</a>
-                <a href="#about" class="btn-ghost">Узнать о школе</a>
-                </div>
-                <!-- МЕЛКИЕ ПЛЮСЫ -->
-                <div class="hero-meta-list">
-                <p class="hero-meta">
-                    🎧 <span class="sparkle-word">Мягкий старт</span> с нуля — объясняем спокойно и по шагам.
-                </p>
-                <p class="hero-meta">
-                    ⭐ Маленькие группы и тёплая атмосфера поддержки.
-                </p>
-                <p class="hero-meta">
-                    🇰🇷 Корейская культура, а не только грамматика.
-                </p>
-                </div>
-            </div>
-
-            <!-- ПРАВАЯ КОЛОНКА: KAWAII-ИЛЛЮСТРАЦИЯ -->
-            <div class="hero-col hero-col-visual">
-                <div class="hero-k-card">
-                <div class="hero-k-header">
-                    <span class="hero-k-tag">오늘도 화이팅 ✨</span>
-                </div>
-
-                <div class="hero-k-main">
-                    <div class="hero-k-avatar">
-                    <div class="hero-k-face">
-                        (•‿•)
-                    </div>
-                    <div class="hero-k-badge">한글</div>
-                    </div>
-                    <div class="hero-k-text">
-                    <p>Небольшие домашки, понятные объяснения и поддержка преподавателя.</p>
-                    <p class="hero-k-note">
-                        <span class="sparkle-word">Каждый шаг важен</span> — от алфавита до первых диалогов.
-                    </p>
-                    </div>
-                </div>
-
-                <div class="hero-k-footer">
-                    <div class="hero-k-chip">🌸 уютные онлайн-занятия</div>
-                    <div class="hero-k-chip">📚 свои материалы</div>
-                </div>
-
-                <!-- МИНИ-ИЛЛЮСТРАЦИИ ВОКРУГ -->
-                <div class="hero-k-icon hero-k-icon--cherry">🌸</div>
-                <div class="hero-k-icon hero-k-icon--house">🏠</div>
-                <div class="hero-k-icon hero-k-icon--book">📖</div>
-                <div class="hero-k-icon hero-k-icon--cup">☕</div>
-                <div class="hero-k-spark hero-k-spark--1">✨</div>
-                <div class="hero-k-spark hero-k-spark--2">✨</div>
-                <div class="hero-k-spark hero-k-spark--3">✨</div>
-                </div>
-            </div>
-            </div>
-        </section>
-
-
-
-
-
-        <!-- ========================================================= -->
-        <!--                         О НАС                               -->
-        <!-- ========================================================= -->
-        <section id="about">
-            <div class="section-inner">
-
-                <div class="section-title">
-                    <h3>О нас</h3>
-                    <span>небольшая уютная школа корейского языка</span>
-                </div>
-
-                <div class="about-box">
-                  <div class="about-text">
-                    <p>
-                      <span class="sparkle-word">K-Spark</span> — это небольшая онлайн-школа корейского языка,
-                      где важно не «отсидеть урок», а почувствовать, что вы правда продвинулись.
-                      Мы делаем занятия тёплыми и понятными, чтобы корейский стал частью жизни,
-                      а не источником стресса.
-                    </p>
-
-                    <p>
-                      С нами учатся и те, кто мечтает об учёбе или жизни в Корее, и те, кто нашёл
-                      вдохновение в корейской культуре уже взрослыми. Мы объясняем спокойно, даём
-                      время на вопросы и поддерживаем даже тогда, когда кажется, что «ничего не получается».
-                    </p>
-                  </div>
-
-                  <div class="about-cards">
-                    <div class="about-card">
-                      <div class="about-card-icon">🌸</div>
-                      <h4>Уют и внимание</h4>
-                      <p>Небольшие группы и доброжелательные преподаватели — у каждого есть голос и место.</p>
-                    </div>
-
-                    <div class="about-card">
-                      <div class="about-card-icon">📚</div>
-                      <h4>Структура без гонки</h4>
-                      <p>Программа по шагам: от алфавита до первых диалогов и уверенного общения.</p>
-                    </div>
-
-                    <div class="about-card">
-                      <div class="about-card-icon">✨</div>
-                      <h4>Поддержка на пути</h4>
-                      <p>Помогаем не только с языком, но и с мотивацией, мечтами и планами про Корею.</p>
-                    </div>
-                  </div>
-                </div>
-
-
-            </div>
-        </section>
-
-        <!-- ========================================================= -->
-        <!--                         ГАЛЕРЕЯ                           -->
-        <!-- ========================================================= -->
-        <section id="gallery">
-          <div class="section-inner">
-            <div class="section-title">
-              <h3>Галерея</h3>
-              <span>Немного кадров из нашей онлайн-школы</span>
-            </div>
-
-            {% if gallery %}
-              <!-- КАСКАД ИЗ ФОТО -->
-              <div class="gallery-stack" id="gallery-stack">
-                {% for img in gallery %}
-                  {% if loop.index <= 5 %}
-                  <button
-                    class="gallery-stack-item"
-                    type="button"
-                    data-index="{{ loop.index0 }}"
-                    data-src="{{ url_for('static', filename='uploads/gallery/' ~ img['photo']) }}"
-                    data-title="{{ img['title'] or '' }}"
-                    data-desc="{{ img['description'] or '' }}"
-                  >
-                    <img src="{{ url_for('static', filename='uploads/gallery/' ~ img['photo']) }}"
-                         alt="{{ img['title'] or 'Фото из занятий' }}">
-                  </button>
-                  {% endif %}
-                {% endfor %}
+            <!-- ДВЕ ЦЕЛЕВЫЕ АУДИТОРИИ -->
+            <div class="hero-audience-pills">
+              <div class="hero-pill">
+                15–25 лет<br /><span>готовимся к учёбе и поступлению</span>
               </div>
-
-              {% if gallery|length > 5 %}
-                <p class="gallery-hint">
-                  В галерее больше фотографий — нажмите на карточку, чтобы полистать всё 📸
-                </p>
-              {% endif %}
-            {% else %}
-              <p>Пока мы только начинаем собирать фото, но скоро здесь будет тепло и многолюдно 😊</p>
-            {% endif %}
-
-            <!-- ЛАЙТБОКС С ЛИСТАНИЕМ -->
-            <div class="gallery-lightbox" id="gallery-lightbox">
-              <div class="gallery-lightbox-backdrop"></div>
-              <div class="gallery-lightbox-content">
-                <button class="gallery-lightbox-close" type="button" aria-label="Закрыть">×</button>
-                <button class="gallery-lightbox-prev" type="button">‹</button>
-                <button class="gallery-lightbox-next" type="button">›</button>
-
-                <img id="gallery-lightbox-image" src="" alt="">
-                <div class="gallery-lightbox-caption">
-                  <div id="gallery-lightbox-title"></div>
-                  <div id="gallery-lightbox-desc"></div>
-                </div>
+              <div class="hero-pill">
+                40+<br /><span>учим язык для души и переезда</span>
               </div>
+            </div>
+
+            <!-- КНОПКИ -->
+            <div class="hero-actions">
+              <a href="#enroll" class="btn-primary"
+                >Записаться на пробный урок</a
+              >
+              <a href="#about" class="btn-ghost">Узнать о школе</a>
+            </div>
+            <!-- МЕЛКИЕ ПЛЮСЫ -->
+            <div class="hero-meta-list">
+              <p class="hero-meta">
+                🎧 <span class="sparkle-word">Мягкий старт</span> с нуля —
+                объясняем спокойно и по шагам.
+              </p>
+              <p class="hero-meta">
+                ⭐ Маленькие группы и тёплая атмосфера поддержки.
+              </p>
+              <p class="hero-meta">
+                🇰🇷 Корейская культура, а не только грамматика.
+              </p>
             </div>
           </div>
-        </section>
 
+          <!-- ПРАВАЯ КОЛОНКА: KAWAII-ИЛЛЮСТРАЦИЯ -->
+          <div class="hero-col hero-col-visual">
+            <div class="hero-k-card">
+              <div class="hero-k-header">
+                <span class="hero-k-tag">오늘도 화이팅 ✨</span>
+              </div>
 
-
-
-        <!-- ========================================================= -->
-        <!--                         Преподы                           -->
-        <!-- ========================================================= -->
-
-        <section id="teachers">
-          <div class="section-inner">
-            <div class="section-title">
-              <h3>Наши преподаватели</h3>
-              <span>внимательные наставники, которые поддержат на каждом шаге</span>
-            </div>
-
-            <div class="teachers-grid">
-              {% for t in teachers %}
-              <!-- КАРТОЧКА ПРЕПОДА -->
-              <article class="teacher-card animate-on-scroll" data-teacher-id="{{ t.id }}">
-                <div class="teacher-photo-wrap">
-                  {% if t.photo %}
-                    <img src="{{ url_for('static', filename='uploads/teachers/' ~ t.photo) }}" alt="{{ t.name }}">
-                  {% else %}
-                    <img src="{{ url_for('static', filename='default_teacher.jpg') }}" alt="{{ t.name }}">
-                  {% endif %}
+              <div class="hero-k-main">
+                <div class="hero-k-avatar">
+                  <div class="hero-k-face">(•‿•)</div>
+                  <div class="hero-k-badge">한글</div>
                 </div>
-
-                <div class="teacher-info">
-                  <h4 class="teacher-name">{{ t.name }}</h4>
-                  <p class="teacher-role">{{ t.role }}</p>
-                  <p class="teacher-mini">
-                    Объясняет спокойно, по шагам и с примерами из жизни.
+                <div class="hero-k-text">
+                  <p>
+                    Небольшие домашки, понятные объяснения и поддержка
+                    преподавателя.
                   </p>
-                  <div class="teacher-pill-row">
-                    <span class="teacher-pill">🌸 поддержка</span>
-                    <span class="teacher-pill">📚 понятные объяснения</span>
-                  </div>
-                </div>
-              </article>
-
-              <!-- МОДАЛКА ПРЕПОДА -->
-              <div class="teacher-modal" id="teacher-modal-{{ t.id }}">
-                <div class="teacher-modal-content">
-                  <button class="teacher-modal-close" aria-label="Закрыть">×</button>
-                  <div class="teacher-modal-inner">
-                    <div class="teacher-modal-header">
-                      {% if t.photo %}
-                        <img src="{{ url_for('static', filename='uploads/teachers/' ~ t.photo) }}"
-                             class="teacher-modal-photo" alt="{{ t.name }}">
-                      {% endif %}
-                      <div>
-                        <h3 class="teacher-modal-name">{{ t.name }}</h3>
-                        <p class="teacher-modal-role">{{ t.role }}</p>
-                        <p class="teacher-modal-tagline">
-                          ✨ Тёплый подход, живые примеры и поддержка даже на «сложных» темах.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="teacher-modal-bio">
-                      {{ t.bio|safe }}
-                    </div>
-                  </div>
+                  <p class="hero-k-note">
+                    <span class="sparkle-word">Каждый шаг важен</span> — от
+                    алфавита до первых диалогов.
+                  </p>
                 </div>
               </div>
-              {% endfor %}
+
+              <div class="hero-k-footer">
+                <div class="hero-k-chip">🌸 уютные онлайн-занятия</div>
+                <div class="hero-k-chip">📚 свои материалы</div>
+              </div>
+
+              <!-- МИНИ-ИЛЛЮСТРАЦИИ ВОКРУГ -->
+              <div class="hero-k-icon hero-k-icon--cherry">🌸</div>
+              <div class="hero-k-icon hero-k-icon--house">🏠</div>
+              <div class="hero-k-icon hero-k-icon--book">📖</div>
+              <div class="hero-k-icon hero-k-icon--cup">☕</div>
+              <div class="hero-k-spark hero-k-spark--1">✨</div>
+              <div class="hero-k-spark hero-k-spark--2">✨</div>
+              <div class="hero-k-spark hero-k-spark--3">✨</div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
+      <!-- ========================================================= -->
+      <!--                         О НАС                               -->
+      <!-- ========================================================= -->
+      <section id="about">
+        <div class="section-inner">
+          <div class="section-title">
+            <h3>О нас</h3>
+            <span>небольшая уютная школа корейского языка</span>
+          </div>
 
+          <div class="about-box">
+            <div class="about-text">
+              <p>
+                <span class="sparkle-word">K-Spark</span> — это небольшая
+                онлайн-школа корейского языка, где важно не «отсидеть урок», а
+                почувствовать, что вы правда продвинулись. Мы делаем занятия
+                тёплыми и понятными, чтобы корейский стал частью жизни, а не
+                источником стресса.
+              </p>
 
-
-
-        <!-- ========================================================= -->
-        <!--                     НАШИ КУРСЫ                            -->
-        <!-- ========================================================= -->
-        <section id="courses">
-          <div class="section-inner">
-            <div class="section-title">
-              <h3>Наши курсы</h3>
-              <span>Подберите формат под свои цели и темп</span>
+              <p>
+                С нами учатся и те, кто мечтает об учёбе или жизни в Корее, и
+                те, кто нашёл вдохновение в корейской культуре уже взрослыми. Мы
+                объясняем спокойно, даём время на вопросы и поддерживаем даже
+                тогда, когда кажется, что «ничего не получается».
+              </p>
             </div>
 
-            <div class="courses-grid">
-              {% for c in courses %}
-              <!-- КАРТОЧКА КУРСА -->
-              <article class="course-card animate-on-scroll"
-                       data-course-id="{{ c['id'] }}"
-                       data-course-title="{{ c['title'] }}">
-                <div class="course-card-inner">
-                  <div class="course-image-wrap">
-                    {% if c['photo'] %}
-                      <img src="{{ url_for('static', filename='uploads/courses/' ~ c['photo']) }}"
-                           alt="{{ c['title'] }}">
-                    {% endif %}
-                  </div>
+            <div class="about-cards">
+              <div class="about-card">
+                <div class="about-card-icon">🌸</div>
+                <h4>Уют и внимание</h4>
+                <p>
+                  Небольшие группы и доброжелательные преподаватели — у каждого
+                  есть голос и место.
+                </p>
+              </div>
 
-                  <div class="course-body">
-                    <h4 class="course-title">{{ c['title'] }}</h4>
-                    <p class="course-meta">
-                      {{ c['lessons'] }} уроков · {{ c['price'] }} ₽
-                    </p>
-                    <p class="course-snippet">
-                      {{ (c['description'] or '')[:120] }}{% if c['description'] and c['description']|length > 120 %}…{% endif %}
-                    </p>
-                    <div class="course-pill-row">
-                      <span class="course-pill">🌸 уютные занятия</span>
-                      <span class="course-pill">📚 своя программа</span>
-                    </div>
-                  </div>
+              <div class="about-card">
+                <div class="about-card-icon">📚</div>
+                <h4>Структура без гонки</h4>
+                <p>
+                  Программа по шагам: от алфавита до первых диалогов и
+                  уверенного общения.
+                </p>
+              </div>
+
+              <div class="about-card">
+                <div class="about-card-icon">✨</div>
+                <h4>Поддержка на пути</h4>
+                <p>
+                  Помогаем не только с языком, но и с мотивацией, мечтами и
+                  планами про Корею.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!--                         ГАЛЕРЕЯ                           -->
+      <!-- ========================================================= -->
+      <section id="gallery">
+        <div class="section-inner">
+          <div class="section-title">
+            <h3>Галерея</h3>
+            <span>Немного кадров из нашей онлайн-школы</span>
+          </div>
+
+          {% if gallery %}
+          <!-- КАСКАД ИЗ ФОТО -->
+          <div class="gallery-stack" id="gallery-stack">
+            {% for img in gallery %} {% if loop.index <= 5 %}
+            <button
+              class="gallery-stack-item"
+              type="button"
+              data-index="{{ loop.index0 }}"
+              data-src="{{ url_for('static', filename='uploads/gallery/' ~ img['photo']) }}"
+              data-title="{{ img['title'] or '' }}"
+              data-desc="{{ img['description'] or '' }}"
+            >
+              <img
+                src="{{ url_for('static', filename='uploads/gallery/' ~ img['photo']) }}"
+                alt="{{ img['title'] or 'Фото из занятий' }}"
+              />
+            </button>
+            {% endif %} {% endfor %}
+          </div>
+
+          {% if gallery|length > 5 %}
+          <p class="gallery-hint">
+            В галерее больше фотографий — нажмите на карточку, чтобы полистать
+            всё 📸
+          </p>
+          {% endif %} {% else %}
+          <p>
+            Пока мы только начинаем собирать фото, но скоро здесь будет тепло и
+            многолюдно 😊
+          </p>
+          {% endif %}
+
+          <!-- ЛАЙТБОКС С ЛИСТАНИЕМ -->
+          <div class="gallery-lightbox" id="gallery-lightbox">
+            <div class="gallery-lightbox-backdrop"></div>
+            <div class="gallery-lightbox-content">
+              <button
+                class="gallery-lightbox-close"
+                type="button"
+                aria-label="Закрыть"
+              >
+                ×
+              </button>
+              <button class="gallery-lightbox-prev" type="button">‹</button>
+              <button class="gallery-lightbox-next" type="button">›</button>
+
+              <img id="gallery-lightbox-image" src="" alt="" />
+              <div class="gallery-lightbox-caption">
+                <div id="gallery-lightbox-title"></div>
+                <div id="gallery-lightbox-desc"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!--                         Преподы                           -->
+      <!-- ========================================================= -->
+
+      <section id="teachers">
+        <div class="section-inner">
+          <div class="section-title">
+            <h3>Наши преподаватели</h3>
+            <span
+              >внимательные наставники, которые поддержат на каждом шаге</span
+            >
+          </div>
+
+          <div class="teachers-grid">
+            {% for t in teachers %}
+            <!-- КАРТОЧКА ПРЕПОДА -->
+            <article
+              class="teacher-card animate-on-scroll"
+              data-teacher-id="{{ t.id }}"
+            >
+              <div class="teacher-photo-wrap">
+                {% if t.photo %}
+                <img
+                  src="{{ url_for('static', filename='uploads/teachers/' ~ t.photo) }}"
+                  alt="{{ t.name }}"
+                />
+                {% else %}
+                <img
+                  src="{{ url_for('static', filename='default_teacher.jpg') }}"
+                  alt="{{ t.name }}"
+                />
+                {% endif %}
+              </div>
+
+              <div class="teacher-info">
+                <h4 class="teacher-name">{{ t.name }}</h4>
+                <p class="teacher-role">{{ t.role }}</p>
+                <p class="teacher-mini">
+                  Объясняет спокойно, по шагам и с примерами из жизни.
+                </p>
+                <div class="teacher-pill-row">
+                  <span class="teacher-pill">🌸 поддержка</span>
+                  <span class="teacher-pill">📚 понятные объяснения</span>
                 </div>
-              </article>
+              </div>
+            </article>
 
-              <!-- МОДАЛКА КУРСА -->
-              <div class="course-modal"
-                   id="course-modal-{{ c['id'] }}"
-                   data-course-id="{{ c['id'] }}"
-                   data-course-title="{{ c['title'] }}">
-                <div class="course-modal-backdrop"></div>
-                <div class="course-modal-content">
-                  <!-- Кнопки навигации -->
-                  <button class="course-modal-prev" type="button">‹</button>
-                  <button class="course-modal-next" type="button">›</button>
-
-                  <button class="course-modal-close" aria-label="Закрыть">×</button>
-
-                  <div class="course-modal-inner">
-                    {% if c['photo'] %}
-                      <img src="{{ url_for('static', filename='uploads/courses/' ~ c['photo']) }}"
-                           class="course-modal-image"
-                           alt="{{ c['title'] }}">
+            <!-- МОДАЛКА ПРЕПОДА -->
+            <div class="teacher-modal" id="teacher-modal-{{ t.id }}">
+              <div class="teacher-modal-content">
+                <button class="teacher-modal-close" aria-label="Закрыть">
+                  ×
+                </button>
+                <div class="teacher-modal-inner">
+                  <div class="teacher-modal-header">
+                    {% if t.photo %}
+                    <img
+                      src="{{ url_for('static', filename='uploads/teachers/' ~ t.photo) }}"
+                      class="teacher-modal-photo"
+                      alt="{{ t.name }}"
+                    />
                     {% endif %}
-
-                    <h3 class="course-modal-title">{{ c['title'] }}</h3>
-                    <p class="course-modal-meta">
-                      {{ c['lessons'] }} уроков · {{ c['price'] }} ₽
-                    </p>
-                    <div class="course-modal-desc">
-                      {{ c['description'] }}
-                    </div>
-
-                    <div class="course-modal-footer">
-                      <p class="course-modal-note">
-                        Если сомневаетесь, подойдёт ли курс — оставьте заявку, мы зададим пару вопросов
-                        и поможем выбрать подходящий уровень.
+                    <div>
+                      <h3 class="teacher-modal-name">{{ t.name }}</h3>
+                      <p class="teacher-modal-role">{{ t.role }}</p>
+                      <p class="teacher-modal-tagline">
+                        ✨ Тёплый подход, живые примеры и поддержка даже на
+                        «сложных» темах.
                       </p>
-                      <button class="course-modal-enroll-btn" type="button">
-                        Записаться на этот курс
-                      </button>
                     </div>
+                  </div>
+
+                  <div class="teacher-modal-bio">{{ t.bio|safe }}</div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!--                     НАШИ КУРСЫ                            -->
+      <!-- ========================================================= -->
+      <section id="courses">
+        <div class="section-inner">
+          <div class="section-title">
+            <h3>Наши курсы</h3>
+            <span>Подберите формат под свои цели и темп</span>
+          </div>
+
+          <div class="courses-grid">
+            {% for c in courses %}
+            <!-- КАРТОЧКА КУРСА -->
+            <article
+              class="course-card animate-on-scroll"
+              data-course-id="{{ c['id'] }}"
+              data-course-title="{{ c['title'] }}"
+            >
+              <div class="course-card-inner">
+                <div class="course-image-wrap">
+                  {% if c['photo'] %}
+                  <img
+                    src="{{ url_for('static', filename='uploads/courses/' ~ c['photo']) }}"
+                    alt="{{ c['title'] }}"
+                  />
+                  {% endif %}
+                </div>
+
+                <div class="course-body">
+                  <h4 class="course-title">{{ c['title'] }}</h4>
+                  <p class="course-meta">
+                    {{ c['lessons'] }} уроков · {{ c['price'] }} ₽
+                  </p>
+                  <p class="course-snippet">
+                    {{ (c['description'] or '')[:120] }}{% if c['description']
+                    and c['description']|length > 120 %}…{% endif %}
+                  </p>
+                  <div class="course-pill-row">
+                    <span class="course-pill">🌸 уютные занятия</span>
+                    <span class="course-pill">📚 своя программа</span>
                   </div>
                 </div>
               </div>
-              {% endfor %}
-            </div>
-          </div>
-        </section>
+            </article>
 
+            <!-- МОДАЛКА КУРСА -->
+            <div
+              class="course-modal"
+              id="course-modal-{{ c['id'] }}"
+              data-course-id="{{ c['id'] }}"
+              data-course-title="{{ c['title'] }}"
+            >
+              <div class="course-modal-backdrop"></div>
+              <div class="course-modal-content">
+                <!-- Кнопки навигации -->
+                <button class="course-modal-prev" type="button">‹</button>
+                <button class="course-modal-next" type="button">›</button>
 
+                <button class="course-modal-close" aria-label="Закрыть">
+                  ×
+                </button>
 
+                <div class="course-modal-inner">
+                  {% if c['photo'] %}
+                  <img
+                    src="{{ url_for('static', filename='uploads/courses/' ~ c['photo']) }}"
+                    class="course-modal-image"
+                    alt="{{ c['title'] }}"
+                  />
+                  {% endif %}
 
+                  <h3 class="course-modal-title">{{ c['title'] }}</h3>
+                  <p class="course-modal-meta">
+                    {{ c['lessons'] }} уроков · {{ c['price'] }} ₽
+                  </p>
+                  <div class="course-modal-desc">{{ c['description'] }}</div>
 
-
-        <!-- ОТЗЫВЫ -->
-        <section id="reviews">
-            <div class="section-inner">
-                <div class="section-title">
-                    <h3>Отзывы учеников</h3>
-                    <span>Живые впечатления о занятиях</span>
-                </div>
-
-                    <div class="reviews-grid">
-                      {% if reviews %}
-                        {% for r in reviews %}
-                          <article class="review-card animate-on-scroll">
-                            <div class="review-card-header">
-                              <div class="review-avatar">
-                                {{ r.name[0] if r.name else "🙂" }}
-                              </div>
-                              <div class="review-head-text">
-                                <div class="review-name">{{ r.name }}</div>
-                                <div class="review-meta-row">
-                                  {% if r.package %}
-                                    <span class="review-badge">{{ r.package }}</span>
-                                  {% endif %}
-                                  <span class="review-date">
-                                    {{ r.created_at[:10] }}
-                                  </span>
-                                </div>
-                                <div class="review-stars">
-                                  {% if r.rating %}
-                                    {{ "★" * r.rating }}{{ "☆" * (5 - r.rating) }}
-                                  {% else %}
-                                    ★★★★★
-                                  {% endif %}
-                                </div>
-                              </div>
-                            </div>
-
-                            <p class="review-text">
-                              {{ r.text }}
-                            </p>
-                          </article>
-                        {% endfor %}
-                      {% else %}
-                        <p>Пока нет отзывов. Станьте первым, кому корейский понравился с «K-Spark» 😊</p>
-                      {% endif %}
-                    </div>
-
-
-                <!-- ФОРМА ОТЗЫВА -->
-                <div class="review-form-wrapper collapsed" id="reviewFormWrapper">
-                    <div class="review-form-header">
-                        <h4 class="review-form-title">Оставить отзыв</h4>
-                        <button type="button" class="btn-primary" id="toggleReviewForm">
-                            Написать отзыв
-                        </button>
-                    </div>
-
-                    <form class="review-form" action="{{ url_for('add_review') }}" method="post" id="reviewForm">
-                        <div class="review-form-row">
-                            <div class="review-form-field">
-                                <label for="name">Имя</label>
-                                <input id="name" name="name" type="text" required placeholder="Ваше имя" />
-                            </div>
-                                <div class="review-form-field">
-                                    <label for="package">Пакет</label>
-                                    <select id="package" name="package">
-                                        <option value="">Не выбрано</option>
-                                        {% for c in courses %}
-                                            <option value="{{ c['title'] }}">{{ c['title'] }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>  
-
-
-                            <!-- НОВЫЙ блок рейтинга звёздочками -->
-                            <div class="review-form-field review-form-rating">
-                                <span class="rating-label">Оценка</span>
-                                <div class="rating-stars" id="ratingStars" data-current="5">
-                                    <span data-value="1">★</span>
-                                    <span data-value="2">★</span>
-                                    <span data-value="3">★</span>
-                                    <span data-value="4">★</span>
-                                    <span data-value="5">★</span>
-                                </div>
-                                <!-- скрытое поле, которое реально уходит в форму -->
-                                <input type="hidden" name="rating" id="ratingInput" value="5" />
-                            </div>
-                        </div>
-
-                        <div class="review-form-field">
-                            <label for="text">Текст отзыва</label>
-                            <textarea id="text" name="text" required placeholder="Поделитесь, как проходят занятия, что понравилось, что было неожиданно…"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Отправить отзыв</button>
-                    </form>
-                </div>
-
-            </div>
-        </section>
-
-        <section id="faq">
-          <div class="section-inner">
-            <div class="section-title">
-              <h3>Частые вопросы</h3>
-              <span>на всякий случай — отвечаем заранее 🙂</span>
-            </div>
-
-            <div class="faq-grid">
-              <details class="faq-item" open>
-                <summary>
-                  Я никогда не учил(а) корейский. Подойдёт ли мне ваша школа?
-                </summary>
-                <p>
-                  Да 💛 У нас много учеников, которые приходят с полного нуля. Мы спокойно
-                  объясняем алфавит, звуки и базовую грамматику, даём время привыкнуть к языку
-                  и не торопим, если что-то не получается с первого раза.
-                </p>
-              </details>
-
-              <details class="faq-item">
-                <summary>
-                  Как понять, на какой уровень или курс мне записаться?
-                </summary>
-                <p>
-                  Если вы сомневаетесь, просто оставьте заявку и напишите пару слов о себе
-                  — мы зададим несколько вопросов, можно будет пройти мини-определение уровня
-                  и подобрать удобную группу или формат обучения.
-                </p>
-              </details>
-
-              <details class="faq-item">
-                <summary>
-                  Сколько длится занятие и как часто проходят уроки?
-                </summary>
-                <p>
-                  Обычно занятие длится 60–90 минут, 1–2 раза в неделю. Конкретный формат
-                  зависит от курса и группы — при записи мы расскажем подробно и поможем
-                  выбрать удобное расписание.
-                </p>
-              </details>
-
-              <details class="faq-item">
-                <summary>
-                  У меня плотная работа / учёба. Я успею?
-                </summary>
-                <p>
-                  Мы специально делаем небольшие домашние задания и даём понятные конспекты.
-                  Можно заниматься вечером после работы/учёбы, а если вы пропустили урок —
-                  поможем наверстать материал.
-                </p>
-              </details>
-
-              <details class="faq-item">
-                <summary>
-                  Можно ли учиться, если мне 40+ и я «давно не учился(ась)»?
-                </summary>
-                <p>
-                  Конечно 🌸 У нас есть взрослые ученики, которые начинают с нуля. Мы ведём занятия
-                  в спокойном темпе, объясняем без «университетского» давления и поддерживаем,
-                  если возникает неуверенность.
-                </p>
-              </details>
-
-              <details class="faq-item">
-                <summary>
-                  Как проходит оплата и можно ли взять пробный урок?
-                </summary>
-                <p>
-                  Да, вы можете начать с пробного занятия. Оставьте заявку на сайте — мы свяжемся,
-                  расскажем про расписание, стоимость и варианты оплаты, а также поможем выбрать
-                  удобный пакет занятий.
-                </p>
-              </details>
-            </div>
-          </div>
-        </section>
-
-
-        <!-- ========================================================= -->
-        <!--                 ИНСТРУМЕНТЫ ОБУЧЕНИЯ                      -->
-        <!-- ========================================================= -->
-        <section id="tools">
-          <div class="section-inner">
-            <div class="section-title">
-              <h3>Как проходит обучение</h3>
-              <span>Инструменты, которые мы используем на занятиях</span>
-            </div>
-
-            <div class="tools-grid">
-              <article class="tool-card animate-on-scroll">
-                <h4>Zoom / Skype</h4>
-                <p>Онлайн-занятия в удобных сервисах: стабильная связь, чат и запись урока по запросу.</p>
-              </article>
-
-              <article class="tool-card animate-on-scroll">
-                <h4>Методические материалы</h4>
-                <p>Авторские презентации, PDF-конспекты и тренажёры, чтобы повторять материал между уроками.</p>
-              </article>
-
-              <article class="tool-card animate-on-scroll">
-                <h4>Поддержка с ИИ</h4>
-                <p>Дополнительные упражнения, проверка фраз и разбор ошибок с помощью современных ИИ-инструментов.</p>
-              </article>
-            </div>
-          </div>
-        </section>
-
-
-        <!-- ЗАПИСЬ НА ЗАНЯТИЯ -->
-        <section id="enroll">
-            <div class="section-inner">
-            <div class="section-title">
-                <h3>Записаться на занятия</h3>
-                <span>Оставьте заявку — подберём формат и группу</span>
-            </div>
-
-            <div class="enroll-wrapper">
-                <div class="enroll-box">
-                <form action="{{ url_for('enroll') }}" method="post">
-                    <div class="form-row">
-                    <div class="form-field">
-                        <label for="enroll-name">Имя</label>
-                        <input id="enroll-name" type="text" name="name"
-                                placeholder="Как к вам обращаться?" required>
-                    </div>
-                    <div class="form-field">
-                        <label for="enroll-contact">Контакт</label>
-                        <input id="enroll-contact" type="text" name="contact"
-                                placeholder="Телеграм, WhatsApp или телефон" required>
-                    </div>
-                    </div>
-
-                    <div class="form-row">
-                    <div class="form-field">
-                        <label for="enroll-level">Ваш уровень корейского</label>
-                        <select id="enroll-level" name="level">
-                        <option value="Никогда не изучал(а)">Полный ноль</option>
-                        <option value="Знаю алфавит">Знаю алфавит, немного слов</option>
-                        <option value="Могу поддержать простой диалог">Уже немного говорю</option>
-                        </select>
-                    </div>
-                    <div class="form-field">
-                        <label for="enroll-tariff">Курс</label>
-                        <select id="enroll-tariff" name="tariff" required>
-                        <option value="">Выберите курс</option>
-                        {% for c in courses %}
-                            <option value="{{ c['title'] }}">{{ c['title'] }}</option>
-                        {% endfor %}
-                        </select>
-                    </div>
-                    </div>
-
-                    <div class="form-field">
-                    <label for="enroll-comment">Пара слов о вас (по желанию)</label>
-                    <textarea id="enroll-comment" name="comment" rows="3"
-                                placeholder="Удобное время, цель обучения, важные пожелания…"></textarea>
-                    </div>
-
-                    <p class="form-note">
-                    Нажимая «Отправить», вы соглашаетесь на обработку введённых данных
-                    для связи по вопросам обучения.
+                  <div class="course-modal-footer">
+                    <p class="course-modal-note">
+                      Если сомневаетесь, подойдёт ли курс — оставьте заявку, мы
+                      зададим пару вопросов и поможем выбрать подходящий
+                      уровень.
                     </p>
-
-                    <button class="btn-primary form-submit" type="submit">
-                    Отправить заявку
+                    <button class="course-modal-enroll-btn" type="button">
+                      Записаться на этот курс
                     </button>
-                </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+
+      <!-- ОТЗЫВЫ -->
+      <section id="reviews">
+        <div class="section-inner">
+          <div class="section-title">
+            <h3>Отзывы учеников</h3>
+            <span>Живые впечатления о занятиях</span>
+          </div>
+
+          <div class="reviews-grid">
+            {% if reviews %} {% for r in reviews %}
+            <article class="review-card animate-on-scroll">
+              <div class="review-card-header">
+                <div class="review-avatar">
+                  {{ r.name[0] if r.name else "🙂" }}
+                </div>
+                <div class="review-head-text">
+                  <div class="review-name">{{ r.name }}</div>
+                  <div class="review-meta-row">
+                    {% if r.package %}
+                    <span class="review-badge">{{ r.package }}</span>
+                    {% endif %}
+                    <span class="review-date"> {{ r.created_at[:10] }} </span>
+                  </div>
+                  <div class="review-stars">
+                    {% if r.rating %} {{ "★" * r.rating }}{{ "☆" * (5 -
+                    r.rating) }} {% else %} ★★★★★ {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <p class="review-text">{{ r.text }}</p>
+            </article>
+            {% endfor %} {% else %}
+            <p>
+              Пока нет отзывов. Станьте первым, кому корейский понравился с
+              «K-Spark» 😊
+            </p>
+            {% endif %}
+          </div>
+
+          <!-- ФОРМА ОТЗЫВА -->
+          <div class="review-form-wrapper collapsed" id="reviewFormWrapper">
+            <div class="review-form-header">
+              <h4 class="review-form-title">Оставить отзыв</h4>
+              <button type="button" class="btn-primary" id="toggleReviewForm">
+                Написать отзыв
+              </button>
+            </div>
+
+            <form
+              class="review-form"
+              action="{{ url_for('add_review') }}"
+              method="post"
+              id="reviewForm"
+            >
+              <div class="review-form-row">
+                <div class="review-form-field">
+                  <label for="name">Имя</label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    required
+                    placeholder="Ваше имя"
+                  />
+                </div>
+                <div class="review-form-field">
+                  <label for="package">Пакет</label>
+                  <select id="package" name="package">
+                    <option value="">Не выбрано</option>
+                    {% for c in courses %}
+                    <option value="{{ c['title'] }}">{{ c['title'] }}</option>
+                    {% endfor %}
+                  </select>
                 </div>
 
-                <div class="enroll-note">
-                <p>Обычно мы отвечаем в течение дня и помогаем подобрать удобный формат —
-                    индивидуально или в небольшой группе.</p>
-                <p>Если вы сомневаетесь, какой курс выбрать, просто напишите
-                    «хочу попробовать» — мы зададим пару вопросов и посоветуем подходящий вариант.</p>
+                <!-- НОВЫЙ блок рейтинга звёздочками -->
+                <div class="review-form-field review-form-rating">
+                  <span class="rating-label">Оценка</span>
+                  <div class="rating-stars" id="ratingStars" data-current="5">
+                    <span data-value="1">★</span>
+                    <span data-value="2">★</span>
+                    <span data-value="3">★</span>
+                    <span data-value="4">★</span>
+                    <span data-value="5">★</span>
+                  </div>
+                  <!-- скрытое поле, которое реально уходит в форму -->
+                  <input
+                    type="hidden"
+                    name="rating"
+                    id="ratingInput"
+                    value="5"
+                  />
                 </div>
-            </div>
-            </div>
-        </section>
+              </div>
 
+              <div class="review-form-field">
+                <label for="text">Текст отзыва</label>
+                <textarea
+                  id="text"
+                  name="text"
+                  required
+                  placeholder="Поделитесь, как проходят занятия, что понравилось, что было неожиданно…"
+                ></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">
+                Отправить отзыв
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
 
-    <footer>
+      <section id="faq">
+        <div class="section-inner">
+          <div class="section-title">
+            <h3>Частые вопросы</h3>
+            <span>на всякий случай — отвечаем заранее 🙂</span>
+          </div>
+
+          <div class="faq-grid">
+            <details class="faq-item" open>
+              <summary>
+                Я никогда не учил(а) корейский. Подойдёт ли мне ваша школа?
+              </summary>
+              <p>
+                Да 💛 У нас много учеников, которые приходят с полного нуля. Мы
+                спокойно объясняем алфавит, звуки и базовую грамматику, даём
+                время привыкнуть к языку и не торопим, если что-то не получается
+                с первого раза.
+              </p>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                Как понять, на какой уровень или курс мне записаться?
+              </summary>
+              <p>
+                Если вы сомневаетесь, просто оставьте заявку и напишите пару
+                слов о себе — мы зададим несколько вопросов, можно будет пройти
+                мини-определение уровня и подобрать удобную группу или формат
+                обучения.
+              </p>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                Сколько длится занятие и как часто проходят уроки?
+              </summary>
+              <p>
+                Обычно занятие длится 60–90 минут, 1–2 раза в неделю. Конкретный
+                формат зависит от курса и группы — при записи мы расскажем
+                подробно и поможем выбрать удобное расписание.
+              </p>
+            </details>
+
+            <details class="faq-item">
+              <summary>У меня плотная работа / учёба. Я успею?</summary>
+              <p>
+                Мы специально делаем небольшие домашние задания и даём понятные
+                конспекты. Можно заниматься вечером после работы/учёбы, а если
+                вы пропустили урок — поможем наверстать материал.
+              </p>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                Можно ли учиться, если мне 40+ и я «давно не учился(ась)»?
+              </summary>
+              <p>
+                Конечно 🌸 У нас есть взрослые ученики, которые начинают с нуля.
+                Мы ведём занятия в спокойном темпе, объясняем без
+                «университетского» давления и поддерживаем, если возникает
+                неуверенность.
+              </p>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                Как проходит оплата и можно ли взять пробный урок?
+              </summary>
+              <p>
+                Да, вы можете начать с пробного занятия. Оставьте заявку на
+                сайте — мы свяжемся, расскажем про расписание, стоимость и
+                варианты оплаты, а также поможем выбрать удобный пакет занятий.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!--                 ИНСТРУМЕНТЫ ОБУЧЕНИЯ                      -->
+      <!-- ========================================================= -->
+      <section id="tools">
+        <div class="section-inner">
+          <div class="section-title">
+            <h3>Как проходит обучение</h3>
+            <span>Инструменты, которые мы используем на занятиях</span>
+          </div>
+
+          <div class="tools-grid">
+            <article class="tool-card animate-on-scroll">
+              <h4>Zoom / Skype</h4>
+              <p>
+                Онлайн-занятия в удобных сервисах: стабильная связь, чат и
+                запись урока по запросу.
+              </p>
+            </article>
+
+            <article class="tool-card animate-on-scroll">
+              <h4>Методические материалы</h4>
+              <p>
+                Авторские презентации, PDF-конспекты и тренажёры, чтобы
+                повторять материал между уроками.
+              </p>
+            </article>
+
+            <article class="tool-card animate-on-scroll">
+              <h4>Поддержка с ИИ</h4>
+              <p>
+                Дополнительные упражнения, проверка фраз и разбор ошибок с
+                помощью современных ИИ-инструментов.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ЗАПИСЬ НА ЗАНЯТИЯ -->
+      <section id="enroll">
+        <div class="section-inner">
+          <div class="section-title">
+            <h3>Записаться на занятия</h3>
+            <span>Оставьте заявку — подберём формат и группу</span>
+          </div>
+
+          <div class="enroll-wrapper">
+            <div class="enroll-box">
+              <form action="{{ url_for('enroll') }}" method="post">
+                <div class="form-row">
+                  <div class="form-field">
+                    <label for="enroll-name">Имя</label>
+                    <input
+                      id="enroll-name"
+                      type="text"
+                      name="name"
+                      placeholder="Как к вам обращаться?"
+                      required
+                    />
+                  </div>
+                  <div class="form-field">
+                    <label for="enroll-contact">Контакт</label>
+                    <input
+                      id="enroll-contact"
+                      type="text"
+                      name="contact"
+                      placeholder="Телеграм, WhatsApp или телефон"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-field">
+                    <label for="enroll-level">Ваш уровень корейского</label>
+                    <select id="enroll-level" name="level">
+                      <option value="Никогда не изучал(а)">Полный ноль</option>
+                      <option value="Знаю алфавит">
+                        Знаю алфавит, немного слов
+                      </option>
+                      <option value="Могу поддержать простой диалог">
+                        Уже немного говорю
+                      </option>
+                    </select>
+                  </div>
+                  <div class="form-field">
+                    <label for="enroll-tariff">Курс</label>
+                    <select id="enroll-tariff" name="tariff" required>
+                      <option value="">Выберите курс</option>
+                      {% for c in courses %}
+                      <option value="{{ c['title'] }}">{{ c['title'] }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-field">
+                  <label for="enroll-comment"
+                    >Пара слов о вас (по желанию)</label
+                  >
+                  <textarea
+                    id="enroll-comment"
+                    name="comment"
+                    rows="3"
+                    placeholder="Удобное время, цель обучения, важные пожелания…"
+                  ></textarea>
+                </div>
+
+                <p class="form-note">
+                  Нажимая «Отправить», вы соглашаетесь на обработку введённых
+                  данных для связи по вопросам обучения.
+                </p>
+
+                <button class="btn-primary form-submit" type="submit">
+                  Отправить заявку
+                </button>
+              </form>
+            </div>
+
+            <div class="enroll-note">
+              <p>
+                Обычно мы отвечаем в течение дня и помогаем подобрать удобный
+                формат — индивидуально или в небольшой группе.
+              </p>
+              <p>
+                Если вы сомневаетесь, какой курс выбрать, просто напишите «хочу
+                попробовать» — мы зададим пару вопросов и посоветуем подходящий
+                вариант.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer>
         © <span id="year"></span> Онлайн школа корейского языка «K-Spark».
         Дизайн и разработка — версия для VPS (Flask + SQLite).
-    </footer>
+      </footer>
     </div>
 
     <script>
-        // Год в футере
-        document.getElementById('year').textContent = new Date().getFullYear();
+      // Год в футере
+      document.getElementById("year").textContent = new Date().getFullYear();
 
-        // Прокрутка к форме с автозаполнением тарифа
-        function scrollToEnroll(tariffName) {
-            const select = document.getElementById('tariff');
-            if (select) {
-                for (const opt of select.options) {
-                    if (opt.value === tariffName) {
-                        select.value = tariffName;
-                        break;
-                    }
-                }
+      // Прокрутка к форме с автозаполнением тарифа
+      function scrollToEnroll(tariffName) {
+        const select = document.getElementById("tariff");
+        if (select) {
+          for (const opt of select.options) {
+            if (opt.value === tariffName) {
+              select.value = tariffName;
+              break;
             }
-            document.getElementById('enroll').scrollIntoView({
-                behavior: 'smooth'
-            });
+          }
+        }
+        document.getElementById("enroll").scrollIntoView({
+          behavior: "smooth",
+        });
+      }
+
+      // Заглушка для формы записи
+      //function handleForm(event) {
+      //  event.preventDefault();
+      //  alert('Заявка отправлена (пока это заглушка). Здесь можно подключить отправку в Telegram-бота или на e-mail.');
+      //  event.target.reset();
+      //}
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const header = document.getElementById("mainHeader");
+        const navToggle = document.querySelector(".nav-toggle");
+        const navLinks = document.querySelectorAll(".top-nav a");
+
+        function updateBodyModalState() {
+          const anyOpen = document.querySelector(
+            ".teacher-modal.active, .course-modal.active"
+          );
+          document.body.classList.toggle("modal-open", Boolean(anyOpen));
         }
 
-        // Заглушка для формы записи
-        //function handleForm(event) {
-        //  event.preventDefault();
-        //  alert('Заявка отправлена (пока это заглушка). Здесь можно подключить отправку в Telegram-бота или на e-mail.');
-        //  event.target.reset();
-        //}
+        // --- Плавное появление шапки ---
+        if (header) {
+          requestAnimationFrame(() => {
+            header.classList.add("header-visible");
+          });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const header = document.getElementById('mainHeader');
-            const navToggle = document.querySelector('.nav-toggle');
-            const navLinks = document.querySelectorAll('.top-nav a');
-
-            function updateBodyModalState() {
-            const anyOpen = document.querySelector('.teacher-modal.active, .course-modal.active');
-            document.body.classList.toggle('modal-open', Boolean(anyOpen));
+          function onScroll() {
+            if (window.scrollY > 20) {
+              header.classList.add("header-scrolled");
+            } else {
+              header.classList.remove("header-scrolled");
             }
+          }
+          window.addEventListener("scroll", onScroll, {
+            passive: true,
+          });
+          onScroll();
+        }
 
-            // --- Плавное появление шапки ---
-            if (header) {
-                requestAnimationFrame(() => {
-                    header.classList.add('header-visible');
+        // --- Мобильное меню ---
+        if (navToggle && header) {
+          navToggle.addEventListener("click", function () {
+            header.classList.toggle("nav-open");
+          });
+          document.querySelectorAll(".main-nav a").forEach((link) => {
+            link.addEventListener("click", () => {
+              header.classList.remove("nav-open");
+            });
+          });
+        }
+
+        // --- Подсветка активного пункта меню при скролле ---
+        const sections = document.querySelectorAll("section[id]");
+        const sectionObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const id = entry.target.id;
+                navLinks.forEach((link) => {
+                  const href = link.getAttribute("href");
+                  link.classList.toggle("active", href === "#" + id);
                 });
+              }
+            });
+          },
+          {
+            threshold: 0.5,
+          }
+        );
 
-                function onScroll() {
-                    if (window.scrollY > 20) {
-                        header.classList.add('header-scrolled');
-                    } else {
-                        header.classList.remove('header-scrolled');
-                    }
-                }
-                window.addEventListener('scroll', onScroll, {
-                    passive: true
-                });
-                onScroll();
-            }
+        sections.forEach((sec) => sectionObserver.observe(sec));
 
-            // --- Мобильное меню ---
-            if (navToggle && header) {
-                navToggle.addEventListener('click', function() {
-                    header.classList.toggle('nav-open');
-                });
-                document.querySelectorAll('.main-nav a').forEach((link) => {
-                    link.addEventListener('click', () => {
-                        header.classList.remove('nav-open');
-                    });
-                });
+        // --- Анимация появления карточек при прокрутке ---
+        const animated = document.querySelectorAll(".animate-on-scroll");
+        const cardsObserver = new IntersectionObserver(
+          (entries, obs) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                obs.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            threshold: 0.15,
+          }
+        );
+        animated.forEach((el) => cardsObserver.observe(el));
 
-            }
+        // --- Звёздочки в форме отзыва ---
+        const starsContainer = document.getElementById("ratingStars");
+        const ratingInput = document.getElementById("ratingInput");
 
-            // --- Подсветка активного пункта меню при скролле ---
-            const sections = document.querySelectorAll('section[id]');
-            const sectionObserver = new IntersectionObserver(
-                (entries) => {
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) {
-                            const id = entry.target.id;
-                            navLinks.forEach((link) => {
-                                const href = link.getAttribute('href');
-                                link.classList.toggle('active', href === '#' + id);
-                            });
-                        }
-                    });
-                }, {
-                    threshold: 0.5
-                }
-            );
+        if (starsContainer && ratingInput) {
+          const stars = starsContainer.querySelectorAll("span");
 
-            sections.forEach((sec) => sectionObserver.observe(sec));
+          function setActiveStars(value) {
+            stars.forEach((star) => {
+              const starValue = Number(star.dataset.value);
+              star.classList.toggle("active", starValue <= value);
+            });
+          }
 
-            // --- Анимация появления карточек при прокрутке ---
-            const animated = document.querySelectorAll('.animate-on-scroll');
-            const cardsObserver = new IntersectionObserver(
-                (entries, obs) => {
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('visible');
-                            obs.unobserve(entry.target);
-                        }
-                    });
-                }, {
-                    threshold: 0.15
-                }
-            );
-            animated.forEach((el) => cardsObserver.observe(el));
+          // начальное состояние
+          setActiveStars(Number(ratingInput.value || 5));
 
-            // --- Звёздочки в форме отзыва ---
-            const starsContainer = document.getElementById('ratingStars');
-            const ratingInput = document.getElementById('ratingInput');
+          stars.forEach((star) => {
+            star.addEventListener("mouseenter", () => {
+              const val = Number(star.dataset.value);
+              stars.forEach((s) =>
+                s.classList.toggle("hovered", Number(s.dataset.value) <= val)
+              );
+            });
+            star.addEventListener("mouseleave", () => {
+              stars.forEach((s) => s.classList.remove("hovered"));
+            });
+            star.addEventListener("click", () => {
+              const val = Number(star.dataset.value);
+              ratingInput.value = val;
+              setActiveStars(val);
+            });
+          });
+        }
 
-            if (starsContainer && ratingInput) {
-                const stars = starsContainer.querySelectorAll('span');
+        // --- Сворачивание/разворачивание формы отзыва ---
+        const wrapper = document.getElementById("reviewFormWrapper");
+        const toggleBtn = document.getElementById("toggleReviewForm");
 
-                function setActiveStars(value) {
-                    stars.forEach((star) => {
-                        const starValue = Number(star.dataset.value);
-                        star.classList.toggle('active', starValue <= value);
-                    });
-                }
-
-                // начальное состояние
-                setActiveStars(Number(ratingInput.value || 5));
-
-                stars.forEach((star) => {
-                    star.addEventListener('mouseenter', () => {
-                        const val = Number(star.dataset.value);
-                        stars.forEach((s) => s.classList.toggle('hovered', Number(s.dataset.value) <= val));
-                    });
-                    star.addEventListener('mouseleave', () => {
-                        stars.forEach((s) => s.classList.remove('hovered'));
-                    });
-                    star.addEventListener('click', () => {
-                        const val = Number(star.dataset.value);
-                        ratingInput.value = val;
-                        setActiveStars(val);
-                    });
-                });
-            }
-
-            // --- Сворачивание/разворачивание формы отзыва ---
-            const wrapper = document.getElementById('reviewFormWrapper');
-            const toggleBtn = document.getElementById('toggleReviewForm');
-
-            if (wrapper && toggleBtn) {
-                toggleBtn.addEventListener('click', () => {
-                    const collapsed = wrapper.classList.toggle('collapsed');
-                    toggleBtn.textContent = collapsed ? 'Написать отзыв' : 'Скрыть форму';
-                });
-            }
-        });
+        if (wrapper && toggleBtn) {
+          toggleBtn.addEventListener("click", () => {
+            const collapsed = wrapper.classList.toggle("collapsed");
+            toggleBtn.textContent = collapsed
+              ? "Написать отзыв"
+              : "Скрыть форму";
+          });
+        }
+      });
     </script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          // --- Галерея: каскад -> лайтбокс ---
-          const stackItems = Array.from(document.querySelectorAll(".gallery-stack-item"));
-          const lightbox = document.getElementById("gallery-lightbox");
-          if (!lightbox || stackItems.length === 0) return;
+      document.addEventListener("DOMContentLoaded", function () {
+        // --- Галерея: каскад -> лайтбокс ---
+        const stackItems = Array.from(
+          document.querySelectorAll(".gallery-stack-item")
+        );
+        const lightbox = document.getElementById("gallery-lightbox");
+        if (!lightbox || stackItems.length === 0) return;
 
-          const imgEl = document.getElementById("gallery-lightbox-image");
-          const titleEl = document.getElementById("gallery-lightbox-title");
-          const descEl = document.getElementById("gallery-lightbox-desc");
-          const btnClose = lightbox.querySelector(".gallery-lightbox-close");
-          const btnPrev = lightbox.querySelector(".gallery-lightbox-prev");
-          const btnNext = lightbox.querySelector(".gallery-lightbox-next");
-          const backdrop = lightbox.querySelector(".gallery-lightbox-backdrop");
+        const imgEl = document.getElementById("gallery-lightbox-image");
+        const titleEl = document.getElementById("gallery-lightbox-title");
+        const descEl = document.getElementById("gallery-lightbox-desc");
+        const btnClose = lightbox.querySelector(".gallery-lightbox-close");
+        const btnPrev = lightbox.querySelector(".gallery-lightbox-prev");
+        const btnNext = lightbox.querySelector(".gallery-lightbox-next");
+        const backdrop = lightbox.querySelector(".gallery-lightbox-backdrop");
 
-          // Соберём все фото (включая те, что не в первых 5, если они тоже есть в разметке)
-          // Но мы уже положили все нужные data-* в stackItems, так что используем их
-          let currentIndex = 0;
+        // Соберём все фото (включая те, что не в первых 5, если они тоже есть в разметке)
+        // Но мы уже положили все нужные data-* в stackItems, так что используем их
+        let currentIndex = 0;
 
-          function showIndex(index) {
-            const item = stackItems[index];
-            if (!item) return;
-            currentIndex = index;
-            imgEl.src = item.dataset.src || "";
-            imgEl.alt = item.dataset.title || "";
-            titleEl.textContent = item.dataset.title || "";
-            descEl.textContent = item.dataset.desc || "";
-            lightbox.classList.add("active");
-          }
+        function showIndex(index) {
+          const item = stackItems[index];
+          if (!item) return;
+          currentIndex = index;
+          imgEl.src = item.dataset.src || "";
+          imgEl.alt = item.dataset.title || "";
+          titleEl.textContent = item.dataset.title || "";
+          descEl.textContent = item.dataset.desc || "";
+          lightbox.classList.add("active");
+        }
 
-          stackItems.forEach((btn, idx) => {
-            btn.addEventListener("click", () => showIndex(idx));
-          });
+        stackItems.forEach((btn, idx) => {
+          btn.addEventListener("click", () => showIndex(idx));
+        });
 
-          function showPrev() {
-            const prev = (currentIndex - 1 + stackItems.length) % stackItems.length;
-            showIndex(prev);
-          }
-          function showNext() {
-            const next = (currentIndex + 1) % stackItems.length;
-            showIndex(next);
-          }
+        function showPrev() {
+          const prev =
+            (currentIndex - 1 + stackItems.length) % stackItems.length;
+          showIndex(prev);
+        }
+        function showNext() {
+          const next = (currentIndex + 1) % stackItems.length;
+          showIndex(next);
+        }
 
-          btnPrev && btnPrev.addEventListener("click", function (e) {
+        btnPrev &&
+          btnPrev.addEventListener("click", function (e) {
             e.stopPropagation();
             showPrev();
           });
 
-          btnNext && btnNext.addEventListener("click", function (e) {
+        btnNext &&
+          btnNext.addEventListener("click", function (e) {
             e.stopPropagation();
             showNext();
           });
 
-          function closeLightbox() {
-            lightbox.classList.remove("active");
-          }
+        function closeLightbox() {
+          lightbox.classList.remove("active");
+        }
 
-          btnClose.addEventListener("click", function (e) {
-            e.stopPropagation();
-            closeLightbox();
-          });
-
-          backdrop.addEventListener("click", closeLightbox);
-
-          document.addEventListener("keydown", function (e) {
-            if (!lightbox.classList.contains("active")) return;
-            if (e.key === "Escape") closeLightbox();
-            if (e.key === "ArrowLeft") showPrev();
-            if (e.key === "ArrowRight") showNext();
-  });
-});
-</script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // === АНИМАЦИЯ ПОЯВЛЕНИЯ БЛОКОВ ===
-            const animated = document.querySelectorAll('.animate-on-scroll');
-            if ('IntersectionObserver' in window) {
-                const observer = new IntersectionObserver(entries => {
-                    entries.forEach(e => {
-                        if (e.isIntersecting) {
-                            e.target.classList.add('visible');
-                            observer.unobserve(e.target);
-                        }
-                    });
-                }, {
-                    threshold: 0.15
-                });
-
-                animated.forEach(el => observer.observe(el));
-            } else {
-                animated.forEach(el => el.classList.add('visible'));
-            }
-
-            // ====================================================================
-            //                          МОДАЛКА ПРЕПОДАВАТЕЛЕЙ
-            // ====================================================================
-            const teacherCards = document.querySelectorAll('.teacher-card');
-            const teacherModals = document.querySelectorAll('.teacher-modal');
-
-            teacherCards.forEach(card => {
-            card.addEventListener('click', () => {
-                const id = card.dataset.teacherId;
-                const modal = document.getElementById('teacher-modal-' + id);
-                if (modal) {
-                modal.classList.add('active');
-                updateBodyModalState();
-                }
-            });
-            });
-
-            document.querySelectorAll('.teacher-modal-close').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const modal = btn.closest('.teacher-modal');
-                if (modal) {
-                modal.classList.remove('active');
-                updateBodyModalState();
-                }
-            });
-            });
-
-            teacherModals.forEach(modal => {
-            modal.addEventListener('click', e => {
-                if (e.target === modal) {
-                modal.classList.remove('active');
-                updateBodyModalState();
-                }
-            });
-            });
-
-
-            // ====================================================================
-            //                          МОДАЛКА КУРСОВ
-            // ====================================================================
-            const courseCards = Array.from(document.querySelectorAll('.course-card'));
-            const courseModals = Array.from(document.querySelectorAll('.course-modal'));
-            let currentCourseIndex = null;
-
-            function openCourseModalByIndex(index) {
-            if (index < 0 || index >= courseModals.length) return;
-            courseModals.forEach(m => m.classList.remove('active'));
-            currentCourseIndex = index;
-            courseModals[index].classList.add('active');
-            updateBodyModalState();
-            }
-
-
-            function openCourseModalById(id) {
-                const modal = document.getElementById('course-modal-' + id);
-                if (!modal) return;
-                const index = courseModals.indexOf(modal);
-                if (index !== -1) openCourseModalByIndex(index);
-            }
-
-            // открыть по клику на карточку
-            courseCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    const id = card.dataset.courseId;
-                    openCourseModalById(id);
-                });
-            });
-
-            // закрытие по крестику
-            document.querySelectorAll('.course-modal-close').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const modal = btn.closest('.course-modal');
-                if (modal) {
-                modal.classList.remove('active');
-                updateBodyModalState();
-                }
-                currentCourseIndex = null;
-            });
-            });
-
-
-            // закрытие по фону
-            courseModals.forEach(modal => {
-            const backdrop = modal.querySelector('.course-modal-backdrop');
-            if (backdrop) {
-                backdrop.addEventListener('click', () => {
-                modal.classList.remove('active');
-                updateBodyModalState();
-                currentCourseIndex = null;
-                });
-            }
-            });
-
-            // закрытие по клику на серую область (псевдоэлемент ::before)
-            courseModals.forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                // если кликнули именно по самому контейнеру, а не по контенту
-                if (e.target === modal) {
-                modal.classList.remove('active');
-                currentCourseIndex = null;
-                updateBodyModalState();
-                }
-            });
-            });
-
-
-            // стрелка "влево"
-            document.querySelectorAll('.course-modal-prev').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    if (currentCourseIndex === null) return;
-                    const next = (currentCourseIndex - 1 + courseModals.length) % courseModals.length;
-                    openCourseModalByIndex(next);
-                });
-            });
-
-            // стрелка "вправо"
-            document.querySelectorAll('.course-modal-next').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    if (currentCourseIndex === null) return;
-                    const next = (currentCourseIndex + 1) % courseModals.length;
-                    openCourseModalByIndex(next);
-                });
-            });
-
-            // Esc — закрыть все модалки курсов и преподавателей
-            document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') {
-                teacherModals.forEach(m => m.classList.remove('active'));
-                courseModals.forEach(m => m.classList.remove('active'));
-                currentCourseIndex = null;
-                updateBodyModalState();
-            }
-            });
-
-
-            // ====================================================================
-            //      "Записаться на этот курс" — автоподстановка + скролл к форме
-            // ====================================================================
-            const enrollSection = document.getElementById('enroll');
-            const enrollSelect = document.querySelector('#enroll select[name="tariff"], select[name="tariff"]');
-
-            document.querySelectorAll('.course-modal-enroll-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const modal = btn.closest('.course-modal');
-                    if (!modal) return;
-                    const title = modal.dataset.courseTitle;
-
-                    if (enrollSelect && title) {
-                        // выбираем курс в select, если он есть в списке
-                        Array.from(enrollSelect.options).forEach(opt => {
-                            if (opt.value === title) {
-                                enrollSelect.value = title;
-                            }
-                        });
-                    }
-
-                    // закрываем все модалки курсов
-                    courseModals.forEach(m => m.classList.remove('active'));
-                    currentCourseIndex = null;
-
-                    // скроллим к форме
-                    if (enrollSection) {
-                        enrollSection.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
+        btnClose.addEventListener("click", function (e) {
+          e.stopPropagation();
+          closeLightbox();
         });
+
+        backdrop.addEventListener("click", closeLightbox);
+
+        document.addEventListener("keydown", function (e) {
+          if (!lightbox.classList.contains("active")) return;
+          if (e.key === "Escape") closeLightbox();
+          if (e.key === "ArrowLeft") showPrev();
+          if (e.key === "ArrowRight") showNext();
+        });
+      });
     </script>
 
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // === АНИМАЦИЯ ПОЯВЛЕНИЯ БЛОКОВ ===
+        const animated = document.querySelectorAll(".animate-on-scroll");
+        if ("IntersectionObserver" in window) {
+          const observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((e) => {
+                if (e.isIntersecting) {
+                  e.target.classList.add("visible");
+                  observer.unobserve(e.target);
+                }
+              });
+            },
+            {
+              threshold: 0.15,
+            }
+          );
 
+          animated.forEach((el) => observer.observe(el));
+        } else {
+          animated.forEach((el) => el.classList.add("visible"));
+        }
 
+        // ====================================================================
+        //                          МОДАЛКА ПРЕПОДАВАТЕЛЕЙ
+        // ====================================================================
+        const teacherCards = document.querySelectorAll(".teacher-card");
+        const teacherModals = document.querySelectorAll(".teacher-modal");
 
-</body>
+        teacherCards.forEach((card) => {
+          card.addEventListener("click", () => {
+            const id = card.dataset.teacherId;
+            const modal = document.getElementById("teacher-modal-" + id);
+            if (modal) {
+              modal.classList.add("active");
+              updateBodyModalState();
+            }
+          });
+        });
 
+        document.querySelectorAll(".teacher-modal-close").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const modal = btn.closest(".teacher-modal");
+            if (modal) {
+              modal.classList.remove("active");
+              updateBodyModalState();
+            }
+          });
+        });
+
+        teacherModals.forEach((modal) => {
+          modal.addEventListener("click", (e) => {
+            if (e.target === modal) {
+              modal.classList.remove("active");
+              updateBodyModalState();
+            }
+          });
+        });
+
+        // ====================================================================
+        //                          МОДАЛКА КУРСОВ
+        // ====================================================================
+        const courseCards = Array.from(
+          document.querySelectorAll(".course-card")
+        );
+        const courseModals = Array.from(
+          document.querySelectorAll(".course-modal")
+        );
+        let currentCourseIndex = null;
+
+        function openCourseModalByIndex(index) {
+          if (index < 0 || index >= courseModals.length) return;
+          courseModals.forEach((m) => m.classList.remove("active"));
+          currentCourseIndex = index;
+          courseModals[index].classList.add("active");
+          updateBodyModalState();
+        }
+
+        function openCourseModalById(id) {
+          const modal = document.getElementById("course-modal-" + id);
+          if (!modal) return;
+          const index = courseModals.indexOf(modal);
+          if (index !== -1) openCourseModalByIndex(index);
+        }
+
+        // открыть по клику на карточку
+        courseCards.forEach((card) => {
+          card.addEventListener("click", () => {
+            const id = card.dataset.courseId;
+            openCourseModalById(id);
+          });
+        });
+
+        // закрытие по крестику
+        document.querySelectorAll(".course-modal-close").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const modal = btn.closest(".course-modal");
+            if (modal) {
+              modal.classList.remove("active");
+              updateBodyModalState();
+            }
+            currentCourseIndex = null;
+          });
+        });
+
+        // закрытие по фону
+        courseModals.forEach((modal) => {
+          const backdrop = modal.querySelector(".course-modal-backdrop");
+          if (backdrop) {
+            backdrop.addEventListener("click", () => {
+              modal.classList.remove("active");
+              updateBodyModalState();
+              currentCourseIndex = null;
+            });
+          }
+        });
+
+        // закрытие по клику на серую область (псевдоэлемент ::before)
+        courseModals.forEach((modal) => {
+          modal.addEventListener("click", (e) => {
+            // если кликнули именно по самому контейнеру, а не по контенту
+            if (e.target === modal) {
+              modal.classList.remove("active");
+              currentCourseIndex = null;
+              updateBodyModalState();
+            }
+          });
+        });
+
+        // стрелка "влево"
+        document.querySelectorAll(".course-modal-prev").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            if (currentCourseIndex === null) return;
+            const next =
+              (currentCourseIndex - 1 + courseModals.length) %
+              courseModals.length;
+            openCourseModalByIndex(next);
+          });
+        });
+
+        // стрелка "вправо"
+        document.querySelectorAll(".course-modal-next").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            if (currentCourseIndex === null) return;
+            const next = (currentCourseIndex + 1) % courseModals.length;
+            openCourseModalByIndex(next);
+          });
+        });
+
+        // Esc — закрыть все модалки курсов и преподавателей
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") {
+            teacherModals.forEach((m) => m.classList.remove("active"));
+            courseModals.forEach((m) => m.classList.remove("active"));
+            currentCourseIndex = null;
+            updateBodyModalState();
+          }
+        });
+
+        // ====================================================================
+        //      "Записаться на этот курс" — автоподстановка + скролл к форме
+        // ====================================================================
+        const enrollSection = document.getElementById("enroll");
+        const enrollSelect = document.querySelector(
+          '#enroll select[name="tariff"], select[name="tariff"]'
+        );
+
+        document.querySelectorAll(".course-modal-enroll-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const modal = btn.closest(".course-modal");
+            if (!modal) return;
+            const title = modal.dataset.courseTitle;
+
+            if (enrollSelect && title) {
+              // выбираем курс в select, если он есть в списке
+              Array.from(enrollSelect.options).forEach((opt) => {
+                if (opt.value === title) {
+                  enrollSelect.value = title;
+                }
+              });
+            }
+
+            // закрываем все модалки курсов
+            courseModals.forEach((m) => m.classList.remove("active"));
+            currentCourseIndex = null;
+
+            // скроллим к форме
+            if (enrollSection) {
+              enrollSection.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+            }
+          });
+        });
+      });
+    </script>
+  </body>
 </html>

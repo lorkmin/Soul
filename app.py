@@ -964,7 +964,6 @@ def student_dashboard():
     student = None
     not_found = False
 
-    # списки занятий
     lessons_planned = []
     lessons_done = []
     lessons_canceled = []
@@ -990,7 +989,6 @@ def student_dashboard():
                 """,
                 (student["id"],),
             ).fetchall()
-            conn.close()
 
             for l in lessons:
                 status = (l["status"] or "planned").lower()
@@ -1003,20 +1001,9 @@ def student_dashboard():
                 else:
                     lessons_planned.append(l)
         else:
-            conn.close()
             not_found = True
 
-    return render_template(
-        "student_dashboard.html",
-        code=code,
-        student=student,
-        not_found=not_found,
-        lessons_planned=lessons_planned,
-        lessons_done=lessons_done,
-        lessons_canceled=lessons_canceled,
-        lessons_rescheduled=lessons_rescheduled,
-    )
-
+        conn.close()
 
     return render_template(
         "student_dashboard.html",
@@ -1028,6 +1015,7 @@ def student_dashboard():
         lessons_canceled=lessons_canceled,
         lessons_rescheduled=lessons_rescheduled,
     )
+
 
 
 
