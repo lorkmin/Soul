@@ -2941,3 +2941,203 @@ body.admin-page {
     font-size: 0.8rem;
   }
 }
+/* ===== Новые широкие карточки преподавателей ===== */
+
+.teachers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+/* сама карточка */
+.teacher-card.teacher-panel {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 24px;
+  padding: 24px 28px;
+  border-radius: 28px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.06);
+  cursor: default;
+}
+
+.teacher-card.teacher-panel:hover {
+  transform: none;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* левая колонка: фото + кнопка */
+.teacher-panel-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* переопределяем старый кружок под квадрат с большим фото */
+.teacher-photo-wrap {
+  width: 180px;
+  height: 180px;
+  border-radius: 32px;
+  overflow: hidden;
+  margin: 0;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+.teacher-photo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.teacher-panel-cta {
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+/* правая колонка */
+.teacher-panel-right {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.teacher-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.teacher-name {
+  margin: 0 0 4px;
+  text-align: left;
+  font-size: 1.3rem;
+}
+
+.teacher-role {
+  margin: 0;
+  text-align: left;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.teacher-panel-tagline {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* табы */
+.teacher-panel-tabs {
+  display: flex;
+  gap: 18px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  margin-bottom: 6px;
+}
+
+.teacher-tab {
+  position: relative;
+  padding: 4px 0 10px;
+  font-size: 0.9rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.teacher-tab.active {
+  color: #4335de;
+  font-weight: 600;
+}
+
+.teacher-tab.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffc95b, #ff7ac4);
+}
+
+/* содержимое табов */
+.teacher-tab-content {
+  display: none;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.teacher-tab-content.active {
+  display: block;
+}
+
+/* список плюсов в "Основное" */
+.teacher-main-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.teacher-main-list li {
+  margin-bottom: 4px;
+}
+
+.teacher-main-list li::before {
+  content: "•";
+  color: #ffb400;
+  margin-right: 6px;
+}
+
+/* текст "О себе" */
+.teacher-about-text p {
+  margin: 0 0 6px;
+}
+
+.teacher-read-more {
+  margin-top: 6px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #4335de;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* Мобильная версия */
+@media (max-width: 768px) {
+  .teacher-card.teacher-panel {
+    grid-template-columns: 1fr;
+    padding: 20px 18px;
+  }
+
+  .teacher-panel-left {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .teacher-photo-wrap {
+    width: 96px;
+    height: 96px;
+    border-radius: 24px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  .teacher-panel-cta {
+    width: auto;
+    white-space: nowrap;
+  }
+
+  .teacher-panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .teacher-panel-tagline {
+    margin-top: 4px;
+  }
+}
