@@ -1644,6 +1644,15 @@ section[id] {
 
 /* ===================== КУРСЫ ===================== */
 
+.course-card img {
+  width: 100%;
+  height: auto;
+  max-height: 260px; /* можно изменить */
+  object-fit: contain;
+  border-radius: 14px;
+  background: #fff; /* чтобы не было пустых серых полей */
+}
+
 .courses-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
