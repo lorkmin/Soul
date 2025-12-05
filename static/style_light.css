@@ -2779,3 +2779,55 @@ body.admin-page {
     font-size: 0.82rem;
   }
 }
+/* ===================== ЛК ученика: ачивки ===================== */
+
+.student-achievements {
+  margin-top: 10px;
+  padding: 8px 10px 10px;
+  border-radius: 14px;
+  background: #f8f5ff;
+  border: 1px solid rgba(141, 115, 245, 0.35);
+}
+
+.student-achievements-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4f3f9f;
+  margin-bottom: 4px;
+}
+
+.student-achievements-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.student-achievements-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: #5c5484;
+}
+
+.badge-icon {
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.badge-text {
+  line-height: 1.3;
+}
+
+/* мобилка */
+@media (max-width: 600px) {
+  .student-achievements {
+    padding: 8px 8px 10px;
+  }
+  .student-achievements-list li {
+    font-size: 0.8rem;
+  }
+}
