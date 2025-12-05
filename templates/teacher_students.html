@@ -42,6 +42,12 @@
           href="{{ url_for('teacher_students_edit', sid=s['id']) }}"
           >Редактировать</a
         >
+        <a
+          class="admin-btn"
+          href="{{ url_for('teacher_student_lessons', sid=s['id']) }}"
+        >
+          Занятия
+        </a>
         <form
           action="{{ url_for('teacher_students_delete', sid=s['id']) }}"
           method="post"
@@ -50,14 +56,6 @@
         >
           <button class="admin-delete-btn" type="submit">Удалить</button>
         </form>
-      </td>
-      <td>
-        <a
-          class="admin-btn"
-          href="{{ url_for('teacher_student_lessons', sid=s['id']) }}"
-        >
-          Занятия
-        </a>
       </td>
     </tr>
     {% else %}
