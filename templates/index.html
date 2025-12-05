@@ -373,10 +373,6 @@
                   <p class="course-meta">
                     {{ c['lessons'] }} уроков · {{ c['price'] }} ₽
                   </p>
-                  <p class="course-snippet">
-                    {{ (c['description'] or '')[:120] }}{% if c['description']
-                    and c['description']|length > 120 %}…{% endif %}
-                  </p>
                   <div class="course-pill-row">
                     <span class="course-pill">🌸 уютные занятия</span>
                     <span class="course-pill">📚 своя программа</span>
