@@ -415,7 +415,9 @@
                   <p class="course-modal-meta">
                     {{ c['lessons'] }} уроков · {{ c['price'] }} ₽
                   </p>
-                  <div class="course-modal-desc">{{ c['description'] }}</div>
+                  <div class="course-modal-desc">
+                    {{ c['description'] | paragraphs | safe }}
+                  </div>
 
                   <div class="course-modal-footer">
                     <p class="course-modal-note">
