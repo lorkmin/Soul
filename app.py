@@ -80,17 +80,13 @@ def generate_student_code():
             conn.close()
             return code
 
-def login_required(f):
+def teacher_login_required(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        if not session.get("admin_logged_in"):
-            return redirect(url_for("admin_login"))
+        if not session.get("teacher_logged_in"):
+            return redirect(url_for("teacher_login", next=request.path))
         return f(*args, **kwargs)
     return wrapper
-
-# Преподаватель = тот же админ, отдельная авторизация не нужна
-teacher_login_required = login_required
-
 
 
 
@@ -214,10 +210,13 @@ def login_required(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
         if not session.get("admin_logged_in"):
-            # можно передать next, чтобы после логина вернуть на нужную страницу
-            return redirect(url_for("admin_login", next=request.path))
+            return redirect(url_for("admin_login"))
         return f(*args, **kwargs)
     return wrapper
+
+# Преподаватель = тот же админ, отдельная авторизация не нужна
+teacher_login_required = login_required
+
 
 
 # ================== TELEGRAM ==================
