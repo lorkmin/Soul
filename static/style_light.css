@@ -3327,3 +3327,37 @@ body.admin-page {
     height: 80px;
   }
 }
+/* Контейнер текста "О себе" */
+.teacher-bio {
+  max-height: 4.5em; /* высота для трёх строк */
+  overflow: hidden;
+  position: relative;
+  transition: max-height 0.3s ease;
+}
+
+/* Затемнение снизу */
+.teacher-bio::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2.2em;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff);
+  pointer-events: none;
+}
+
+/* Когда развёрнуто — снимаем ограничения */
+.teacher-bio.expanded {
+  max-height: none;
+}
+
+.teacher-bio.expanded::after {
+  display: none;
+}
+
+/* Внутренние параграфы должны иметь нормальные отступы */
+.teacher-bio-inner p,
+.teacher-bio-inner li {
+  margin-bottom: 4px;
+}
