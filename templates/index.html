@@ -309,14 +309,7 @@
                     any_line = false %} {% for line in lines %} {% if
                     line.strip() %} {% set any_line = true %}
                     <li>{{ line.strip() }}</li>
-                    {% endif %} {% endfor %} {% if not any_line %}
-                    <li>
-                      Спокойно объясняет грамматику с понятными примерами.
-                    </li>
-                    <li>
-                      Поддерживает и помогает не бояться говорить на корейском.
-                    </li>
-                    {% endif %}
+                    {% endif %} {% endfor %} {% if not any_line %} {% endif %}
                   </ul>
 
                   {% set badge_lines = (t['badges'] or '').split('\n') %}
