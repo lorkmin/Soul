@@ -27,9 +27,6 @@ app = Flask(__name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "soul.db")
 
-# регистрируем HTML-фильтр абзацев
-app.jinja_env.filters["paragraphs"] = format_paragraphs
-
 # ================== НАСТРОЙКИ ==================
 
 # секретный ключ для сессий (логин в админку)
@@ -213,16 +210,6 @@ def login_required(f):
 # Преподаватель = тот же админ, отдельная авторизация не нужна
 teacher_login_required = login_required
 
-
-def format_paragraphs(text: str) -> str:
-    """Преобразует текст с пустыми строками в HTML-абзацы."""
-    if not text:
-        return ""
-    # разбиваем по пустым строкам
-    parts = [p.strip() for p in text.replace("\r", "").split("\n\n")]
-    # оборачиваем каждый непустой блок в <p>
-    html = "".join(f"<p>{p}</p>" for p in parts if p)
-    return html
 
 
 # ================== TELEGRAM ==================
