@@ -2367,55 +2367,71 @@ body.student-dashboard {
 .lesson-next {
   position: relative;
   background: #fff7d6;
-  border-radius: 12px;
-  padding: 6px 8px;
-  margin: 4px 0;
+  border-radius: 14px;
+  padding: 10px 12px;
+  margin: 6px 0;
   box-shadow: 0 4px 12px rgba(255, 200, 80, 0.25);
-  border: 1px solid rgba(255, 200, 80, 0.5);
-  overflow: hidden;
+  border: 1px solid rgba(255, 200, 80, 0.4);
+  overflow: visible; /* чтобы искры могли выходить наружу */
 }
 
-.lesson-next-badge {
-  background: #ffca54;
-  color: #4a3300;
-  padding: 2px 6px;
-  border-radius: 8px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  margin-right: 6px;
-}
-
-/* искорки */
+/* искорки — аккуратно по углам, НЕ поверх текста */
 .lesson-next::before,
 .lesson-next::after {
   content: "✨";
   position: absolute;
-  font-size: 1rem;
-  opacity: 0.6;
+  font-size: 1.1rem;
+  opacity: 0.7;
   pointer-events: none;
-  animation: lessonSparkle 2.6s ease-in-out infinite;
+  animation: sparkleFloat 2.8s ease-in-out infinite;
 }
 
+/* верхняя искра */
 .lesson-next::before {
-  top: -6px;
-  left: -2px;
+  top: -10px;
+  left: -6px;
+  animation-delay: 0s;
 }
 
+/* нижняя искра */
 .lesson-next::after {
-  bottom: -4px;
-  right: 4px;
-  animation-delay: 1.2s;
+  bottom: -10px;
+  right: -2px;
+  animation-delay: 1.4s;
 }
 
-@keyframes lessonSparkle {
-  0%,
-  100% {
-    opacity: 0.2;
+@keyframes sparkleFloat {
+  0% {
+    opacity: 0.1;
     transform: translateY(0) scale(0.9) rotate(0deg);
   }
   50% {
     opacity: 1;
-    transform: translateY(-3px) scale(1.15) rotate(6deg);
+    transform: translateY(-4px) scale(1.15) rotate(8deg);
+  }
+  100% {
+    opacity: 0.1;
+    transform: translateY(0) scale(0.9) rotate(0deg);
+  }
+}
+
+/* бейдж «Скоро» */
+.lesson-next-badge {
+  background: #ffca54;
+  color: #4a3300;
+  padding: 3px 7px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+/* мобильная версия: чуть меньше искры */
+@media (max-width: 600px) {
+  .lesson-next::before,
+  .lesson-next::after {
+    font-size: 0.9rem;
+    opacity: 0.55;
   }
 }
 
