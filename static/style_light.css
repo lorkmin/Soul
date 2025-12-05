@@ -2208,6 +2208,30 @@ section[id] {
     display: none;
   }
 }
+/* ===================== ЛК ученика: общий вид ===================== */
+
+body.student-dashboard {
+  background: radial-gradient(
+    circle at top,
+    #fff7e9 0,
+    #fffdf8 40%,
+    #f7f4ff 100%
+  );
+}
+
+.student-dashboard .section-inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* карточка ЛК */
+.student-dashboard .enroll-box {
+  max-width: 560px;
+  margin: 12px auto 0;
+  border-radius: 24px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+}
+
 /* ===================== ЛК ученика: расписание ===================== */
 
 .student-lessons-sections {
@@ -2218,7 +2242,7 @@ section[id] {
 }
 
 .student-lessons-section {
-  border-radius: 16px;
+  border-radius: 18px;
   border: 1px solid var(--border-soft);
   background: #ffffff;
   box-shadow: var(--shadow-soft);
@@ -2230,6 +2254,25 @@ section[id] {
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* маленькая иконка перед заголовком секции */
+.student-lessons-label::before {
+  content: "📅";
+  font-size: 1rem;
+}
+
+.student-lessons-section:nth-of-type(2) .student-lessons-label::before {
+  content: "🔁";
+}
+.student-lessons-section:nth-of-type(3) .student-lessons-label::before {
+  content: "✅";
+}
+.student-lessons-section:nth-of-type(4) .student-lessons-label::before {
+  content: "🚫";
 }
 
 .student-lessons-list {
@@ -2319,27 +2362,17 @@ section[id] {
   border: 1px solid rgba(123, 97, 214, 0.7);
 }
 
-/* мобилка: бейдж под текстом */
-
-@media (max-width: 480px) {
-  .lesson-row {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .lesson-status-badge {
-    margin-top: 2px;
-  }
-}
-/* ===================== Подсветка ближайшего занятия ===================== */
+/* ===================== Подсветка и искорки ближайшего занятия ===================== */
 
 .lesson-next {
-  background: #fff7d6; /* мягкая тёплая подсветка */
+  position: relative;
+  background: #fff7d6;
   border-radius: 12px;
   padding: 6px 8px;
   margin: 4px 0;
   box-shadow: 0 4px 12px rgba(255, 200, 80, 0.25);
   border: 1px solid rgba(255, 200, 80, 0.5);
+  overflow: hidden;
 }
 
 .lesson-next-badge {
@@ -2352,46 +2385,66 @@ section[id] {
   margin-right: 6px;
 }
 
-/* мобильные поправки */
-@media (max-width: 480px) {
-  .lesson-next {
-    padding: 8px;
+/* искорки */
+.lesson-next::before,
+.lesson-next::after {
+  content: "✨";
+  position: absolute;
+  font-size: 1rem;
+  opacity: 0.6;
+  pointer-events: none;
+  animation: lessonSparkle 2.6s ease-in-out infinite;
+}
+
+.lesson-next::before {
+  top: -6px;
+  left: -2px;
+}
+
+.lesson-next::after {
+  bottom: -4px;
+  right: 4px;
+  animation-delay: 1.2s;
+}
+
+@keyframes lessonSparkle {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: translateY(0) scale(0.9) rotate(0deg);
   }
-
-  .lesson-next-badge {
-    margin-bottom: 3px;
-    display: inline-block;
+  50% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.15) rotate(6deg);
   }
 }
-/* ===================== ЛК ученика: мобильная вёрстка ===================== */
 
-.section-inner {
-  margin-left: auto;
-  margin-right: auto;
-}
+/* ===================== Мобилка: делаем всё шире и ближе ===================== */
 
-/* центрируем контент в ЛК */
-.enroll-box {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* делаем внешний контейнер более адаптивным */
 @media (max-width: 600px) {
-  .section-inner {
-    padding-left: 14px !important;
-    padding-right: 14px !important;
-    max-width: 100% !important;
+  .student-dashboard .section-inner {
+    max-width: 100%;
+    padding-left: 12px;
+    padding-right: 12px;
   }
 
-  .enroll-box {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 16px !important;
+  .student-dashboard .enroll-box {
+    max-width: 100%;
+    width: 100%;
+    padding: 16px 14px;
+    margin-top: 10px;
   }
 
-  /* расстояние между секциями занятий */
   .student-lessons-section {
-    padding: 12px !important;
+    padding: 12px;
+  }
+
+  .lesson-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .lesson-status-badge {
+    margin-top: 2px;
   }
 }
