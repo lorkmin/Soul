@@ -2331,3 +2331,35 @@ section[id] {
     margin-top: 2px;
   }
 }
+/* ===================== Подсветка ближайшего занятия ===================== */
+
+.lesson-next {
+  background: #fff7d6; /* мягкая тёплая подсветка */
+  border-radius: 12px;
+  padding: 6px 8px;
+  margin: 4px 0;
+  box-shadow: 0 4px 12px rgba(255, 200, 80, 0.25);
+  border: 1px solid rgba(255, 200, 80, 0.5);
+}
+
+.lesson-next-badge {
+  background: #ffca54;
+  color: #4a3300;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* мобильные поправки */
+@media (max-width: 480px) {
+  .lesson-next {
+    padding: 8px;
+  }
+
+  .lesson-next-badge {
+    margin-bottom: 3px;
+    display: inline-block;
+  }
+}

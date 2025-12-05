@@ -101,19 +101,29 @@
                 <p class="student-lessons-label">Ближайшие занятия</p>
                 <ul class="student-lessons-list">
                   {% for l in lessons_planned %}
-                  <li class="lesson-row">
+                  <li
+                    class="lesson-row {% if loop.first %}lesson-next{% endif %}"
+                  >
                     <div class="lesson-main">
-                      <span class="lesson-date">{{ l['start_at'] }}</span>
-                      {% if l['topic'] %}
-                      <span class="lesson-dot">•</span>
-                      <span class="lesson-topic">{{ l['topic'] }}</span>
-                      {% endif %} {% if l['comment'] %}
+                      <div>
+                        {% if loop.first %}
+                        <span class="lesson-next-badge">Скоро</span>
+                        {% endif %}
+                        <span class="lesson-date">{{ l['start_at'] }}</span>
+                        {% if l['topic'] %}
+                        <span class="lesson-dot">•</span>
+                        <span class="lesson-topic">{{ l['topic'] }}</span>
+                        {% endif %}
+                      </div>
+
+                      {% if l['comment'] %}
                       <div class="lesson-comment">{{ l['comment'] }}</div>
                       {% endif %}
                     </div>
-                    <span class="lesson-status-badge lesson-status-planned">
-                      Запланировано
-                    </span>
+
+                    <span class="lesson-status-badge lesson-status-planned"
+                      >Запланировано</span
+                    >
                   </li>
                   {% endfor %}
                 </ul>
