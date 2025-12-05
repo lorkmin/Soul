@@ -2208,3 +2208,126 @@ section[id] {
     display: none;
   }
 }
+/* ===================== ЛК ученика: расписание ===================== */
+
+.student-lessons-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.student-lessons-section {
+  border-radius: 16px;
+  border: 1px solid var(--border-soft);
+  background: #ffffff;
+  box-shadow: var(--shadow-soft);
+  padding: 10px 12px;
+}
+
+.student-lessons-label {
+  margin: 0 0 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.student-lessons-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.lesson-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.student-lessons-list li:first-child .lesson-row,
+.student-lessons-list li:first-child {
+  border-top: none;
+}
+
+.lesson-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lesson-date {
+  font-weight: 500;
+}
+
+.lesson-topic {
+  color: #555;
+}
+
+.lesson-dot,
+.lesson-arrow {
+  margin: 0 4px;
+  color: #999;
+}
+
+.lesson-comment {
+  font-size: 0.82rem;
+  color: #777;
+}
+
+/* цветные бейджи статусов */
+
+.lesson-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* запланировано */
+.lesson-status-planned {
+  background: #fffaf2;
+  color: #b16a1e;
+  border: 1px solid rgba(244, 201, 76, 0.7);
+}
+
+/* проведено */
+.lesson-status-done {
+  background: #e6f7eb;
+  color: #1b7a3a;
+  border: 1px solid rgba(49, 161, 88, 0.6);
+}
+
+/* отменено */
+.lesson-status-canceled {
+  background: #fde8e8;
+  color: #b3261e;
+  border: 1px solid rgba(203, 75, 75, 0.7);
+}
+
+/* перенесено */
+.lesson-status-rescheduled {
+  background: #eee8ff;
+  color: #5c3fbf;
+  border: 1px solid rgba(123, 97, 214, 0.7);
+}
+
+/* мобилка: бейдж под текстом */
+
+@media (max-width: 480px) {
+  .lesson-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .lesson-status-badge {
+    margin-top: 2px;
+  }
+}

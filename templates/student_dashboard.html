@@ -1,123 +1,203 @@
 <!DOCTYPE html>
 <html lang="ru">
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Личный дашборд ученика — Soul</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style_light.css') }}">
-</head>
-
-<body>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style_light.css') }}"
+    />
+  </head>
+  <body>
     <div class="wrapper">
-        <section>
-            <div class="section-inner">
-                <div class="section-title">
-                    <h3>Личный кабинет ученика</h3>
-                    <span>посмотрите ваши оплаты и оставшиеся занятия</span>
-                </div>
+      <section>
+        <div class="section-inner">
+          <div class="section-title">
+            <h3>Личный кабинет ученика</h3>
+            <span>посмотрите ваши оплаты и оставшиеся занятия</span>
+          </div>
 
-        <div class="enroll-box" style="max-width:520px;">
-          <form method="post">
-            <div class="form-field">
-              <label for="code">Ваш 6-значный ID</label>
-              <input id="code" name="code" type="text" maxlength="6"
-                     placeholder="например, 038421" value="{{ code or '' }}" required>
-            </div>
-            <button class="btn-primary form-submit" type="submit">Показать данные</button>
-          </form>
+          <div class="enroll-box" style="max-width: 520px">
+            <form method="post">
+              <div class="form-field">
+                <label for="code">Ваш 6-значный ID</label>
+                <input
+                  id="code"
+                  name="code"
+                  type="text"
+                  maxlength="6"
+                  placeholder="например, 038421"
+                  value="{{ code or '' }}"
+                  required
+                />
+              </div>
+              <button class="btn-primary form-submit" type="submit">
+                Показать данные
+              </button>
+            </form>
 
-          {% if not_found %}
-            <p style="color:#c00; margin-top:10px;">Запись с таким ID не найдена. Проверьте код или спросите у преподавателя.</p>
-          {% endif %}
+            {% if not_found %}
+            <p style="color: #c00; margin-top: 10px">
+              Запись с таким ID не найдена. Проверьте код или спросите у
+              преподавателя.
+            </p>
+            {% endif %} {% if student %}
+            <hr
+              style="
+                margin: 20px 0;
+                border: none;
+                border-top: 1px solid rgba(0, 0, 0, 0.06);
+              "
+            />
 
-          {% if student %}
+            <h4 style="margin-bottom: 10px">
+              {{ student['name'] or 'Ученик' }}
+            </h4>
 
-            <hr style="margin:20px 0; border:none; border-top:1px solid rgba(0,0,0,0.06);">
-
-            <h4 style="margin-bottom:10px;">{{ student['name'] or 'Ученик' }}</h4>
             {% if student['course'] %}
-              <p style="margin:0 0 10px 0; color:#666;">Курс: {{ student['course'] }}</p>
+            <p style="margin: 0 0 10px 0; color: #666">
+              Курс: {{ student['course'] }}
+            </p>
             {% endif %}
 
-            <p><strong>Всего занятий в пакете:</strong> {{ student['lessons_total'] or '—' }}</p>
-            <p><strong>Осталось занятий:</strong> {{ student['lessons_left'] or '—' }}</p>
+            <p>
+              <strong>Всего занятий в пакете:</strong>
+              {{ student['lessons_total'] or '—' }}
+            </p>
+            <p>
+              <strong>Осталось занятий:</strong>
+              {{ student['lessons_left'] or '—' }}
+            </p>
 
-            <p style="margin-top:10px;">
+            <p style="margin-top: 10px">
               <strong>Последняя оплата:</strong>
-              {{ student['last_payment_date'] or '—' }}
-              {% if student['last_payment_amount'] %}
-                · {{ student['last_payment_amount'] }} ₽
-              {% endif %}
+              {{ student['last_payment_date'] or '—' }} {% if
+              student['last_payment_amount'] %} · {{
+              student['last_payment_amount'] }} ₽ {% endif %}
             </p>
 
             {% if student['comment'] %}
-              <p style="margin-top:10px; color:#777;">Комментарий от школы:<br>{{ student['comment'] }}</p>
+            <p style="margin-top: 10px; color: #777">
+              Комментарий от школы:<br />{{ student['comment'] }}
+            </p>
             {% endif %}
 
-            <!-- РАСПИСАНИЕ -->
-            <hr style="margin:18px 0; border:none; border-top:1px solid rgba(0,0,0,0.06);">
-            <h4 style="margin-bottom:8px;">Ваши занятия</h4>
+            <!-- РАСПИСАНИЕ ЗАНЯТИЙ -->
+            <hr
+              style="
+                margin: 18px 0;
+                border: none;
+                border-top: 1px solid rgba(0, 0, 0, 0.06);
+              "
+            />
 
-            {% if lessons_planned %}
-              <p style="font-weight:600; font-size:0.9rem; margin-bottom:4px;">Ближайшие</p>
-              <ul class="student-lessons-list">
-                {% for l in lessons_planned %}
-                  <li>
-                    <span class="lesson-date">{{ l['start_at'] }}</span>
-                    {% if l['topic'] %} · <span class="lesson-topic">{{ l['topic'] }}</span>{% endif %}
-                    {% if l['comment'] %}<br><span class="lesson-comment">{{ l['comment'] }}</span>{% endif %}
+            <h4 style="margin-bottom: 8px">Ваши занятия</h4>
+
+            {% if lessons_planned or lessons_rescheduled or lessons_done or
+            lessons_canceled %}
+            <div class="student-lessons-sections">
+              {% if lessons_planned %}
+              <div class="student-lessons-section">
+                <p class="student-lessons-label">Ближайшие занятия</p>
+                <ul class="student-lessons-list">
+                  {% for l in lessons_planned %}
+                  <li class="lesson-row">
+                    <div class="lesson-main">
+                      <span class="lesson-date">{{ l['start_at'] }}</span>
+                      {% if l['topic'] %}
+                      <span class="lesson-dot">•</span>
+                      <span class="lesson-topic">{{ l['topic'] }}</span>
+                      {% endif %} {% if l['comment'] %}
+                      <div class="lesson-comment">{{ l['comment'] }}</div>
+                      {% endif %}
+                    </div>
+                    <span class="lesson-status-badge lesson-status-planned">
+                      Запланировано
+                    </span>
                   </li>
-                {% endfor %}
-              </ul>
-            {% endif %}
-
-            {% if lessons_rescheduled %}
-              <p style="font-weight:600; font-size:0.9rem; margin:10px 0 4px;">Перенесённые</p>
-              <ul class="student-lessons-list">
-                {% for l in lessons_rescheduled %}
-                  <li>
-                    <span class="lesson-date">{{ l['start_at'] }}</span>
-                    {% if l['rescheduled_to'] %} → <span class="lesson-date">{{ l['rescheduled_to'] }}</span>{% endif %}
-                    {% if l['topic'] %} · <span class="lesson-topic">{{ l['topic'] }}</span>{% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %} {% if lessons_rescheduled %}
+              <div class="student-lessons-section">
+                <p class="student-lessons-label">Перенесённые занятия</p>
+                <ul class="student-lessons-list">
+                  {% for l in lessons_rescheduled %}
+                  <li class="lesson-row">
+                    <div class="lesson-main">
+                      <span class="lesson-date">{{ l['start_at'] }}</span>
+                      {% if l['rescheduled_to'] %}
+                      <span class="lesson-arrow">→</span>
+                      <span class="lesson-date">{{ l['rescheduled_to'] }}</span>
+                      {% endif %} {% if l['topic'] %}
+                      <span class="lesson-dot">•</span>
+                      <span class="lesson-topic">{{ l['topic'] }}</span>
+                      {% endif %} {% if l['comment'] %}
+                      <div class="lesson-comment">{{ l['comment'] }}</div>
+                      {% endif %}
+                    </div>
+                    <span class="lesson-status-badge lesson-status-rescheduled">
+                      Перенесено
+                    </span>
                   </li>
-                {% endfor %}
-              </ul>
-            {% endif %}
-
-            {% if lessons_done %}
-              <p style="font-weight:600; font-size:0.9rem; margin:10px 0 4px;">Проведённые</p>
-              <ul class="student-lessons-list">
-                {% for l in lessons_done %}
-                  <li>
-                    <span class="lesson-date">{{ l['start_at'] }}</span>
-                    {% if l['topic'] %} · <span class="lesson-topic">{{ l['topic'] }}</span>{% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %} {% if lessons_done %}
+              <div class="student-lessons-section">
+                <p class="student-lessons-label">Проведённые занятия</p>
+                <ul class="student-lessons-list">
+                  {% for l in lessons_done %}
+                  <li class="lesson-row">
+                    <div class="lesson-main">
+                      <span class="lesson-date">{{ l['start_at'] }}</span>
+                      {% if l['topic'] %}
+                      <span class="lesson-dot">•</span>
+                      <span class="lesson-topic">{{ l['topic'] }}</span>
+                      {% endif %} {% if l['comment'] %}
+                      <div class="lesson-comment">{{ l['comment'] }}</div>
+                      {% endif %}
+                    </div>
+                    <span class="lesson-status-badge lesson-status-done">
+                      Проведено
+                    </span>
                   </li>
-                {% endfor %}
-              </ul>
-            {% endif %}
-
-            {% if lessons_canceled %}
-              <p style="font-weight:600; font-size:0.9rem; margin:10px 0 4px;">Отменённые</p>
-              <ul class="student-lessons-list">
-                {% for l in lessons_canceled %}
-                  <li>
-                    <span class="lesson-date">{{ l['start_at'] }}</span>
-                    {% if l['comment'] %} · <span class="lesson-comment">{{ l['comment'] }}</span>{% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %} {% if lessons_canceled %}
+              <div class="student-lessons-section">
+                <p class="student-lessons-label">Отменённые занятия</p>
+                <ul class="student-lessons-list">
+                  {% for l in lessons_canceled %}
+                  <li class="lesson-row">
+                    <div class="lesson-main">
+                      <span class="lesson-date">{{ l['start_at'] }}</span>
+                      {% if l['topic'] %}
+                      <span class="lesson-dot">•</span>
+                      <span class="lesson-topic">{{ l['topic'] }}</span>
+                      {% endif %} {% if l['comment'] %}
+                      <div class="lesson-comment">{{ l['comment'] }}</div>
+                      {% endif %}
+                    </div>
+                    <span class="lesson-status-badge lesson-status-canceled">
+                      Отменено
+                    </span>
                   </li>
-                {% endfor %}
-              </ul>
-            {% endif %}
-
-            {% if not (lessons_planned or lessons_rescheduled or lessons_done or lessons_canceled) %}
-              <p style="font-size:0.9rem; color:#777; margin-top:6px;">
-                Расписание пока не заполнено. Спросите у преподавателя, когда будет ближайшее занятие 🙂
-              </p>
-            {% endif %}
-          {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %}
+            </div>
+            {% else %}
+            <p style="font-size: 0.9rem; color: #777; margin-top: 6px">
+              Расписание пока не заполнено. Спросите у преподавателя, когда
+              будет ближайшее занятие 🙂
+            </p>
+            {% endif %} {% endif %}
+          </div>
         </div>
-
-        </section>
+      </section>
     </div>
-</body>
-
+  </body>
 </html>
