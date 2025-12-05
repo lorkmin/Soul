@@ -2515,3 +2515,204 @@ body.student-dashboard {
     margin-top: 2px;
   }
 }
+/* ===================== ADMIN DARK THEME ===================== */
+
+body.admin-page {
+  margin: 0;
+  background: radial-gradient(
+    circle at top,
+    #25253a 0,
+    #141421 40%,
+    #080811 100%
+  );
+  color: #f5f5ff;
+}
+
+.admin-page .wrapper {
+  padding: 24px 0 40px;
+}
+
+/* контейнер админки */
+.admin-page .admin-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  background: rgba(10, 10, 18, 0.9);
+  border-radius: 24px;
+  padding: 22px 22px 26px;
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+/* заголовок секции */
+.admin-page .section-title h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #ffffff;
+}
+
+.admin-page .section-title span {
+  font-size: 0.9rem;
+  color: #a9a9c5;
+}
+
+/* верхнее меню админки */
+.admin-page .admin-nav {
+  margin: 16px 0 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.65);
+}
+
+.admin-page .admin-nav a {
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  text-decoration: none;
+  color: #e1e1ff;
+  opacity: 0.7;
+  transition: background 0.16s ease, color 0.16s ease, opacity 0.16s ease,
+    transform 0.12s ease;
+}
+
+.admin-page .admin-nav a:hover {
+  background: rgba(255, 255, 255, 0.07);
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.admin-page .admin-nav a.active {
+  background: linear-gradient(135deg, #f4c94c, #f89d3c);
+  color: #281c02;
+  font-weight: 600;
+  opacity: 1;
+}
+
+/* формы в админке */
+.admin-page .admin-form {
+  background: rgba(18, 18, 30, 0.95);
+  border-radius: 18px;
+  padding: 14px 16px 16px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.02);
+  margin-bottom: 18px;
+}
+
+.admin-page .admin-form input,
+.admin-page .admin-form textarea,
+.admin-page .admin-form select {
+  width: 100%;
+  background: #151525;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: #f5f5ff;
+  padding: 7px 10px;
+  font-size: 0.9rem;
+}
+
+.admin-page .admin-form input:focus,
+.admin-page .admin-form textarea:focus,
+.admin-page .admin-form select:focus {
+  outline: none;
+  border-color: #f4c94c;
+  box-shadow: 0 0 0 1px rgba(244, 201, 76, 0.7);
+}
+
+/* обычные кнопки админки */
+.admin-page .admin-btn,
+.admin-page button.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: none;
+  background: #30304a;
+  color: #f5f5ff;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.16s ease, box-shadow 0.16s ease, transform 0.12s ease;
+}
+
+.admin-page .admin-btn:hover,
+.admin-page button.admin-btn:hover {
+  background: #3d3d5b;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+  transform: translateY(-1px);
+}
+
+/* кнопка удаления */
+.admin-page .admin-delete-btn,
+.admin-page button.admin-delete-btn {
+  background: #441822;
+  color: #ffd5d0;
+  border-radius: 999px;
+  padding: 5px 9px;
+  font-size: 0.8rem;
+  border: 1px solid rgba(255, 152, 152, 0.4);
+}
+
+.admin-page .admin-delete-btn:hover,
+.admin-page button.admin-delete-btn:hover {
+  background: #711a29;
+}
+
+/* таблицы */
+.admin-page .admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #1a1a2a;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  margin-top: 4px;
+}
+
+.admin-page .admin-table th,
+.admin-page .admin-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.admin-page .admin-table th {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #b6b6d5;
+  background: #262636;
+}
+
+.admin-page .admin-table td {
+  font-size: 0.87rem;
+  color: #f4f4ff;
+}
+
+.admin-page .admin-table tbody tr:nth-child(even) {
+  background: #181824;
+}
+
+.admin-page .admin-table tbody tr:hover {
+  background: #202034;
+}
+
+/* мелкий текст/подписи */
+.admin-page p {
+  color: #cecedf;
+}
+
+/* адаптация под узкие экраны */
+@media (max-width: 720px) {
+  .admin-page .admin-container {
+    margin: 0 8px;
+    padding: 16px 14px 20px;
+    border-radius: 20px;
+  }
+
+  .admin-page .admin-nav {
+    border-radius: 18px;
+  }
+}
