@@ -80,13 +80,17 @@ def generate_student_code():
             conn.close()
             return code
 
-def teacher_login_required(f):
+def login_required(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        if not session.get("teacher_logged_in"):
-            return redirect(url_for("teacher_login", next=request.path))
+        if not session.get("admin_logged_in"):
+            return redirect(url_for("admin_login"))
         return f(*args, **kwargs)
     return wrapper
+
+# Преподаватель = тот же админ, отдельная авторизация не нужна
+teacher_login_required = login_required
+
 
 
 
