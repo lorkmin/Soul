@@ -151,6 +151,18 @@ def init_db():
         );
     """)
 
+    # новые поля под "Основное" и ачивки
+    try:
+        cur.execute("ALTER TABLE teachers ADD COLUMN highlights TEXT")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        cur.execute("ALTER TABLE teachers ADD COLUMN badges TEXT")
+    except sqlite3.OperationalError:
+        pass
+
+
     # ---- COURSES ----
     cur.execute("""
         CREATE TABLE IF NOT EXISTS courses (
@@ -630,16 +642,20 @@ def admin_teachers_add():
     name = request.form["name"]
     role = request.form["role"]
     bio = request.form.get("bio", "")
+    highlights = request.form.get("highlights", "")   # НОВОЕ
+    badges = request.form.get("badges", "")           # НОВОЕ
     photo = save_upload(request.files.get("photo"), TEACHER_UPLOAD)
 
     conn = get_db()
     conn.execute(
-        "INSERT INTO teachers (name, role, bio, photo) VALUES (?, ?, ?, ?)",
-        (name, role, bio, photo),
+        "INSERT INTO teachers (name, role, bio, photo, highlights, badges) "
+        "VALUES (?, ?, ?, ?, ?, ?)",
+        (name, role, bio, photo, highlights, badges),
     )
     conn.commit()
     conn.close()
     return redirect(url_for("admin_teachers"))
+
 
 
 # ----- РЕДАКТИРОВАНИЕ ПРЕПОДАВАТЕЛЯ -----
@@ -658,30 +674,39 @@ def admin_teachers_edit(tid):
         conn.close()
         return redirect(url_for("admin_teachers"))
 
-    if request.method == "POST":
-        name = request.form["name"]
-        role = request.form["role"]
-        bio = request.form.get("bio", "")
-        file = request.files.get("photo")
-        new_photo = save_upload(file, TEACHER_UPLOAD) if file and file.filename else None
+if request.method == "POST":
+    name = request.form["name"]
+    role = request.form["role"]
+    bio = request.form.get("bio", "")
+    highlights = request.form.get("highlights", "")   # НОВОЕ
+    badges = request.form.get("badges", "")           # НОВОЕ
 
-        if new_photo:
-            conn.execute(
-                "UPDATE teachers SET name = ?, role = ?, bio = ?, photo = ? WHERE id = ?",
-                (name, role, bio, new_photo, tid),
-            )
-        else:
-            conn.execute(
-                "UPDATE teachers SET name = ?, role = ?, bio = ? WHERE id = ?",
-                (name, role, bio, tid),
-            )
+    file = request.files.get("photo")
+    new_photo = save_upload(file, TEACHER_UPLOAD) if file and file.filename else None
 
-        conn.commit()
-        conn.close()
-        return redirect(url_for("admin_teachers"))
+    if new_photo:
+        conn.execute(
+            """
+            UPDATE teachers
+            SET name = ?, role = ?, bio = ?, photo = ?, highlights = ?, badges = ?
+            WHERE id = ?
+            """,
+            (name, role, bio, new_photo, highlights, badges, tid),
+        )
+    else:
+        conn.execute(
+            """
+            UPDATE teachers
+            SET name = ?, role = ?, bio = ?, highlights = ?, badges = ?
+            WHERE id = ?
+            """,
+            (name, role, bio, highlights, badges, tid),
+        )
 
+    conn.commit()
     conn.close()
-    return render_template("admin_teacher_edit.html", teacher=teacher)
+    return redirect(url_for("admin_teachers"))
+
 
 
 # ----- УДАЛЕНИЕ ПРЕПОДАВАТЕЛЯ -----

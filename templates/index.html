@@ -272,120 +272,84 @@
             >
           </div>
 
-          <div class="teachers-list">
+          <div class="teachers-grid">
             {% for t in teachers %}
-            <!-- ШИРОКАЯ КАРТОЧКА ПРЕПОДА -->
-            <article
-              class="teacher-card teacher-panel animate-on-scroll"
-              data-teacher-id="{{ t.id }}"
-            >
-              <div class="teacher-panel-left">
-                <div class="teacher-photo-wrap">
-                  {% if t.photo %}
-                  <img
-                    src="{{ url_for('static', filename='uploads/teachers/' ~ t.photo) }}"
-                    alt="{{ t.name }}"
-                  />
+            <article class="teacher-card animate-on-scroll">
+              <div class="teacher-photo-wrap">
+                {% if t.photo %}
+                <img
+                  src="{{ url_for('static', filename='uploads/teachers/' ~ t.photo) }}"
+                  alt="{{ t.name }}"
+                />
+                {% else %}
+                <img
+                  src="{{ url_for('static', filename='default_teacher.jpg') }}"
+                  alt="{{ t.name }}"
+                />
+                {% endif %}
+              </div>
+
+              <div class="teacher-main">
+                <div class="teacher-header">
+                  <h4 class="teacher-name">{{ t.name }}</h4>
+                  <p class="teacher-role">{{ t.role }}</p>
+                </div>
+
+                <div class="teacher-tabs">
+                  <button class="teacher-tab active" type="button">
+                    Основное
+                  </button>
+                  <button class="teacher-tab" type="button">О себе</button>
+                </div>
+
+                {# Вкладка "Основное" #}
+                <div class="teacher-tab-panel active">
+                  <ul class="teacher-main-list">
+                    {% set lines = (t['highlights'] or '').split('\n') %} {% set
+                    any_line = false %} {% for line in lines %} {% if
+                    line.strip() %} {% set any_line = true %}
+                    <li>{{ line.strip() }}</li>
+                    {% endif %} {% endfor %} {% if not any_line %}
+                    <li>
+                      Спокойно объясняет грамматику с понятными примерами.
+                    </li>
+                    <li>
+                      Поддерживает и помогает не бояться говорить на корейском.
+                    </li>
+                    {% endif %}
+                  </ul>
+
+                  {% set badge_lines = (t['badges'] or '').split('\n') %}
+                  <div class="teacher-badges">
+                    {% for b in badge_lines %} {% if b.strip() %}
+                    <span class="teacher-badge">{{ b.strip() }}</span>
+                    {% endif %} {% endfor %}
+                  </div>
+                </div>
+
+                {# Вкладка "О себе" #}
+                <div class="teacher-tab-panel">
+                  {% if t.bio %}
+                  <div class="teacher-bio">
+                    <div class="teacher-bio-inner">{{ t.bio | safe }}</div>
+                  </div>
+                  <button class="teacher-bio-toggle" type="button">
+                    Читать дальше
+                  </button>
                   {% else %}
-                  <img
-                    src="{{ url_for('static', filename='default_teacher.jpg') }}"
-                    alt="{{ t.name }}"
-                  />
+                  <p class="teacher-bio-empty">
+                    Скоро здесь появится рассказ о преподавателе :)
+                  </p>
                   {% endif %}
                 </div>
 
-                <button
-                  type="button"
-                  class="btn-primary teacher-panel-cta"
-                  onclick="scrollToEnroll('')"
-                >
-                  Оставить заявку
-                </button>
-              </div>
-
-              <div class="teacher-panel-right">
-                <div class="teacher-panel-header">
-                  <div>
-                    <h4 class="teacher-name">{{ t.name }}</h4>
-                    {% if t.role %}
-                    <p class="teacher-role">{{ t.role }}</p>
-                    {% endif %}
-                  </div>
-                  <div class="teacher-panel-tagline">
-                    Преподаватель корейского языка
-                  </div>
-                </div>
-
-                <div class="teacher-panel-tabs">
-                  <button
-                    type="button"
-                    class="teacher-tab active"
-                    data-tab="main"
-                  >
-                    Основное
-                  </button>
-                  <button type="button" class="teacher-tab" data-tab="about">
-                    О себе
-                  </button>
-                </div>
-
-                <!-- Вкладка "Основное" — короткие плюсы преподавателя -->
-                <div class="teacher-tab-content active" data-tab="main">
-                  <ul class="teacher-main-list">
-                    <li>Объясняет спокойно и по шагам, без гонки и стресса.</li>
-                    <li>
-                      Подстраивается под ваши цели — учёба, работа или переезд.
-                    </li>
-                    <li>
-                      Даёт много живой практики и примеров из реальной жизни.
-                    </li>
-                  </ul>
-                </div>
-
-                <!-- Вкладка "О себе" — то, что ты вводишь в админке в поле bio -->
-                <div class="teacher-tab-content" data-tab="about">
-                  <div class="teacher-about-text">{{ t.bio|safe }}</div>
-
-                  <button
-                    type="button"
-                    class="teacher-read-more"
-                    data-teacher-id="{{ t.id }}"
-                  >
-                    Читать дальше
-                  </button>
+                <div class="teacher-footer">
+                  <a href="#enroll" class="btn-ghost teacher-cta">
+                    Оставить заявку
+                  </a>
                 </div>
               </div>
             </article>
-
-            <!-- МОДАЛКА ПРЕПОДА (оставляем как есть, только ниже карточки) -->
-            <div class="teacher-modal" id="teacher-modal-{{ t.id }}">
-              <div class="teacher-modal-content">
-                <button class="teacher-modal-close" aria-label="Закрыть">
-                  ×
-                </button>
-                <div class="teacher-modal-inner">
-                  <div class="teacher-modal-header">
-                    {% if t.photo %}
-                    <img
-                      src="{{ url_for('static', filename='uploads/teachers/' ~ t.photo) }}"
-                      class="teacher-modal-photo"
-                      alt="{{ t.name }}"
-                    />
-                    {% endif %}
-                    <div>
-                      <h3 class="teacher-modal-name">{{ t.name }}</h3>
-                      <p class="teacher-modal-role">{{ t.role }}</p>
-                      <p class="teacher-modal-tagline">
-                        ✨ Тёплый подход, живые примеры и поддержка даже на
-                        «сложных» темах.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div class="teacher-modal-bio">{{ t.bio|safe }}</div>
-                </div>
-              </div>
-            </div>
             {% endfor %}
           </div>
         </div>
@@ -1076,79 +1040,37 @@
         }
 
         // ====================================================================
-        //                          МОДАЛКА ПРЕПОДАВАТЕЛЕЙ
+        //                 ПРЕПОДАВАТЕЛИ: ВКЛАДКИ И "ЧИТАТЬ ДАЛЬШЕ"
         // ====================================================================
-        // --- Табы "Основное / О себе" внутри карточек преподавателей ---
-        document
-          .querySelectorAll(".teacher-card.teacher-panel")
-          .forEach((panel) => {
-            const tabs = panel.querySelectorAll(".teacher-tab");
-            const contents = panel.querySelectorAll(".teacher-tab-content");
+        document.querySelectorAll(".teacher-card").forEach(function (card) {
+          const tabs = card.querySelectorAll(".teacher-tab");
+          const panels = card.querySelectorAll(".teacher-tab-panel");
 
-            tabs.forEach((tab) => {
-              tab.addEventListener("click", (e) => {
-                e.stopPropagation(); // чтобы не открывалась модалка
-                const target = tab.dataset.tab;
+          // переключение вкладок "Основное / О себе"
+          tabs.forEach(function (tab, index) {
+            tab.addEventListener("click", function (e) {
+              e.preventDefault();
 
-                tabs.forEach((t) => t.classList.toggle("active", t === tab));
-                contents.forEach((c) =>
-                  c.classList.toggle("active", c.dataset.tab === target)
-                );
-              });
+              tabs.forEach((t) => t.classList.remove("active"));
+              panels.forEach((p) => p.classList.remove("active"));
+
+              tab.classList.add("active");
+              if (panels[index]) {
+                panels[index].classList.add("active");
+              }
             });
           });
 
-        // --- Кнопка "Читать дальше" в табе "О себе" открывает модалку ---
-        document.querySelectorAll(".teacher-read-more").forEach((btn) => {
-          btn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const id = btn.dataset.teacherId;
-            const modal = document.getElementById("teacher-modal-" + id);
-            if (modal) {
-              modal.classList.add("active");
-              updateBodyModalState();
-            }
-          });
-        });
+          // сворачиваемый текст "О себе"
+          const bio = card.querySelector(".teacher-bio");
+          const toggle = card.querySelector(".teacher-bio-toggle");
 
-        // чтобы табы и кнопки не триггерили клик по всей карточке
-        document
-          .querySelectorAll(".teacher-tab, .teacher-panel-cta")
-          .forEach((el) => {
-            el.addEventListener("click", (e) => e.stopPropagation());
-          });
-
-        const teacherCards = document.querySelectorAll(".teacher-card");
-        const teacherModals = document.querySelectorAll(".teacher-modal");
-
-        teacherCards.forEach((card) => {
-          card.addEventListener("click", () => {
-            const id = card.dataset.teacherId;
-            const modal = document.getElementById("teacher-modal-" + id);
-            if (modal) {
-              modal.classList.add("active");
-              updateBodyModalState();
-            }
-          });
-        });
-
-        document.querySelectorAll(".teacher-modal-close").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const modal = btn.closest(".teacher-modal");
-            if (modal) {
-              modal.classList.remove("active");
-              updateBodyModalState();
-            }
-          });
-        });
-
-        teacherModals.forEach((modal) => {
-          modal.addEventListener("click", (e) => {
-            if (e.target === modal) {
-              modal.classList.remove("active");
-              updateBodyModalState();
-            }
-          });
+          if (bio && toggle) {
+            toggle.addEventListener("click", function () {
+              const expanded = bio.classList.toggle("expanded");
+              toggle.textContent = expanded ? "Свернуть" : "Читать дальше";
+            });
+          }
         });
 
         // ====================================================================
