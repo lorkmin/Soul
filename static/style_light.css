@@ -2716,3 +2716,66 @@ body.admin-page {
     border-radius: 18px;
   }
 }
+/* ===================== ЛК ученика: прогресс по занятиям ===================== */
+
+.student-progress {
+  margin-top: 8px;
+  padding: 8px 10px 10px;
+  border-radius: 14px;
+  background: #fffaf2;
+  border: 1px solid rgba(244, 201, 76, 0.45);
+}
+
+.student-progress-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.student-progress-label {
+  font-size: 0.85rem;
+  color: #7a5a12;
+  font-weight: 600;
+}
+
+.student-progress-percent {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #b16a1e;
+}
+
+.student-progress-bar {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(244, 201, 76, 0.25);
+}
+
+.student-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #f4c94c, #f89d3c);
+  box-shadow: 0 0 8px rgba(244, 201, 76, 0.8);
+  transition: width 0.4s ease;
+}
+
+.student-progress-meta {
+  margin-top: 4px;
+  font-size: 0.8rem;
+  color: #94713a;
+}
+
+/* мобилка: чуть крупнее текст */
+@media (max-width: 600px) {
+  .student-progress {
+    padding: 8px 8px 10px;
+  }
+  .student-progress-label,
+  .student-progress-meta {
+    font-size: 0.82rem;
+  }
+}

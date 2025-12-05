@@ -68,6 +68,30 @@
               <strong>Осталось занятий:</strong>
               {{ student['lessons_left'] or '—' }}
             </p>
+            {# ПРОГРЕСС ПО ЗАНЯТИЯМ #} {% set total = (student['lessons_total']
+            or 0)|int %} {% set left = (student['lessons_left'] or 0)|int %} {%
+            if total > 0 %} {% set done = total - left %} {% if done < 0 %}{%
+            set done = 0 %}{% endif %} {% if done > total %}{% set done = total
+            %}{% endif %} {% set percent = (done * 100 / total)|round(0) %}
+
+            <div class="student-progress">
+              <div class="student-progress-top">
+                <span class="student-progress-label"> Прогресс по пакету </span>
+                <span class="student-progress-percent">
+                  {{ percent|int }}%
+                </span>
+              </div>
+              <div class="student-progress-bar">
+                <div
+                  class="student-progress-fill"
+                  style="width: {{ percent }}%;"
+                ></div>
+              </div>
+              <div class="student-progress-meta">
+                Пройдено {{ done }} из {{ total }} занятий
+              </div>
+            </div>
+            {% endif %}
 
             <p style="margin-top: 10px">
               <strong>Последняя оплата:</strong>
