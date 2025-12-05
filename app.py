@@ -32,12 +32,10 @@ def format_paragraphs(text: str) -> str:
     return html
 
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY")
-
 # регистрируем фильтр ПОСЛЕ того, как создан app
 app.jinja_env.filters["paragraphs"] = format_paragraphs
 
-app = Flask(__name__)
+app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "soul.db")
