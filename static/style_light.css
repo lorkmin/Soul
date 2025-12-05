@@ -1906,6 +1906,52 @@ section[id] {
   cursor: pointer;
 }
 
+/* ====== Модалка курса: красивый блок описания ====== */
+
+.course-bio {
+  margin-top: 10px;
+  padding: 10px 12px 12px;
+  border-radius: 16px;
+  background: #f8f9ff;
+  border: 1px solid rgba(120, 140, 255, 0.28);
+}
+
+.course-bio-title {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #36428a;
+}
+
+.course-bio-list {
+  margin: 0 0 6px;
+  padding-left: 1.1rem;
+  font-size: 0.9rem;
+  color: #4d568c;
+}
+
+.course-bio-list li {
+  margin-bottom: 3px;
+}
+
+.course-bio-note {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #5c628c;
+}
+
+/* мобилка */
+@media (max-width: 600px) {
+  .course-bio {
+    padding: 8px 10px 10px;
+  }
+  .course-bio-title,
+  .course-bio-list,
+  .course-bio-note {
+    font-size: 0.85rem;
+  }
+}
+
 /* АДАПТИВ МОДАЛКИ */
 
 @media (max-width: 640px) {
