@@ -80,13 +80,6 @@ def generate_student_code():
             conn.close()
             return code
 
-def teacher_login_required(f):
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        if not session.get("teacher_logged_in"):
-            return redirect(url_for("teacher_login", next=request.path))
-        return f(*args, **kwargs)
-    return wrapper
 
 
 
