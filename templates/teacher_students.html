@@ -1,48 +1,61 @@
-{% extends "admin_layout.html" %}
+{% extends "admin_layout.html" %} {% block content %}
+<h2>РЈС‡РµРЅРёРєРё (РґР°С€Р±РѕСЂРґ)</h2>
 
-{% block content %}
-<h2>Ученики (дашборд)</h2>
-
-<div class="admin-form" style="margin-bottom:20px;">
-  <a class="admin-btn" href="{{ url_for('teacher_students_add') }}">Добавить ученика</a>
-  <a class="admin-btn" href="{{ url_for('teacher_logout') }}" style="margin-left:10px;">Выйти из панели преподавателя</a>
+<div class="admin-form" style="margin-bottom: 20px">
+  <a class="admin-btn" href="{{ url_for('teacher_students_add') }}"
+    >Р”РѕР±Р°РІРёС‚СЊ СѓС‡РµРЅРёРєР°</a
+  >
+  <a
+    class="admin-btn"
+    href="{{ url_for('teacher_logout') }}"
+    style="margin-left: 10px"
+    >Р’С‹Р№С‚Рё РёР· РїР°РЅРµР»Рё РїСЂРµРїРѕРґР°РІР°С‚РµР»СЏ</a
+  >
 </div>
 
 <table class="admin-table">
   <thead>
     <tr>
-      <th>ID для ученика</th>
-      <th>Имя</th>
-      <th>Курс</th>
-      <th>Всего занятий</th>
-      <th>Осталось</th>
-      <th>Последняя оплата</th>
-      <th>Сумма</th>
+      <th>ID РґР»СЏ СѓС‡РµРЅРёРєР°</th>
+      <th>РРјСЏ</th>
+      <th>РљСѓСЂСЃ</th>
+      <th>Р’СЃРµРіРѕ Р·Р°РЅСЏС‚РёР№</th>
+      <th>РћСЃС‚Р°Р»РѕСЃСЊ</th>
+      <th>РџРѕСЃР»РµРґРЅСЏСЏ РѕРїР»Р°С‚Р°</th>
+      <th>РЎСѓРјРјР°</th>
       <th></th>
     </tr>
   </thead>
   <tbody>
     {% for s in students %}
-      <tr>
-        <td><code>{{ s['public_code'] }}</code></td>
-        <td>{{ s['name'] or '—' }}</td>
-        <td>{{ s['course'] or '—' }}</td>
-        <td>{{ s['lessons_total'] or '—' }}</td>
-        <td>{{ s['lessons_left'] or '—' }}</td>
-        <td>{{ s['last_payment_date'] or '—' }}</td>
-        <td>{{ s['last_payment_amount'] or '—' }}</td>
-        <td>
-          <a class="admin-btn" href="{{ url_for('teacher_students_edit', sid=s['id']) }}">Редактировать</a>
-          <form action="{{ url_for('teacher_students_delete', sid=s['id']) }}"
-                method="post"
-                style="display:inline;"
-                onsubmit="return confirm('Удалить этого ученика?');">
-            <button class="admin-delete-btn" type="submit">Удалить</button>
-          </form>
-        </td>
-      </tr>
+    <tr>
+      <td><code>{{ s['public_code'] }}</code></td>
+      <td>{{ s['name'] or 'вЂ”' }}</td>
+      <td>{{ s['course'] or 'вЂ”' }}</td>
+      <td>{{ s['lessons_total'] or 'вЂ”' }}</td>
+      <td>{{ s['lessons_left'] or 'вЂ”' }}</td>
+      <td>{{ s['last_payment_date'] or 'вЂ”' }}</td>
+      <td>{{ s['last_payment_amount'] or 'вЂ”' }}</td>
+      <td>
+        <a
+          class="admin-btn"
+          href="{{ url_for('teacher_students_edit', sid=s['id']) }}"
+          >Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ</a
+        >
+        <form
+          action="{{ url_for('teacher_students_delete', sid=s['id']) }}"
+          method="post"
+          style="display: inline"
+          onsubmit="return confirm('РЈРґР°Р»РёС‚СЊ СЌС‚РѕРіРѕ СѓС‡РµРЅРёРєР°?');"
+        >
+          <button class="admin-delete-btn" type="submit">РЈРґР°Р»РёС‚СЊ</button>
+        </form>
+      </td>
+    </tr>
     {% else %}
-      <tr><td colspan="8">Пока нет учеников.</td></tr>
+    <tr>
+      <td colspan="8">РџРѕРєР° РЅРµС‚ СѓС‡РµРЅРёРєРѕРІ.</td>
+    </tr>
     {% endfor %}
   </tbody>
 </table>
