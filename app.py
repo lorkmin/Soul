@@ -22,6 +22,21 @@ from flask import (
     send_file,
 )
 
+# ==== ФИЛЬТР ДЛЯ АБЗАЦЕВ ==== 
+def format_paragraphs(text: str) -> str:
+    """Преобразует текст с пустыми строками в HTML-абзацы."""
+    if not text:
+        return ""
+    parts = [p.strip() for p in text.replace("\r", "").split("\n\n")]
+    html = "".join(f"<p>{p}</p>" for p in parts if p)
+    return html
+
+app = Flask(__name__)
+app.secret_key = os.getenv("FLASK_SECRET_KEY")
+
+# регистрируем фильтр ПОСЛЕ того, как создан app
+app.jinja_env.filters["paragraphs"] = format_paragraphs
+
 app = Flask(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -29,7 +44,7 @@ DB_PATH = os.path.join(BASE_DIR, "soul.db")
 
 # ================== НАСТРОЙКИ ==================
 
-app.jinja_env.filters["paragraphs"] = format_paragraphs
+#app.jinja_env.filters["paragraphs"] = format_paragraphs
 
 
 # секретный ключ для сессий (логин в админку)
@@ -212,17 +227,6 @@ def login_required(f):
 
 # Преподаватель = тот же админ, отдельная авторизация не нужна
 teacher_login_required = login_required
-
-def format_paragraphs(text: str) -> str:
-    """Преобразует текст с пустыми строками в HTML-абзацы."""
-    if not text:
-        return ""
-    # убираем \r и делим по пустым строкам
-    parts = [p.strip() for p in text.replace("\r", "").split("\n\n")]
-    # оборачиваем в <p> только непустые куски
-    html = "".join(f"<p>{p}</p>" for p in parts if p)
-    return html
-
 
 
 # ================== TELEGRAM ==================
