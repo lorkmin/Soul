@@ -1,0 +1,46 @@
+{% extends "admin_layout.html" %}
+
+{% block content %}
+<h2>{{ 'Изменить занятие' if lesson else 'Добавить занятие' }}</h2>
+
+<p style="margin-bottom: 10px;">
+  Для ученика: <strong>{{ student['name'] or 'Ученик' }}</strong>
+  {% if student['course'] %} · {{ student['course'] }}{% endif %}
+</p>
+
+<div class="admin-form">
+  <form method="post">
+    <label>Дата и время (формат: 2025-02-01 19:00)</label>
+    <input type="text" name="start_at"
+           value="{{ lesson['start_at'] if lesson else '' }}"
+           placeholder="2025-02-01 19:00" required>
+
+    <label>Статус</label>
+    <select name="status">
+      {% set st = lesson['status'] if lesson else 'planned' %}
+      <option value="planned"     {{ 'selected' if st == 'planned' else '' }}>Запланировано</option>
+      <option value="done"        {{ 'selected' if st == 'done' else '' }}>Проведено</option>
+      <option value="canceled"    {{ 'selected' if st == 'canceled' else '' }}>Отменено</option>
+      <option value="rescheduled" {{ 'selected' if st == 'rescheduled' else '' }}>Перенесено</option>
+    </select>
+
+    <label>Новая дата/время (если перенесено)</label>
+    <input type="text" name="rescheduled_to"
+           value="{{ lesson['rescheduled_to'] if lesson else '' }}"
+           placeholder="2025-02-05 19:00">
+
+    <label>Тема занятия (по желанию)</label>
+    <input type="text" name="topic"
+           value="{{ lesson['topic'] if lesson else '' }}"
+           placeholder="Например: алфавит, чтение, диалоги">
+
+    <label>Комментарий (виден ученику)</label>
+    <textarea name="comment" rows="3"
+              placeholder="Например: перенос по просьбе ученика или детали домашки">{{ lesson['comment'] if lesson else '' }}</textarea>
+
+    <button class="admin-btn" type="submit">
+      {{ 'Сохранить' if lesson else 'Добавить' }}
+    </button>
+  </form>
+</div>
+{% endblock %}

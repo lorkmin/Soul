@@ -7,6 +7,9 @@ import csv
 import random
 import traceback
 
+from datetime import datetime  # вверху файла, если ещё не импортирован
+
+
 import requests
 from flask import (
     Flask,
@@ -177,6 +180,22 @@ def init_db():
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
     """)
+
+    # ---- STUDENT LESSONS (расписание) ----
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS student_lessons (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            student_id INTEGER NOT NULL,
+            start_at TEXT NOT NULL,             -- 'YYYY-MM-DD HH:MM'
+            status TEXT NOT NULL DEFAULT 'planned',  -- planned / done / canceled / rescheduled
+            rescheduled_to TEXT,                -- новая дата/время, если перенос
+            topic TEXT,                         -- тема урока
+            comment TEXT,                       -- заметка для ученика или для себя
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (student_id) REFERENCES student_accounts(id) ON DELETE CASCADE
+        );
+    """)
+
 
     conn.commit()
     conn.close()
@@ -945,16 +964,44 @@ def student_dashboard():
     student = None
     not_found = False
 
+    lessons_planned = []
+    lessons_done = []
+    lessons_canceled = []
+    lessons_rescheduled = []
+
     if request.method == "POST":
         code = (request.form.get("code") or "").strip()
         conn = get_db()
         conn.row_factory = sqlite3.Row
+
         student = conn.execute(
             "SELECT * FROM student_accounts WHERE public_code = ?",
             (code,),
         ).fetchone()
-        conn.close()
-        if not student:
+
+        if student:
+            lessons = conn.execute(
+                """
+                SELECT * FROM student_lessons
+                WHERE student_id = ?
+                ORDER BY start_at
+                """,
+                (student["id"],),
+            ).fetchall()
+            conn.close()
+
+            for l in lessons:
+                status = (l["status"] or "planned").lower()
+                if status == "done":
+                    lessons_done.append(l)
+                elif status == "canceled":
+                    lessons_canceled.append(l)
+                elif status == "rescheduled":
+                    lessons_rescheduled.append(l)
+                else:
+                    lessons_planned.append(l)
+        else:
+            conn.close()
             not_found = True
 
     return render_template(
@@ -962,7 +1009,12 @@ def student_dashboard():
         code=code,
         student=student,
         not_found=not_found,
+        lessons_planned=lessons_planned,
+        lessons_done=lessons_done,
+        lessons_canceled=lessons_canceled,
+        lessons_rescheduled=lessons_rescheduled,
     )
+
 
 
 @app.errorhandler(500)
@@ -973,6 +1025,145 @@ def internal_error_handler(error):
     traceback.print_exc()
     print("="*60 + "\n")
     return "Произошла внутренняя ошибка сервера. Ошибка записана в лог.", 500
+
+@app.get("/teacher/students/<int:sid>/lessons")
+@teacher_login_required
+def teacher_student_lessons(sid):
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+
+    student = conn.execute(
+        "SELECT * FROM student_accounts WHERE id = ?",
+        (sid,),
+    ).fetchone()
+    if not student:
+        conn.close()
+        return redirect(url_for("teacher_students"))
+
+    lessons = conn.execute(
+        """
+        SELECT * FROM student_lessons
+        WHERE student_id = ?
+        ORDER BY start_at
+        """,
+        (sid,),
+    ).fetchall()
+    conn.close()
+
+    return render_template(
+        "teacher_lessons.html",
+        student=student,
+        lessons=lessons,
+    )
+
+@app.route("/teacher/students/<int:sid>/lessons/add", methods=["GET", "POST"])
+@teacher_login_required
+def teacher_student_lesson_add(sid):
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+    student = conn.execute(
+        "SELECT * FROM student_accounts WHERE id = ?",
+        (sid,),
+    ).fetchone()
+    if not student:
+        conn.close()
+        return redirect(url_for("teacher_students"))
+
+    if request.method == "POST":
+        start_at = (request.form.get("start_at") or "").strip()
+        status = (request.form.get("status") or "planned").strip()
+        rescheduled_to = (request.form.get("rescheduled_to") or "").strip()
+        topic = (request.form.get("topic") or "").strip()
+        comment = (request.form.get("comment") or "").strip()
+
+        conn.execute(
+            """
+            INSERT INTO student_lessons (student_id, start_at, status, rescheduled_to, topic, comment)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (
+                sid,
+                start_at,
+                status,
+                rescheduled_to or None,
+                topic or None,
+                comment or None,
+            ),
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for("teacher_student_lessons", sid=sid))
+
+    conn.close()
+    return render_template("teacher_lesson_form.html", student=student, lesson=None)
+
+@app.route("/teacher/lessons/<int:lid>/edit", methods=["GET", "POST"])
+@teacher_login_required
+def teacher_lesson_edit(lid):
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+    lesson = conn.execute(
+        "SELECT * FROM student_lessons WHERE id = ?",
+        (lid,),
+    ).fetchone()
+
+    if not lesson:
+        conn.close()
+        return redirect(url_for("teacher_students"))
+
+    student = conn.execute(
+        "SELECT * FROM student_accounts WHERE id = ?",
+        (lesson["student_id"],),
+    ).fetchone()
+
+    if request.method == "POST":
+        start_at = (request.form.get("start_at") or "").strip()
+        status = (request.form.get("status") or "planned").strip()
+        rescheduled_to = (request.form.get("rescheduled_to") or "").strip()
+        topic = (request.form.get("topic") or "").strip()
+        comment = (request.form.get("comment") or "").strip()
+
+        conn.execute(
+            """
+            UPDATE student_lessons
+            SET start_at = ?, status = ?, rescheduled_to = ?, topic = ?, comment = ?,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+            """,
+            (
+                start_at,
+                status,
+                rescheduled_to or None,
+                topic or None,
+                comment or None,
+                lid,
+            ),
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for("teacher_student_lessons", sid=lesson["student_id"]))
+
+    conn.close()
+    return render_template("teacher_lesson_form.html", student=student, lesson=lesson)
+
+
+@app.post("/teacher/lessons/<int:lid>/delete")
+@teacher_login_required
+def teacher_lesson_delete(lid):
+    conn = get_db()
+    row = conn.execute(
+        "SELECT student_id FROM student_lessons WHERE id = ?",
+        (lid,),
+    ).fetchone()
+    if not row:
+        conn.close()
+        return redirect(url_for("teacher_students"))
+    sid = row["student_id"]
+
+    conn.execute("DELETE FROM student_lessons WHERE id = ?", (lid,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for("teacher_student_lessons", sid=sid))
 
 
 # ================== DEV-запуск ==================

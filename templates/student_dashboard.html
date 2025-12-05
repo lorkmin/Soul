@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -52,6 +52,66 @@
             {% endif %}
           {% endif %}
         </div>
+          <hr style="margin:18px 0; border:none; border-top:1px solid rgba(0,0,0,0.06);">
+
+          <h4 style="margin-bottom:8px;">Ваши занятия</h4>
+
+          {% if lessons_planned %}
+            <p style="font-weight:600; font-size:0.9rem; margin-bottom:4px;">Ближайшие</p>
+            <ul class="student-lessons-list">
+              {% for l in lessons_planned %}
+                <li>
+                  <span class="lesson-date">{{ l['start_at'] }}</span>
+                  {% if l['topic'] %} · <span class="lesson-topic">{{ l['topic'] }}</span>{% endif %}
+                  {% if l['comment'] %}<br><span class="lesson-comment">{{ l['comment'] }}</span>{% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+
+          {% if lessons_rescheduled %}
+            <p style="font-weight:600; font-size:0.9rem; margin:10px 0 4px;">Перенесённые</p>
+            <ul class="student-lessons-list">
+              {% for l in lessons_rescheduled %}
+                <li>
+                  <span class="lesson-date">{{ l['start_at'] }}</span>
+                  {% if l['rescheduled_to'] %} → <span class="lesson-date">{{ l['rescheduled_to'] }}</span>{% endif %}
+                  {% if l['topic'] %} · <span class="lesson-topic">{{ l['topic'] }}</span>{% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+
+          {% if lessons_done %}
+            <p style="font-weight:600; font-size:0.9rem; margin:10px 0 4px;">Проведённые</p>
+            <ul class="student-lessons-list">
+              {% for l in lessons_done %}
+                <li>
+                  <span class="lesson-date">{{ l['start_at'] }}</span>
+                  {% if l['topic'] %} · <span class="lesson-topic">{{ l['topic'] }}</span>{% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+
+          {% if lessons_canceled %}
+            <p style="font-weight:600; font-size:0.9rem; margin:10px 0 4px;">Отменённые</p>
+            <ul class="student-lessons-list">
+              {% for l in lessons_canceled %}
+                <li>
+                  <span class="lesson-date">{{ l['start_at'] }}</span>
+                  {% if l['comment'] %} · <span class="lesson-comment">{{ l['comment'] }}</span>{% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+
+          {% if not (lessons_planned or lessons_rescheduled or lessons_done or lessons_canceled) %}
+            <p style="font-size:0.9rem; color:#777; margin-top:6px;">
+              Расписание пока не заполнено. Спросите у преподавателя, когда будет ближайшее занятие 🙂
+            </p>
+          {% endif %}
+
       </div>
     </section>
   </div>

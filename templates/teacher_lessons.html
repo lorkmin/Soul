@@ -1,0 +1,57 @@
+{% extends "admin_layout.html" %}
+
+{% block content %}
+<h2>Занятия ученика</h2>
+
+<p style="margin-bottom: 10px;">
+  <strong>{{ student['name'] or 'Ученик' }}</strong>
+  {% if student['course'] %} · курс: {{ student['course'] }}{% endif %}
+</p>
+
+<div class="admin-form" style="margin-bottom: 16px;">
+  <a class="admin-btn" href="{{ url_for('teacher_student_lesson_add', sid=student['id']) }}">
+    Добавить занятие
+  </a>
+  <a class="admin-btn" href="{{ url_for('teacher_students') }}" style="margin-left:8px;">
+    К списку учеников
+  </a>
+</div>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>Дата и время</th>
+      <th>Статус</th>
+      <th>Перенос</th>
+      <th>Тема</th>
+      <th>Комментарий</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for l in lessons %}
+      <tr>
+        <td>{{ l['start_at'] }}</td>
+        <td>
+          {% if l['status'] == 'done' %}Проведено{% elif l['status'] == 'canceled' %}
+            Отменено{% elif l['status'] == 'rescheduled' %}Перенесено{% else %}Запланировано{% endif %}
+        </td>
+        <td>{{ l['rescheduled_to'] or '—' }}</td>
+        <td>{{ l['topic'] or '—' }}</td>
+        <td>{{ l['comment'] or '—' }}</td>
+        <td>
+          <a class="admin-btn" href="{{ url_for('teacher_lesson_edit', lid=l['id']) }}">Изм.</a>
+          <form action="{{ url_for('teacher_lesson_delete', lid=l['id']) }}"
+                method="post"
+                style="display:inline;"
+                onsubmit="return confirm('Удалить это занятие?');">
+            <button class="admin-delete-btn" type="submit">×</button>
+          </form>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="6">Пока нет занятий.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
