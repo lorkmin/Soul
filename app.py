@@ -964,6 +964,7 @@ def student_dashboard():
     student = None
     not_found = False
 
+    # списки занятий
     lessons_planned = []
     lessons_done = []
     lessons_canceled = []
@@ -982,7 +983,8 @@ def student_dashboard():
         if student:
             lessons = conn.execute(
                 """
-                SELECT * FROM student_lessons
+                SELECT *
+                FROM student_lessons
                 WHERE student_id = ?
                 ORDER BY start_at
                 """,
@@ -1003,6 +1005,18 @@ def student_dashboard():
         else:
             conn.close()
             not_found = True
+
+    return render_template(
+        "student_dashboard.html",
+        code=code,
+        student=student,
+        not_found=not_found,
+        lessons_planned=lessons_planned,
+        lessons_done=lessons_done,
+        lessons_canceled=lessons_canceled,
+        lessons_rescheduled=lessons_rescheduled,
+    )
+
 
     return render_template(
         "student_dashboard.html",
