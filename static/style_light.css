@@ -3499,3 +3499,34 @@ body.admin-page {
   opacity: 0.9;
   transform: translateY(-2px);
 }
+/* ===== Маленький круглый бейдж на фото ===== */
+
+.teacher-photo-wrap {
+  position: relative;
+}
+
+/* сам бейдж */
+.teacher-badge-circle {
+  position: absolute;
+  bottom: -6px; /* чуть заходит под фото */
+  right: -6px;
+  padding: 6px 10px;
+  background: #fff8d9;
+  border: 2px solid #ffd978;
+  border-radius: 50px; /* овал — выглядит милее */
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #7a5600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  white-space: nowrap;
+  pointer-events: none; /* не мешает кликам */
+  z-index: 3;
+  transform: translate(0, 0);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* маленькая анимация при ховере */
+.teacher-card:hover .teacher-badge-circle {
+  transform: translate(0, -2px);
+  opacity: 1;
+}
