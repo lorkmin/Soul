@@ -51,6 +51,14 @@
           <button class="admin-delete-btn" type="submit">Удалить</button>
         </form>
       </td>
+      <td>
+        <a
+          class="admin-btn"
+          href="{{ url_for('teacher_student_lessons', sid=s['id']) }}"
+        >
+          Занятия
+        </a>
+      </td>
     </tr>
     {% else %}
     <tr>
