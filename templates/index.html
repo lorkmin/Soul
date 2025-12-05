@@ -331,7 +331,9 @@
                 <div class="teacher-tab-panel">
                   {% if t.bio %}
                   <div class="teacher-bio">
-                    <div class="teacher-bio-inner">{{ t.bio | safe }}</div>
+                    <div class="teacher-bio-inner">
+                      {{ t.bio | paragraphs | safe }}
+                    </div>
                   </div>
                   <button class="teacher-bio-toggle" type="button">
                     Читать дальше
