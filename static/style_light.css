@@ -1,6 +1,15 @@
 :root {
   --bg-page: #f7f5f1;
-  --bg-hero: linear-gradient(135deg, #fffaf1, #f3f5ff);
+  --bg-hero:
+    /* 1) мягкий градиент: пастель сверху → белый ниже */ linear-gradient(
+      to bottom,
+      #fff6ed 0px,
+      /* цвет прямо под шапкой */ #fff6ed 520px,
+      /* держим пастель до низа hero */ #ffffff 900px,
+      /* к этому месту уже белый */ #ffffff 100%
+    ),
+    /* 2) твой kawaii-фон */ url("/static/img/hero-kawaii-bg.png") center top /
+      cover no-repeat;
   --bg-section: #ffffff;
 
   --border-soft: rgba(0, 0, 0, 0.06);
