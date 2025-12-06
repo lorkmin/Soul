@@ -25,24 +25,11 @@ html {
 
 body {
   margin: 0;
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display",
     sans-serif;
-  color: #1b1b1b;
-
-  /* фоновая картинка + плавный переход в белый */
-  background:
-    /* сначала градиент: пастельный сверху → белый ниже */ linear-gradient(
-      to bottom,
-      #fff6ed 0px,
-      /* мягкий пастельный цвет у шапки */ #fff6ed 550px,
-      /* держим цвет чуть ниже hero */ #ffffff 900px,
-      /* к этому месту уже белый */ #ffffff 100%
-    ),
-    /* затем сама картинка */ url("/static/img/hero-kawaii-bg.png") center top /
-      cover no-repeat;
-  background-attachment: scroll;
+  background: var(--bg-page);
+  color: var(--text-main);
 }
-
 .top-bar {
   position: sticky;
   top: 0;
@@ -3511,16 +3498,4 @@ body.admin-page {
 .teacher-card:hover::after {
   opacity: 0.9;
   transform: translateY(-2px);
-}
-@media (max-width: 768px) {
-  body {
-    background: linear-gradient(
-        to bottom,
-        #fff6ed 0px,
-        #fff6ed 420px,
-        #ffffff 750px,
-        #ffffff 100%
-      ),
-      url("/static/img/hero-kawaii-bg.png") center top / contain no-repeat;
-  }
 }
