@@ -3533,16 +3533,3 @@ body.admin-page {
       url("/static/img/hero-kawaii-bg.png") center top / contain no-repeat;
   }
 }
-/* Kawaii-фон в верхней части сайта */
-#hero {
-  background:
-    /* мягкий вертикальный градиент: пастель сверху → белый ниже */ linear-gradient(
-      to bottom,
-      #fff6ed 0px,
-      /* цвет прямо под шапкой */ #fff6ed 520px,
-      /* держим пастель примерно до конца hero */ #ffffff 900px,
-      /* к этому месту уже белый фон */ #ffffff 100%
-    ),
-    /* сама картинка */ url("/static/img/hero-kawaii-bg.png") center top / cover
-      no-repeat;
-}
