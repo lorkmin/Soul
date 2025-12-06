@@ -1,20 +1,27 @@
-﻿{% extends "admin_layout.html" %}
-
-{% block content %}
+﻿{% extends "admin_layout.html" %} {% block content %}
 <h2>Курсы</h2>
 
 <div class="admin-form">
   <form action="/admin/courses/add" method="post" enctype="multipart/form-data">
     <h3>Добавить курс</h3>
 
-    <input type="text" name="title" placeholder="Название курса" required>
-    <input type="number" name="price" placeholder="Цена" required>
-    <input type="number" name="lessons" placeholder="Количество уроков" required>
+    <input type="text" name="title" placeholder="Название курса" required />
+    <input type="number" name="price" placeholder="Цена" required />
+    <input
+      type="number"
+      name="lessons"
+      placeholder="Количество уроков"
+      required
+    />
 
-    <textarea name="description" rows="4" placeholder="Описание курса"></textarea>
+    <textarea
+      name="description"
+      rows="4"
+      placeholder="Описание курса"
+    ></textarea>
 
     <label>Фото:</label>
-    <input type="file" name="photo" accept="image/*">
+    <input type="file" name="photo" accept="image/*" />
 
     <button class="admin-btn" type="submit">Добавить</button>
   </form>
@@ -35,13 +42,19 @@
   <tbody>
     {% for c in courses %}
     <tr>
-      <td><img src="/static/uploads/courses/{{ c.photo }}"></td>
+      <td><img src="/static/uploads/courses/{{ c.photo }}" /></td>
       <td>{{ c.title }}</td>
       <td>{{ c.price }}₽</td>
       <td>{{ c.lessons }}</td>
       <td>{{ c.description }}</td>
 
       <td>
+        <a
+          href="{{ url_for('admin_courses_edit', cid=c['id']) }}"
+          class="admin-btn"
+        >
+          Редактировать
+        </a>
         <form action="/admin/courses/delete/{{ c.id }}" method="post">
           <button class="admin-delete-btn">Удалить</button>
         </form>

@@ -1,27 +1,104 @@
-﻿{% extends "admin_layout.html" %}
-
-{% block content %}
-<h2>Редактировать курс</h2>
+﻿{% extends "admin_layout.html" %} {% block content %}
+<h2>Редактирование курса</h2>
 
 <div class="admin-form">
-  <form action="{{ url_for('admin_courses_edit', cid=course['id']) }}"
-        method="post"
-        enctype="multipart/form-data">
+  <form
+    action="{{ url_for('admin_courses_edit', cid=course['id']) }}"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <div class="form-row">
+      <div class="form-field">
+        <label for="title">Название курса</label>
+        <input
+          id="title"
+          type="text"
+          name="title"
+          value="{{ course['title'] }}"
+          required
+        />
+      </div>
 
-    <input type="text" name="title" value="{{ course['title'] }}" required>
-    <input type="number" name="price" value="{{ course['price'] }}" required>
-    <input type="number" name="lessons" value="{{ course['lessons'] }}" required>
+      <div class="form-field">
+        <label for="price">Стоимость (₽)</label>
+        <input
+          id="price"
+          type="number"
+          name="price"
+          value="{{ course['price'] or '' }}"
+          min="0"
+          step="100"
+        />
+      </div>
+    </div>
 
-    <textarea name="description">{{ course['description'] }}</textarea>
+    <div class="form-row">
+      <div class="form-field">
+        <label for="lessons">Количество уроков</label>
+        <input
+          id="lessons"
+          type="number"
+          name="lessons"
+          value="{{ course['lessons'] or '' }}"
+          min="1"
+          step="1"
+        />
+      </div>
+    </div>
 
-    {% if course['photo'] %}
-      <img src="{{ url_for('static', filename='uploads/courses/' ~ course['photo']) }}"
-           style="width:150px;height:100px;object-fit:cover;border-radius:8px;">
-    {% endif %}
+    <div class="form-field">
+      <label for="description">Описание курса</label>
+      <textarea
+        id="description"
+        name="description"
+        rows="8"
+        placeholder="Текст описания курса"
+      >
+{{ course['description'] or '' }}</textarea
+      >
+      <p class="admin-hint">
+        Можно делать абзацы — пустая строка будет превращаться в отдельный блок
+        на сайте.
+      </p>
+    </div>
 
-    <input type="file" name="photo">
+    <div class="form-field">
+      <label>Обложка курса</label>
 
-    <button class="admin-btn" type="submit">Сохранить</button>
+      {% if course['photo'] %}
+      <div
+        style="
+          margin-bottom: 8px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        "
+      >
+        <img
+          src="{{ url_for('static', filename='uploads/courses/' ~ course['photo']) }}"
+          alt="Текущая обложка"
+          style="
+            width: 140px;
+            height: auto;
+            border-radius: 10px;
+            object-fit: cover;
+          "
+        />
+        <span style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.7)">
+          Можно оставить как есть или загрузить новую картинку.
+        </span>
+      </div>
+      {% endif %}
+
+      <input type="file" name="photo" accept="image/*" />
+    </div>
+
+    <div class="admin-form-actions">
+      <button class="admin-btn" type="submit">Сохранить изменения</button>
+      <a href="{{ url_for('admin_courses') }}" class="admin-secondary-link">
+        Отменить и вернуться к списку
+      </a>
+    </div>
   </form>
 </div>
 {% endblock %}
