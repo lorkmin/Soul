@@ -3499,3 +3499,8 @@ body.admin-page {
   opacity: 0.9;
   transform: translateY(-2px);
 }
+#hero {
+  background: url("/static/img/kawaii-pattern.png") repeat;
+  background-size: 180px;
+  opacity: 0.95;
+}
