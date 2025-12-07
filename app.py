@@ -912,42 +912,53 @@ def teacher_students():
 @app.route("/teacher/students/add", methods=["GET", "POST"])
 @teacher_login_required
 def teacher_students_add():
-   if request.method == "POST":
-    name = (request.form.get("name") or "").strip()
-    course = (request.form.get("course") or "").strip()
-    last_payment_date = (request.form.get("last_payment_date") or "").strip()
-    last_payment_amount = request.form.get("last_payment_amount") or None
-    lessons_total = request.form.get("lessons_total") or None
-    lessons_left = request.form.get("lessons_left") or None
-    comment = (request.form.get("comment") or "").strip()
-    teacher_id = request.form.get("teacher_id") or None
+    if request.method == "POST":
+        name = (request.form.get("name") or "").strip()
+        course = (request.form.get("course") or "").strip()
+        last_payment_date = (request.form.get("last_payment_date") or "").strip()
+        last_payment_amount = request.form.get("last_payment_amount") or None
+        lessons_total = request.form.get("lessons_total") or None
+        lessons_left = request.form.get("lessons_left") or None
+        comment = (request.form.get("comment") or "").strip()
+        teacher_id = request.form.get("teacher_id") or None
 
-    code = generate_student_code()
+        code = generate_student_code()
 
-    conn = get_db()
-    conn.execute(
-        """
-        INSERT INTO student_accounts (
-            public_code, name, course, last_payment_date,
-            last_payment_amount, lessons_total, lessons_left,
-            comment, teacher_id
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """,
-        (
-            code, name or None, course or None, last_payment_date or None,
-            int(last_payment_amount) if last_payment_amount else None,
-            int(lessons_total) if lessons_total else None,
-            int(lessons_left) if lessons_left else None,
-            comment or None,
-            int(teacher_id) if teacher_id else None,
-        ),
-    )
-    conn.commit()
-    conn.close()
-    return redirect(url_for("teacher_students"))
+        conn = get_db()
+        conn.execute(
+            """
+            INSERT INTO student_accounts (
+                public_code,
+                name,
+                course,
+                last_payment_date,
+                last_payment_amount,
+                lessons_total,
+                lessons_left,
+                comment,
+                teacher_id
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                code,
+                name or None,
+                course or None,
+                last_payment_date or None,
+                int(last_payment_amount) if last_payment_amount else None,
+                int(lessons_total) if lessons_total else None,
+                int(lessons_left) if lessons_left else None,
+                comment or None,
+                int(teacher_id) if teacher_id else None,
+            ),
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for("teacher_students"))
 
-
+    # сюда ещё хорошо бы прокинуть список teachers, когда форму допилим
     return render_template("teacher_student_form.html", student=None)
+
 
 
 @app.route("/teacher/students/<int:sid>/edit", methods=["GET", "POST"])
@@ -974,13 +985,19 @@ def teacher_students_edit(sid):
         comment = (request.form.get("comment") or "").strip()
         teacher_id = request.form.get("teacher_id") or None
 
-
         conn.execute(
             """
             UPDATE student_accounts
-            SET name = ?, course = ?, last_payment_date = ?,
-                last_payment_amount = ?, lessons_total = ?, lessons_left = ?,
-                comment = ?, updated_at = CURRENT_TIMESTAMP
+            SET
+                name = ?,
+                course = ?,
+                last_payment_date = ?,
+                last_payment_amount = ?,
+                lessons_total = ?,
+                lessons_left = ?,
+                comment = ?,
+                teacher_id = ?,
+                updated_at = CURRENT_TIMESTAMP
             WHERE id = ?
             """,
             (
@@ -991,13 +1008,14 @@ def teacher_students_edit(sid):
                 int(lessons_total) if lessons_total else None,
                 int(lessons_left) if lessons_left else None,
                 comment or None,
-                sid
-                , teacher_id = ?
+                int(teacher_id) if teacher_id else None,
+                sid,
             ),
         )
         conn.commit()
         conn.close()
         return redirect(url_for("teacher_students"))
+
 
     conn.close()
     return render_template("teacher_student_form.html", student=student)
