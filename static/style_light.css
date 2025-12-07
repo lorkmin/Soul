@@ -3899,3 +3899,54 @@ body.student-dashboard {
     padding: 6px 8px;
   }
 }
+/* === ЛК ученика: общая ширина и карточки === */
+
+body.student-dashboard .section-inner {
+  max-width: 1040px; /* Было около 600, делаем пошире только для ЛК */
+}
+
+.student-dashboard-card {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 24px 28px;
+}
+
+/* Подкарточки "Ваши занятия" и "Домашние задания" */
+
+.student-subcard {
+  margin-top: 24px;
+  padding: 20px 22px;
+  border-radius: 20px;
+  background: #fffdf9;
+  box-shadow: 0 12px 30px rgba(220, 180, 120, 0.12);
+}
+
+.student-subcard-title {
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.student-subcard-empty {
+  font-size: 0.9rem;
+  color: #777;
+  margin: 6px 0 0 0;
+}
+
+/* Чуть растянем блоки расписания, чтобы не казались "кирпичами" */
+
+.student-lessons-sections {
+  display: grid;
+  gap: 12px;
+}
+
+@media (min-width: 900px) {
+  .student-lessons-sections {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* чтобы "Ближайшие занятия" тянулись во всю ширину, если их немного */
+  .student-lessons-section:nth-child(1) {
+    grid-column: 1 / -1;
+  }
+}

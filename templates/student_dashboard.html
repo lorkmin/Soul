@@ -17,7 +17,7 @@
             <span>посмотрите ваши оплаты и оставшиеся занятия</span>
           </div>
 
-          <div class="enroll-box" style="max-width: 520px">
+          <div class="enroll-box student-dashboard-card">
             <form method="post">
               <div class="form-field">
                 <label for="code">Ваш 6-значный ID</label>
@@ -199,6 +199,7 @@
             </div>
 
             <!-- РАСПИСАНИЕ ЗАНЯТИЙ -->
+            <div class="student-subcard"></div>
             <hr
               style="
                 margin: 18px 0;
@@ -320,6 +321,7 @@
               Расписание пока не заполнено. Спросите у преподавателя, когда
               будет ближайшее занятие 🙂
             </p>
+            </div>
             {% endif %} {% endif %}
 
             <hr
@@ -329,7 +331,7 @@
                 border-top: 1px solid rgba(0, 0, 0, 0.06);
               "
             />
-
+<div class="student-subcard"></div>
             <h4 style="margin-bottom: 8px">Домашние задания</h4>
 
             {% if student %}
@@ -449,6 +451,7 @@
             <p style="font-size: 0.9rem; color: #777">
               Введите ID ученика, чтобы отправить домашнее задание.
             </p>
+            </div>
             {% endif %}
           </div>
         </div>
