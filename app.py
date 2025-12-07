@@ -1383,7 +1383,6 @@ def teacher_students_export():
         "Последняя оплата (дата)",
         "Последняя оплата (₽)",
         "Комментарий",
-        "Создано"
     ])
 
     for r in rows:
@@ -1398,7 +1397,6 @@ def teacher_students_export():
             r["last_payment_date"] or "",
             r["last_payment_amount"] or "",
             r["comment"] or "",
-            r["created_at"] or "",
         ])
 
     data = output.getvalue().encode("utf-8-sig")  # BOM, чтобы Excel нормально понял UTF-8
