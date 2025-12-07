@@ -959,31 +959,6 @@ def teacher_students():
     conn.close()
     return render_template("teacher_students.html", students=students)
 
-@app.get("/teacher/homework")
-@teacher_login_required
-def teacher_homework_list():
-    conn = get_db()
-    conn.row_factory = sqlite3.Row
-
-    rows = conn.execute("""
-        SELECT
-            h.*,
-            s.name AS student_name,
-            s.public_code AS student_code,
-            s.course AS student_course
-        FROM student_homework h
-        JOIN student_accounts s ON s.id = h.student_id
-        ORDER BY
-            CASE h.status
-                WHEN 'new' THEN 0
-                ELSE 1
-            END,
-            h.created_at DESC
-        LIMIT 300
-    """).fetchall()
-
-    conn.close()
-    return render_template("teacher_homework_list.html", homework=rows)
 
 @app.route("/teacher/homework/<int:hw_id>", methods=["GET", "POST"])
 @teacher_login_required
