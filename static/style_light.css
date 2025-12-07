@@ -3950,3 +3950,19 @@ body.student-dashboard .section-inner {
     grid-column: 1 / -1;
   }
 }
+/* Обёртка для нижних карточек: расписание + ДЗ */
+.student-subcards-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 28px;
+}
+
+/* На широких экранах — две колонки */
+@media (min-width: 960px) {
+  .student-subcards-wrapper {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: flex-start;
+  }
+}
