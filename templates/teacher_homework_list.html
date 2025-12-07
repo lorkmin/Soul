@@ -1,0 +1,76 @@
+{% extends "admin_layout.html" %} {% block content %}
+<h2>Домашние задания</h2>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>Дата</th>
+      <th>Ученик</th>
+      <th>Курс</th>
+      <th>ДЗ</th>
+      <th>Статус</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for hw in homework %}
+    <tr>
+      <td style="white-space: nowrap">{{ hw['created_at'] or '' }}</td>
+      <td>
+        <div><strong>{{ hw['student_name'] or 'Без имени' }}</strong></div>
+        {% if hw['student_code'] %}
+        <div class="student-code">ID: {{ hw['student_code'] }}</div>
+        {% endif %}
+      </td>
+      <td>{{ hw['student_course'] or 'Не указан' }}</td>
+      <td>
+        <div>{{ hw['title'] or 'Без названия' }}</div>
+        {% if hw['comment'] %}
+        <div class="admin-note">{{ hw['comment'] }}</div>
+        {% endif %} {% if hw['file_path'] %}
+        <div style="margin-top: 4px">
+          <a
+            href="{{ url_for('static', filename=hw['file_path']) }}"
+            target="_blank"
+          >
+            Открыть файл ученика
+          </a>
+        </div>
+        {% endif %} {% if hw['teacher_file_path'] %}
+        <div style="margin-top: 4px; font-size: 0.85rem">
+          Ответ:
+          <a
+            href="{{ url_for('static', filename=hw['teacher_file_path']) }}"
+            target="_blank"
+          >
+            файл преподавателя
+          </a>
+        </div>
+        {% endif %}
+      </td>
+      <td>
+        {% if hw['status'] == 'new' %}
+        <span class="badge-status badge-status-new">Новое</span>
+        {% elif hw['status'] == 'checked' %}
+        <span class="badge-status badge-status-checked">Проверено</span>
+        {% else %}
+        <span class="badge-status">{{ hw['status'] }}</span>
+        {% endif %}
+      </td>
+      <td>
+        <a
+          href="{{ url_for('teacher_homework_review', hw_id=hw['id']) }}"
+          class="admin-btn"
+        >
+          Проверить
+        </a>
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="6">Домашних заданий пока нет.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -6,9 +6,10 @@ import io
 import csv
 import random
 import traceback
+import calendar
 
 from datetime import datetime  # вверху файла, если ещё не импортирован
-
+from werkzeug.utils import secure_filename
 
 import requests
 from flask import (
@@ -20,6 +21,7 @@ from flask import (
     jsonify,
     session,
     send_file,
+    flash,
 )
 
 # ==== ФИЛЬТР ДЛЯ АБЗАЦЕВ ==== 
@@ -32,6 +34,9 @@ def format_paragraphs(text: str) -> str:
     return html
 
 app = Flask(__name__)
+
+app.config["MAX_CONTENT_LENGTH"] = 20 * 1024 * 1024  # 20 МБ
+
 # регистрируем фильтр ПОСЛЕ того, как создан app
 app.jinja_env.filters["paragraphs"] = format_paragraphs
 
@@ -65,6 +70,18 @@ COURSE_UPLOAD  = os.path.join(UPLOAD_FOLDER, "courses")
 GALLERY_UPLOAD = os.path.join(UPLOAD_FOLDER, "gallery")  # НОВОЕ
 TEACHER_KEY = os.getenv("TEACHER_KEY")  # типа 'teacher_very_long_secret'
 
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+HOMEWORK_UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads", "homework")
+os.makedirs(HOMEWORK_UPLOAD_FOLDER, exist_ok=True)
+
+ALLOWED_HW_EXTENSIONS = {"pdf", "png", "jpg", "jpeg", "doc", "docx", "ppt", "pptx", "zip", "txt"}
+
+def hw_allowed(filename: str) -> bool:
+    if "." not in filename:
+        return False
+    ext = filename.rsplit(".", 1)[1].lower()
+    return ext in ALLOWED_HW_EXTENSIONS
 
 for path in (UPLOAD_FOLDER, TEACHER_UPLOAD, COURSE_UPLOAD, GALLERY_UPLOAD):
     os.makedirs(path, exist_ok=True)
@@ -201,10 +218,14 @@ def init_db():
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
     """)
-    # новые поля под "Основное" и ачивки
+    # привязка ученика к преподавателю (может уже существовать)
     try:
-        cur.execute("ALTER TABLE student_accounts ADD COLUMN teacher_id INTEGER")
+        cur.execute("""
+            ALTER TABLE student_accounts
+            ADD COLUMN teacher_id INTEGER REFERENCES teachers(id)
+        """)
     except sqlite3.OperationalError:
+        # колонка уже есть — просто игнорируем ошибку
         pass
     # ---- STUDENT LESSONS (расписание) ----
     cur.execute("""
@@ -220,6 +241,33 @@ def init_db():
             FOREIGN KEY (student_id) REFERENCES student_accounts(id) ON DELETE CASCADE
         );
     """)
+    # ---- STUDENT HOMEWORK ----
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS student_homework (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            student_id INTEGER NOT NULL,
+            title TEXT,
+            comment TEXT,
+            file_name TEXT,    -- оригинальное имя файла
+            file_path TEXT,    -- путь к файлу на диске
+            status TEXT DEFAULT 'new',  -- new / checked
+            teacher_comment TEXT,
+            teacher_file_name TEXT,         -- имя файла от препода
+            teacher_file_path TEXT,         -- путь к файлу от препода
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            checked_at DATETIME,
+            FOREIGN KEY(student_id) REFERENCES student_accounts(id)
+        );
+    """)
+    try:
+        cur.execute("ALTER TABLE student_homework ADD COLUMN teacher_file_name TEXT")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        cur.execute("ALTER TABLE student_homework ADD COLUMN teacher_file_path TEXT")
+    except sqlite3.OperationalError:
+        pass
 
 
     conn.commit()
@@ -902,11 +950,85 @@ def teacher_logout():
 def teacher_students():
     conn = get_db()
     conn.row_factory = sqlite3.Row
-    students = conn.execute(
-        "SELECT * FROM student_accounts ORDER BY name COLLATE NOCASE"
-    ).fetchall()
+
+    students = conn.execute("""
+        SELECT
+            s.*,
+            t.name AS teacher_name
+        FROM student_accounts AS s
+        LEFT JOIN teachers AS t ON t.id = s.teacher_id
+        ORDER BY s.name COLLATE NOCASE
+    """).fetchall()
+
     conn.close()
     return render_template("teacher_students.html", students=students)
+
+
+@app.route("/teacher/homework/<int:hw_id>", methods=["GET", "POST"])
+@teacher_login_required
+def teacher_homework_review(hw_id):
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+
+    hw = conn.execute("""
+        SELECT
+            h.*,
+            s.name AS student_name,
+            s.public_code AS student_code,
+            s.course AS student_course
+        FROM student_homework h
+        JOIN student_accounts s ON s.id = h.student_id
+        WHERE h.id = ?
+    """, (hw_id,)).fetchone()
+
+    if not hw:
+        conn.close()
+        flash("Домашнее задание не найдено", "error")
+        return redirect(url_for("teacher_homework_list"))
+
+    if request.method == "POST":
+        status = request.form.get("status") or "checked"
+        teacher_comment = (request.form.get("teacher_comment") or "").strip()
+        file = request.files.get("teacher_file")
+
+        teacher_file_name = hw["teacher_file_name"]
+        teacher_file_path = hw["teacher_file_path"]
+
+        if file and file.filename and hw_allowed(file.filename):
+            orig_name = secure_filename(file.filename)
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            new_name = f"hw{hw['id']}_reply_{ts}_{orig_name}"
+            abs_path = os.path.join(HOMEWORK_UPLOAD_FOLDER, new_name)
+            file.save(abs_path)
+
+            teacher_file_name = orig_name
+            teacher_file_path = f"uploads/homework/{new_name}"
+
+        conn.execute("""
+            UPDATE student_homework
+            SET
+                status = ?,
+                teacher_comment = ?,
+                teacher_file_name = ?,
+                teacher_file_path = ?,
+                checked_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+        """, (
+            status,
+            teacher_comment or None,
+            teacher_file_name,
+            teacher_file_path,
+            hw_id,
+        ))
+        conn.commit()
+        conn.close()
+
+        flash("Домашнее задание обновлено", "success")
+        return redirect(url_for("teacher_homework_list"))
+
+    conn.close()
+    return render_template("teacher_homework_review.html", hw=hw)
+
 
 
 @app.route("/teacher/students/add", methods=["GET", "POST"])
@@ -1040,36 +1162,6 @@ def teacher_students_edit(sid):
     )
 
 
-@app.get("/teacher/schedule")
-@teacher_login_required
-def teacher_schedule():
-    teacher_id = request.args.get("tid")
-    conn = get_db()
-    conn.row_factory = sqlite3.Row
-
-    teachers = conn.execute("SELECT * FROM teachers").fetchall()
-
-    lessons = []
-    teacher = None
-
-    if teacher_id:
-        teacher = conn.execute("SELECT * FROM teachers WHERE id = ?", (teacher_id,)).fetchone()
-
-        lessons = conn.execute("""
-            SELECT sl.*, sa.name AS student_name
-            FROM student_lessons sl
-            JOIN student_accounts sa ON sa.id = sl.student_id
-            WHERE sa.teacher_id = ?
-            ORDER BY sl.start_at
-        """, (teacher_id,)).fetchall()
-
-    conn.close()
-
-    return render_template("teacher_schedule.html",
-                           teachers=teachers,
-                           teacher=teacher,
-                           lessons=lessons)
-
 
 @app.post("/teacher/students/<int:sid>/delete")
 @teacher_login_required
@@ -1083,61 +1175,155 @@ def teacher_students_delete(sid):
 
 @app.route("/student", methods=["GET", "POST"])
 def student_dashboard():
-    code = ""
+    code = None
     student = None
     not_found = False
 
+    # сразу заводим списки, чтобы шаблон всегда их видел
     lessons_planned = []
+    lessons_rescheduled = []
     lessons_done = []
     lessons_canceled = []
-    lessons_rescheduled = []
+    homework_list = []
 
-    if request.method == "POST":
+    # --- 1. Определяем, какой это POST: ввод кода или загрузка ДЗ ---
+    if request.method == "POST" and request.form.get("action") != "upload_homework":
+        # это обычный ввод 6-значного ID
         code = (request.form.get("code") or "").strip()
-        conn = get_db()
-        conn.row_factory = sqlite3.Row
+    else:
+        # GET или upload_homework — берём code из query/формы
+        code = (request.values.get("code") or "").strip()
 
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+
+    # --- 2. Ищем ученика по public_code ---
+    if code:
         student = conn.execute(
             "SELECT * FROM student_accounts WHERE public_code = ?",
             (code,),
         ).fetchone()
-
-        if student:
-            lessons = conn.execute(
-                """
-                SELECT *
-                FROM student_lessons
-                WHERE student_id = ?
-                ORDER BY start_at
-                """,
-                (student["id"],),
-            ).fetchall()
-
-            for l in lessons:
-                status = (l["status"] or "planned").lower()
-                if status == "done":
-                    lessons_done.append(l)
-                elif status == "canceled":
-                    lessons_canceled.append(l)
-                elif status == "rescheduled":
-                    lessons_rescheduled.append(l)
-                else:
-                    lessons_planned.append(l)
-        else:
+        if not student:
             not_found = True
 
-        conn.close()
+    # --- 3. Если ученик найден — подтягиваем его расписание ---
+    if student:
+        rows = conn.execute(
+            """
+            SELECT *
+            FROM student_lessons
+            WHERE student_id = ?
+            ORDER BY start_at
+            """,
+            (student["id"],),
+        ).fetchall()
+
+        for r in rows:
+            status = (r["status"] or "").lower() if "status" in r.keys() else ""
+            # если вдруг нет статуса — считаем по умолчанию "planned"
+            if not status:
+                status = "planned"
+
+            if status == "planned":
+                lessons_planned.append(r)
+            elif status == "rescheduled":
+                lessons_rescheduled.append(r)
+            elif status == "done":
+                lessons_done.append(r)
+            elif status == "canceled":
+                lessons_canceled.append(r)
+            else:
+                # неизвестный статус — можно тоже считать запланированным
+                lessons_planned.append(r)
+
+    # --- 4. Обработка загрузки домашнего задания ---
+    if student and request.method == "POST" and request.form.get("action") == "upload_homework":
+        file = request.files.get("hw_file")
+        title = (request.form.get("hw_title") or "").strip()
+        comment = (request.form.get("hw_comment") or "").strip()
+
+        if file and file.filename and hw_allowed(file.filename):
+            filename = secure_filename(file.filename)
+            # чтобы не было коллизий имён — добавим дату и ID
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            new_name = f"stu{student['id']}_{ts}_{filename}"
+            abs_path = os.path.join(HOMEWORK_UPLOAD_FOLDER, new_name)
+            file.save(abs_path)
+
+            rel_path = f"uploads/homework/{new_name}"
+
+            conn.execute(
+                """
+                INSERT INTO student_homework (
+                    student_id, title, comment,
+                    file_name, file_path, status
+                ) VALUES (?, ?, ?, ?, ?, 'new')
+                """,
+                (
+                    student["id"],
+                    title or None,
+                    comment or None,
+                    filename,
+                    rel_path,
+                ),
+            )
+            conn.commit()
+
+        # после загрузки — обновим список ДЗ
+        homework_list = conn.execute(
+            """
+            SELECT *
+            FROM student_homework
+            WHERE student_id = ?
+            ORDER BY created_at DESC
+            """,
+            (student["id"],),
+        ).fetchall()
+
+    elif student:
+        # просто просмотр — подтягиваем список домашних
+        homework_list = conn.execute(
+            """
+            SELECT *
+            FROM student_homework
+            WHERE student_id = ?
+            ORDER BY created_at DESC
+            """,
+            (student["id"],),
+        ).fetchall()
+
+    conn.close()
 
     return render_template(
         "student_dashboard.html",
         code=code,
         student=student,
         not_found=not_found,
+        homework_list=homework_list,
         lessons_planned=lessons_planned,
+        lessons_rescheduled=lessons_rescheduled,
         lessons_done=lessons_done,
         lessons_canceled=lessons_canceled,
-        lessons_rescheduled=lessons_rescheduled,
     )
+
+
+@app.route("/teacher/homework")
+@teacher_login_required  # или login_required, как тебе надо
+def teacher_homework_list():
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+
+    rows = conn.execute("""
+        SELECT h.*, s.name AS student_name, s.public_code
+        FROM student_homework h
+        JOIN student_accounts s ON s.id = h.student_id
+        ORDER BY h.created_at DESC
+        LIMIT 200
+    """).fetchall()
+
+    conn.close()
+    return render_template("teacher_homework_list.html", homework=rows)
+
 
 
 
@@ -1270,6 +1456,162 @@ def teacher_lesson_edit(lid):
 
     conn.close()
     return render_template("teacher_lesson_form.html", student=student, lesson=lesson)
+
+@app.route("/teacher/schedule")
+@teacher_login_required
+def teacher_schedule():
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+
+    # все преподаватели для селекта
+    teachers = conn.execute(
+        "SELECT id, name FROM teachers ORDER BY name COLLATE NOCASE"
+    ).fetchall()
+
+    # выбранный препод и месяц
+    teacher_id = request.args.get("teacher_id") or ""
+    month_str = request.args.get("month")  # формат YYYY-MM
+
+    today = datetime.today()
+    if month_str:
+        try:
+            year, month = map(int, month_str.split("-"))
+        except ValueError:
+            year, month = today.year, today.month
+    else:
+        year, month = today.year, today.month
+
+    teacher = None
+    lessons_by_day = {}
+
+    if teacher_id:
+        # сам препод
+        teacher = conn.execute(
+            "SELECT * FROM teachers WHERE id = ?",
+            (teacher_id,),
+        ).fetchone()
+
+        # диапазон дат: [1 число месяца; 1 число следующего месяца)
+        if month == 12:
+            month_start = datetime(year, 12, 1)
+            month_end = datetime(year + 1, 1, 1)
+        else:
+            month_start = datetime(year, month, 1)
+            month_end = datetime(year, month + 1, 1)
+
+        # ВАЖНО: тут нужна колонка teacher_id в student_accounts
+        # и связь с student_lessons
+        rows = conn.execute(
+            """
+            SELECT sl.*, sa.name AS student_name
+            FROM student_lessons sl
+            JOIN student_accounts sa ON sa.id = sl.student_id
+            WHERE sa.teacher_id = ?
+              AND sl.start_at >= ?
+              AND sl.start_at < ?
+            ORDER BY sl.start_at
+            """,
+            (
+                teacher_id,
+                month_start.strftime("%Y-%m-%d %H:%M"),
+                month_end.strftime("%Y-%m-%d %H:%M"),
+            ),
+        ).fetchall()
+
+        for r in rows:
+            day_key = r["start_at"][:10]  # 'YYYY-MM-DD'
+            lessons_by_day.setdefault(day_key, []).append(r)
+
+    conn.close()
+
+    # строим календарную сетку
+    cal = calendar.Calendar(firstweekday=0)  # 0 = понедельник
+    weeks = []
+    for week in cal.monthdatescalendar(year, month):
+        week_cells = []
+        for d in week:
+            date_str = d.strftime("%Y-%m-%d")
+            in_month = (d.month == month)
+            week_cells.append(
+                {
+                    "date": d,
+                    "in_month": in_month,
+                    "lessons": lessons_by_day.get(date_str, []),
+                }
+            )
+        weeks.append(week_cells)
+
+    month_name = calendar.month_name[month]  # можно будет русифицировать в шаблоне
+
+    return render_template(
+        "teacher_schedule.html",
+        teachers=teachers,
+        teacher_id=teacher_id,
+        teacher=teacher,
+        year=year,
+        month=month,
+        month_str=f"{year:04d}-{month:02d}",
+        month_name=month_name,
+        weeks=weeks,
+    )
+
+@app.get("/teacher/students/export")
+@teacher_login_required
+def teacher_students_export():
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+
+    rows = conn.execute("""
+        SELECT
+            s.*,
+            t.name AS teacher_name
+        FROM student_accounts AS s
+        LEFT JOIN teachers AS t ON t.id = s.teacher_id
+        ORDER BY s.name COLLATE NOCASE
+    """).fetchall()
+
+    conn.close()
+
+    output = io.StringIO()
+    writer = csv.writer(output, delimiter=";")
+
+    writer.writerow([
+        "ID",
+        "Публичный код",
+        "Имя",
+        "Курс",
+        "Преподаватель",
+        "Всего занятий",
+        "Осталось занятий",
+        "Последняя оплата (дата)",
+        "Последняя оплата (₽)",
+        "Комментарий",
+    ])
+
+    for r in rows:
+        writer.writerow([
+            r["id"],
+            r["public_code"] or "",
+            r["name"] or "",
+            r["course"] or "",
+            r["teacher_name"] or "",
+            r["lessons_total"] or "",
+            r["lessons_left"] or "",
+            r["last_payment_date"] or "",
+            r["last_payment_amount"] or "",
+            r["comment"] or "",
+        ])
+
+    data = output.getvalue().encode("utf-8-sig")  # BOM, чтобы Excel нормально понял UTF-8
+    buf = io.BytesIO(data)
+    buf.seek(0)
+
+    return send_file(
+        buf,
+        mimetype="text/csv; charset=utf-8",
+        as_attachment=True,
+        download_name=f"students_{datetime.now().date()}.csv",
+    )
 
 
 @app.post("/teacher/lessons/<int:lid>/delete")

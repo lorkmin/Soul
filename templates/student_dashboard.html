@@ -280,6 +280,135 @@
               будет ближайшее занятие 🙂
             </p>
             {% endif %} {% endif %}
+            <hr
+              style="
+                margin: 18px 0;
+                border: none;
+                border-top: 1px solid rgba(0, 0, 0, 0.06);
+              "
+            />
+
+            <h4 style="margin-bottom: 8px">Домашние задания</h4>
+
+            {% if student %}
+            <form
+              method="post"
+              enctype="multipart/form-data"
+              class="enroll-box"
+              style="max-width: 520px; padding: 14px 16px; margin-bottom: 14px"
+            >
+              <input type="hidden" name="action" value="upload_homework" />
+              <input type="hidden" name="code" value="{{ code }}" />
+              <!-- 👈 вот это важно -->
+              <div class="form-field">
+                <label for="hw-title">Краткое название (по желанию)</label>
+                <input
+                  id="hw-title"
+                  type="text"
+                  name="hw_title"
+                  placeholder="Например: ДЗ по теме «Приветствия»"
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="hw-comment">Комментарий</label>
+                <textarea
+                  id="hw-comment"
+                  name="hw_comment"
+                  rows="2"
+                  placeholder="Что вы отправляете, вопросы к преподавателю…"
+                ></textarea>
+              </div>
+
+              <div class="form-field">
+                <label for="hw-file">Файл домашнего задания</label>
+                <input id="hw-file" type="file" name="hw_file" required />
+                <p class="form-note" style="margin-top: 4px">
+                  Можно отправить фото тетради, PDF или документ.
+                </p>
+              </div>
+
+              <button class="btn-primary form-submit" type="submit">
+                Отправить домашнее задание
+              </button>
+            </form>
+
+            {% if homework_list %}
+            <ul class="student-homework-list">
+              {% for hw in homework_list %}
+              <li class="student-homework-item">
+                <div class="student-homework-header">
+                  <div>
+                    <span class="lesson-date">
+                      {{ hw['created_at'] or '' }}
+                    </span>
+                    ·
+                    <strong>{{ hw['title'] or 'Без названия' }}</strong>
+                  </div>
+                  <div class="student-homework-status">
+                    {% if hw['status'] == 'checked' %}
+                    <span class="lesson-status-badge lesson-status-done">
+                      Проверено
+                    </span>
+                    {% else %}
+                    <span class="lesson-status-badge lesson-status-planned">
+                      Отправлено
+                    </span>
+                    {% endif %}
+                  </div>
+                </div>
+
+                {% if hw['comment'] %}
+                <div class="lesson-comment" style="margin-top: 4px">
+                  Ваш комментарий: {{ hw['comment'] }}
+                </div>
+                {% endif %}
+
+                <div class="student-homework-files">
+                  {% if hw['file_path'] %}
+                  <div>
+                    <span class="lesson-topic">Ваш файл: </span>
+                    <a
+                      href="{{ url_for('static', filename=hw['file_path']) }}"
+                      target="_blank"
+                    >
+                      открыть
+                    </a>
+                  </div>
+                  {% endif %} {% if hw['teacher_file_path'] %}
+                  <div style="margin-top: 2px">
+                    <span class="lesson-topic">Файл от преподавателя: </span>
+                    <a
+                      href="{{ url_for('static', filename=hw['teacher_file_path']) }}"
+                      target="_blank"
+                    >
+                      скачать
+                    </a>
+                  </div>
+                  {% endif %}
+                </div>
+
+                {% if hw['teacher_comment'] %}
+                <div class="lesson-comment" style="margin-top: 6px">
+                  Комментарий преподавателя: {{ hw['teacher_comment'] }}
+                </div>
+                {% endif %} {% if hw['checked_at'] %}
+                <div class="student-homework-meta">
+                  Проверено: {{ hw['checked_at'] }}
+                </div>
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <p style="font-size: 0.9rem; color: #777; margin-top: 6px">
+              Пока нет загруженных домашних заданий.
+            </p>
+            {% endif %} {% else %}
+            <p style="font-size: 0.9rem; color: #777">
+              Введите ID ученика, чтобы отправить домашнее задание.
+            </p>
+            {% endif %}
           </div>
         </div>
       </section>
