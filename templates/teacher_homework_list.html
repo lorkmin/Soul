@@ -1,0 +1,33 @@
+{% extends "admin_layout.html" %} {% block content %}
+<h2>Домашние задания</h2>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>Дата</th>
+      <th>Ученик</th>
+      <th>Название</th>
+      <th>Файл</th>
+      <th>Статус</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for hw in homework %}
+    <tr>
+      <td>{{ hw['created_at'] }}</td>
+      <td>{{ hw['student_name'] }} ({{ hw['public_code'] }})</td>
+      <td>{{ hw['title'] or 'Без названия' }}</td>
+      <td>
+        <a
+          href="{{ url_for('static', filename=hw['file_path']) }}"
+          target="_blank"
+        >
+          открыть
+        </a>
+      </td>
+      <td>{{ hw['status'] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

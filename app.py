@@ -9,7 +9,7 @@ import traceback
 import calendar
 
 from datetime import datetime  # вверху файла, если ещё не импортирован
-
+from werkzeug.utils import secure_filename
 
 import requests
 from flask import (
@@ -66,6 +66,18 @@ COURSE_UPLOAD  = os.path.join(UPLOAD_FOLDER, "courses")
 GALLERY_UPLOAD = os.path.join(UPLOAD_FOLDER, "gallery")  # НОВОЕ
 TEACHER_KEY = os.getenv("TEACHER_KEY")  # типа 'teacher_very_long_secret'
 
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+HOMEWORK_UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads", "homework")
+os.makedirs(HOMEWORK_UPLOAD_FOLDER, exist_ok=True)
+
+ALLOWED_HW_EXTENSIONS = {"pdf", "png", "jpg", "jpeg", "doc", "docx", "ppt", "pptx", "zip", "txt"}
+
+def hw_allowed(filename: str) -> bool:
+    if "." not in filename:
+        return False
+    ext = filename.rsplit(".", 1)[1].lower()
+    return ext in ALLOWED_HW_EXTENSIONS
 
 for path in (UPLOAD_FOLDER, TEACHER_UPLOAD, COURSE_UPLOAD, GALLERY_UPLOAD):
     os.makedirs(path, exist_ok=True)
@@ -223,6 +235,22 @@ def init_db():
             comment TEXT,                       -- заметка для ученика или для себя
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (student_id) REFERENCES student_accounts(id) ON DELETE CASCADE
+        );
+    """)
+    # ---- STUDENT HOMEWORK ----
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS student_homework (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            student_id INTEGER NOT NULL,
+            title TEXT,
+            comment TEXT,
+            file_name TEXT,    -- оригинальное имя файла
+            file_path TEXT,    -- путь к файлу на диске
+            status TEXT DEFAULT 'new',  -- new / checked
+            teacher_comment TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            checked_at DATETIME,
+            FOREIGN KEY(student_id) REFERENCES student_accounts(id)
         );
     """)
 
@@ -1066,61 +1094,111 @@ def teacher_students_delete(sid):
 
 @app.route("/student", methods=["GET", "POST"])
 def student_dashboard():
-    code = ""
+    code = None
     student = None
     not_found = False
+    homework_list = []
 
-    lessons_planned = []
-    lessons_done = []
-    lessons_canceled = []
-    lessons_rescheduled = []
-
-    if request.method == "POST":
+    if request.method == "POST" and request.form.get("action") != "upload_homework":
+        # это обычный ввод 6-значного ID
         code = (request.form.get("code") or "").strip()
-        conn = get_db()
-        conn.row_factory = sqlite3.Row
+    else:
+        # если просто GET — берём code из query, если надо
+        code = (request.values.get("code") or "").strip()
 
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+
+    if code:
         student = conn.execute(
             "SELECT * FROM student_accounts WHERE public_code = ?",
             (code,),
         ).fetchone()
-
-        if student:
-            lessons = conn.execute(
-                """
-                SELECT *
-                FROM student_lessons
-                WHERE student_id = ?
-                ORDER BY start_at
-                """,
-                (student["id"],),
-            ).fetchall()
-
-            for l in lessons:
-                status = (l["status"] or "planned").lower()
-                if status == "done":
-                    lessons_done.append(l)
-                elif status == "canceled":
-                    lessons_canceled.append(l)
-                elif status == "rescheduled":
-                    lessons_rescheduled.append(l)
-                else:
-                    lessons_planned.append(l)
-        else:
+        if not student:
             not_found = True
 
-        conn.close()
+    # если студент найден и прилетел POST с ДЗ
+    if student and request.method == "POST" and request.form.get("action") == "upload_homework":
+        file = request.files.get("hw_file")
+        title = (request.form.get("hw_title") or "").strip()
+        comment = (request.form.get("hw_comment") or "").strip()
+
+        if file and file.filename and hw_allowed(file.filename):
+            filename = secure_filename(file.filename)
+            # чтобы не было коллизий имён — добавим дату и ID
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            new_name = f"stu{student['id']}_{ts}_{filename}"
+            abs_path = os.path.join(HOMEWORK_UPLOAD_FOLDER, new_name)
+            file.save(abs_path)
+
+            rel_path = f"uploads/homework/{new_name}"
+
+            conn.execute(
+                """
+                INSERT INTO student_homework (
+                    student_id, title, comment,
+                    file_name, file_path, status
+                ) VALUES (?, ?, ?, ?, ?, 'new')
+                """,
+                (
+                    student["id"],
+                    title or None,
+                    comment or None,
+                    filename,
+                    rel_path,
+                ),
+            )
+            conn.commit()
+
+        # после загрузки — обновим список ДЗ
+        homework_list = conn.execute(
+            """
+            SELECT * FROM student_homework
+            WHERE student_id = ?
+            ORDER BY created_at DESC
+            """,
+            (student["id"],),
+        ).fetchall()
+
+    elif student:
+        # просто просмотр — подтягиваем список домашних
+        homework_list = conn.execute(
+            """
+            SELECT * FROM student_homework
+            WHERE student_id = ?
+            ORDER BY created_at DESC
+            """,
+            (student["id"],),
+        ).fetchall()
+
+    conn.close()
 
     return render_template(
         "student_dashboard.html",
         code=code,
         student=student,
         not_found=not_found,
-        lessons_planned=lessons_planned,
-        lessons_done=lessons_done,
-        lessons_canceled=lessons_canceled,
-        lessons_rescheduled=lessons_rescheduled,
+        homework_list=homework_list,
+        # плюс твои существующие переменные типа lessons_planned и т.п.
     )
+
+@app.route("/teacher/homework")
+@teacher_login_required  # или login_required, как тебе надо
+def teacher_homework_list():
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+
+    rows = conn.execute("""
+        SELECT h.*, s.name AS student_name, s.public_code
+        FROM student_homework h
+        JOIN student_accounts s ON s.id = h.student_id
+        ORDER BY h.created_at DESC
+        LIMIT 200
+    """).fetchall()
+
+    conn.close()
+    return render_template("teacher_homework_list.html", homework=rows)
+
 
 
 
