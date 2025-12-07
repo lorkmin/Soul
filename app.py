@@ -1097,18 +1097,26 @@ def student_dashboard():
     code = None
     student = None
     not_found = False
+
+    # сразу заводим списки, чтобы шаблон всегда их видел
+    lessons_planned = []
+    lessons_rescheduled = []
+    lessons_done = []
+    lessons_canceled = []
     homework_list = []
 
+    # --- 1. Определяем, какой это POST: ввод кода или загрузка ДЗ ---
     if request.method == "POST" and request.form.get("action") != "upload_homework":
         # это обычный ввод 6-значного ID
         code = (request.form.get("code") or "").strip()
     else:
-        # если просто GET — берём code из query, если надо
+        # GET или upload_homework — берём code из query/формы
         code = (request.values.get("code") or "").strip()
 
     conn = get_db()
     conn.row_factory = sqlite3.Row
 
+    # --- 2. Ищем ученика по public_code ---
     if code:
         student = conn.execute(
             "SELECT * FROM student_accounts WHERE public_code = ?",
@@ -1117,7 +1125,37 @@ def student_dashboard():
         if not student:
             not_found = True
 
-    # если студент найден и прилетел POST с ДЗ
+    # --- 3. Если ученик найден — подтягиваем его расписание ---
+    if student:
+        rows = conn.execute(
+            """
+            SELECT *
+            FROM student_lessons
+            WHERE student_id = ?
+            ORDER BY start_at
+            """,
+            (student["id"],),
+        ).fetchall()
+
+        for r in rows:
+            status = (r["status"] or "").lower() if "status" in r.keys() else ""
+            # если вдруг нет статуса — считаем по умолчанию "planned"
+            if not status:
+                status = "planned"
+
+            if status == "planned":
+                lessons_planned.append(r)
+            elif status == "rescheduled":
+                lessons_rescheduled.append(r)
+            elif status == "done":
+                lessons_done.append(r)
+            elif status == "canceled":
+                lessons_canceled.append(r)
+            else:
+                # неизвестный статус — можно тоже считать запланированным
+                lessons_planned.append(r)
+
+    # --- 4. Обработка загрузки домашнего задания ---
     if student and request.method == "POST" and request.form.get("action") == "upload_homework":
         file = request.files.get("hw_file")
         title = (request.form.get("hw_title") or "").strip()
@@ -1153,7 +1191,8 @@ def student_dashboard():
         # после загрузки — обновим список ДЗ
         homework_list = conn.execute(
             """
-            SELECT * FROM student_homework
+            SELECT *
+            FROM student_homework
             WHERE student_id = ?
             ORDER BY created_at DESC
             """,
@@ -1164,7 +1203,8 @@ def student_dashboard():
         # просто просмотр — подтягиваем список домашних
         homework_list = conn.execute(
             """
-            SELECT * FROM student_homework
+            SELECT *
+            FROM student_homework
             WHERE student_id = ?
             ORDER BY created_at DESC
             """,
@@ -1179,8 +1219,12 @@ def student_dashboard():
         student=student,
         not_found=not_found,
         homework_list=homework_list,
-        # плюс твои существующие переменные типа lessons_planned и т.п.
+        lessons_planned=lessons_planned,
+        lessons_rescheduled=lessons_rescheduled,
+        lessons_done=lessons_done,
+        lessons_canceled=lessons_canceled,
     )
+
 
 @app.route("/teacher/homework")
 @teacher_login_required  # или login_required, как тебе надо
