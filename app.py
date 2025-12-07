@@ -202,10 +202,14 @@ def init_db():
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
     """)
-    # новые поля под "Основное" и ачивки
+    # привязка ученика к преподавателю (может уже существовать)
     try:
-        cur.execute("ALTER TABLE student_accounts ADD COLUMN teacher_id INTEGER")
+        cur.execute("""
+            ALTER TABLE student_accounts
+            ADD COLUMN teacher_id INTEGER REFERENCES teachers(id)
+        """)
     except sqlite3.OperationalError:
+        # колонка уже есть — просто игнорируем ошибку
         pass
     # ---- STUDENT LESSONS (расписание) ----
     cur.execute("""
@@ -903,11 +907,19 @@ def teacher_logout():
 def teacher_students():
     conn = get_db()
     conn.row_factory = sqlite3.Row
-    students = conn.execute(
-        "SELECT * FROM student_accounts ORDER BY name COLLATE NOCASE"
-    ).fetchall()
+
+    students = conn.execute("""
+        SELECT
+            s.*,
+            t.name AS teacher_name
+        FROM student_accounts AS s
+        LEFT JOIN teachers AS t ON t.id = s.teacher_id
+        ORDER BY s.name COLLATE NOCASE
+    """).fetchall()
+
     conn.close()
     return render_template("teacher_students.html", students=students)
+
 
 
 @app.route("/teacher/students/add", methods=["GET", "POST"])
@@ -1340,6 +1352,65 @@ def teacher_schedule():
         weeks=weeks,
     )
 
+@app.get("/teacher/students/export")
+@teacher_login_required
+def teacher_students_export():
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+
+    rows = conn.execute("""
+        SELECT
+            s.*,
+            t.name AS teacher_name
+        FROM student_accounts AS s
+        LEFT JOIN teachers AS t ON t.id = s.teacher_id
+        ORDER BY s.name COLLATE NOCASE
+    """).fetchall()
+
+    conn.close()
+
+    output = io.StringIO()
+    writer = csv.writer(output, delimiter=";")
+
+    writer.writerow([
+        "ID",
+        "Публичный код",
+        "Имя",
+        "Курс",
+        "Преподаватель",
+        "Всего занятий",
+        "Осталось занятий",
+        "Последняя оплата (дата)",
+        "Последняя оплата (₽)",
+        "Комментарий",
+        "Создано"
+    ])
+
+    for r in rows:
+        writer.writerow([
+            r["id"],
+            r["public_code"] or "",
+            r["name"] or "",
+            r["course"] or "",
+            r["teacher_name"] or "",
+            r["lessons_total"] or "",
+            r["lessons_left"] or "",
+            r["last_payment_date"] or "",
+            r["last_payment_amount"] or "",
+            r["comment"] or "",
+            r["created_at"] or "",
+        ])
+
+    data = output.getvalue().encode("utf-8-sig")  # BOM, чтобы Excel нормально понял UTF-8
+    buf = io.BytesIO(data)
+    buf.seek(0)
+
+    return send_file(
+        buf,
+        mimetype="text/csv; charset=utf-8",
+        as_attachment=True,
+        download_name=f"students_{datetime.now().date()}.csv",
+    )
 
 
 @app.post("/teacher/lessons/<int:lid>/delete")

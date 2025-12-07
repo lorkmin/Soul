@@ -230,9 +230,25 @@
 </style>
 
 <div class="students-header">
-  <div>
+  <div class="admin-header-line">
     <h2>Ученики</h2>
-    <p>управляйте личными кабинетами и расписанием</p>
+    <div class="admin-header-actions">
+      <a
+        href="{{ url_for('teacher_students_export') }}"
+        class="admin-btn-main"
+        style="
+          background: #fff;
+          color: #3a2c0a;
+          border: 1px solid rgba(0, 0, 0, 0.08);
+          box-shadow: none;
+        "
+      >
+        ⬇︎ Экспорт в Excel
+      </a>
+      <a href="{{ url_for('teacher_students_add') }}" class="admin-btn-main">
+        + Добавить ученика
+      </a>
+    </div>
   </div>
 
   <a href="{{ url_for('teacher_students_add') }}" class="admin-btn-main">
@@ -262,6 +278,8 @@
     <tr>
       <th>Ученик</th>
       <th>Курс / ID</th>
+      <th>Преподаватель</th>
+      <!-- 👈 новый столбец -->
       <th>Занятия</th>
       <th>Последняя оплата</th>
       <th style="width: 1%">Действия</th>
@@ -278,7 +296,7 @@
     {% set badge_text = "—" %} {% endif %}
 
     <tr
-      data-search="{{ (s['name'] or '')|lower }} {{ (s['course'] or '')|lower }} {{ s['public_code'] }}"
+      data-search="{{ (s['name'] or '')|lower }} {{ (s['course'] or '')|lower }} {{ (s['teacher_name'] or '')|lower }} {{ s['public_code'] }}"
     >
       <td>
         <div class="student-name">{{ s['name'] or "Без имени" }}</div>
@@ -293,6 +311,15 @@
         <br />
         {% endif %}
         <span class="student-code">{{ s['public_code'] }}</span>
+      </td>
+
+      <!-- 👇 новый столбец «Преподаватель» -->
+      <td>
+        {% if s['teacher_name'] %}
+        <div class="student-meta">{{ s['teacher_name'] }}</div>
+        {% else %}
+        <div class="student-meta student-note">Не указан</div>
+        {% endif %}
       </td>
 
       <td>
