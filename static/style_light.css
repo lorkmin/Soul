@@ -3499,3 +3499,25 @@ body.admin-page {
   opacity: 0.9;
   transform: translateY(-2px);
 }
+/* Мобильная адаптация ачивок преподавателей */
+@media (max-width: 768px) {
+  .teacher-card {
+    padding: 16px 16px 18px;
+  }
+
+  .teacher-badges {
+    display: flex;
+    flex-wrap: wrap; /* обязательно разрешаем перенос */
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .teacher-badge {
+    white-space: normal; /* разрешаем перенос текста */
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    max-width: 100%; /* чип не шире карточки */
+    box-sizing: border-box;
+    word-break: break-word; /* если прям длинная фраза */
+  }
+}
