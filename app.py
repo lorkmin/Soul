@@ -6,6 +6,7 @@ import io
 import csv
 import random
 import traceback
+import calendar
 
 from datetime import datetime  # вверху файла, если ещё не импортирован
 
@@ -1270,6 +1271,105 @@ def teacher_lesson_edit(lid):
 
     conn.close()
     return render_template("teacher_lesson_form.html", student=student, lesson=lesson)
+
+@app.route("/teacher/schedule")
+@teacher_login_required
+def teacher_schedule():
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+
+    # все преподаватели для селекта
+    teachers = conn.execute(
+        "SELECT id, name FROM teachers ORDER BY name COLLATE NOCASE"
+    ).fetchall()
+
+    # выбранный препод и месяц
+    teacher_id = request.args.get("teacher_id") or ""
+    month_str = request.args.get("month")  # формат YYYY-MM
+
+    today = datetime.today()
+    if month_str:
+        try:
+            year, month = map(int, month_str.split("-"))
+        except ValueError:
+            year, month = today.year, today.month
+    else:
+        year, month = today.year, today.month
+
+    teacher = None
+    lessons_by_day = {}
+
+    if teacher_id:
+        # сам препод
+        teacher = conn.execute(
+            "SELECT * FROM teachers WHERE id = ?",
+            (teacher_id,),
+        ).fetchone()
+
+        # диапазон дат: [1 число месяца; 1 число следующего месяца)
+        if month == 12:
+            month_start = datetime(year, 12, 1)
+            month_end = datetime(year + 1, 1, 1)
+        else:
+            month_start = datetime(year, month, 1)
+            month_end = datetime(year, month + 1, 1)
+
+        # ВАЖНО: тут нужна колонка teacher_id в student_accounts
+        # и связь с student_lessons
+        rows = conn.execute(
+            """
+            SELECT sl.*, sa.name AS student_name
+            FROM student_lessons sl
+            JOIN student_accounts sa ON sa.id = sl.student_id
+            WHERE sa.teacher_id = ?
+              AND sl.start_at >= ?
+              AND sl.start_at < ?
+            ORDER BY sl.start_at
+            """,
+            (
+                teacher_id,
+                month_start.strftime("%Y-%m-%d %H:%M"),
+                month_end.strftime("%Y-%m-%d %H:%M"),
+            ),
+        ).fetchall()
+
+        for r in rows:
+            day_key = r["start_at"][:10]  # 'YYYY-MM-DD'
+            lessons_by_day.setdefault(day_key, []).append(r)
+
+    conn.close()
+
+    # строим календарную сетку
+    cal = calendar.Calendar(firstweekday=0)  # 0 = понедельник
+    weeks = []
+    for week in cal.monthdatescalendar(year, month):
+        week_cells = []
+        for d in week:
+            date_str = d.strftime("%Y-%m-%d")
+            in_month = (d.month == month)
+            week_cells.append(
+                {
+                    "date": d,
+                    "in_month": in_month,
+                    "lessons": lessons_by_day.get(date_str, []),
+                }
+            )
+        weeks.append(week_cells)
+
+    month_name = calendar.month_name[month]  # можно будет русифицировать в шаблоне
+
+    return render_template(
+        "teacher_schedule.html",
+        teachers=teachers,
+        teacher_id=teacher_id,
+        teacher=teacher,
+        year=year,
+        month=month,
+        month_str=f"{year:04d}-{month:02d}",
+        month_name=month_name,
+        weeks=weeks,
+    )
+
 
 
 @app.post("/teacher/lessons/<int:lid>/delete")

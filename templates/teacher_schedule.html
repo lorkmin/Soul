@@ -1,35 +1,208 @@
 {% extends "admin_layout.html" %}
 {% block content %}
 
-<h2>Расписание преподавателя</h2>
-<p>Выберите преподавателя, чтобы увидеть его график</p>
+<style>
+  .teacher-schedule-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    align-items: flex-end;
+    margin-bottom: 18px;
+  }
 
-<form method="get">
-  <select name="tid" onchange="this.form.submit()">
-    <option value="">— выберите преподавателя —</option>
-    {% for t in teachers %}
-      <option value="{{ t.id }}" {% if teacher and teacher.id == t.id %}selected{% endif %}>
-        {{ t.name }}
-      </option>
-    {% endfor %}
-  </select>
-</form>
+  .teacher-schedule-header h2 {
+    margin: 0;
+    font-size: 1.3rem;
+  }
+
+  .teacher-schedule-header form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    align-items: center;
+  }
+
+  .teacher-schedule-header select,
+  .teacher-schedule-header input[type="month"] {
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,0.15);
+    font-size: 0.9rem;
+    background: rgba(0,0,0,0.15);
+    color: #fff;
+  }
+
+  .teacher-schedule-header button {
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background: linear-gradient(135deg, #f9d976, #f39f86);
+    color: #3a2500;
+    font-weight: 600;
+  }
+
+  .teacher-calendar {
+    margin-top: 10px;
+    background: rgba(0,0,0,0.35);
+    border-radius: 18px;
+    padding: 12px 12px 16px;
+  }
+
+  .teacher-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .teacher-cal-head {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-align: center;
+    padding-bottom: 4px;
+    opacity: 0.85;
+  }
+
+  .teacher-cal-day {
+    min-height: 82px;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 0.75rem;
+    background: rgba(0,0,0,0.28);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.03) inset;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .teacher-cal-day.other-month {
+    opacity: 0.28;
+  }
+
+  .teacher-cal-date {
+    font-weight: 600;
+    margin-bottom: 2px;
+    font-size: 0.78rem;
+  }
+
+  .teacher-cal-lesson {
+    border-radius: 7px;
+    padding: 2px 4px;
+    margin-top: 2px;
+    line-height: 1.25;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .teacher-cal-lesson .time {
+    font-weight: 600;
+    margin-right: 4px;
+  }
+
+  .teacher-cal-lesson .student {
+    opacity: 0.9;
+  }
+
+  .teacher-cal-lesson .topic {
+    display: block;
+    opacity: 0.75;
+    font-size: 0.7rem;
+  }
+
+  @media (max-width: 768px) {
+    .teacher-calendar-grid {
+      gap: 4px;
+    }
+
+    .teacher-cal-day {
+      min-height: 70px;
+      padding: 4px;
+    }
+
+    .teacher-cal-date {
+      font-size: 0.7rem;
+    }
+
+    .teacher-cal-lesson {
+      font-size: 0.7rem;
+    }
+  }
+</style>
+
+<div class="teacher-schedule-header">
+  <div>
+    <h2>Расписание преподавателя</h2>
+    <p style="margin: 4px 0 0; opacity: 0.8; font-size: 0.9rem;">
+      Выберите преподавателя и месяц, чтобы увидеть его занятия в виде календаря.
+    </p>
+  </div>
+
+  <form method="get" action="{{ url_for('teacher_schedule') }}">
+    <label style="font-size:0.8rem;">Преподаватель</label>
+    <select name="teacher_id">
+      <option value="">— выберите —</option>
+      {% for t in teachers %}
+        <option value="{{ t.id }}"
+          {% if teacher_id and teacher_id|string == t.id|string %}selected{% endif %}>
+          {{ t.name }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <label style="font-size:0.8rem;">Месяц</label>
+    <input type="month" name="month" value="{{ month_str }}">
+
+    <button type="submit">Показать</button>
+  </form>
+</div>
 
 {% if teacher %}
-<h3>График: {{ teacher.name }}</h3>
-{% if lessons %}
-<ul>
-  {% for l in lessons %}
-    <li>
-      <strong>{{ l.start_at }}</strong> — {{ l.student_name }}
-      {% if l.topic %} ({{ l.topic }}){% endif %}
-      — статус: {{ l.status }}
-    </li>
-  {% endfor %}
-</ul>
-{% else %}
-<p>Нет занятий.</p>
-{% endif %}
+  <p style="margin-bottom: 10px; font-size:0.9rem; opacity:0.85;">
+    {{ teacher.name }} — {{ month_name }} {{ year }}
+  </p>
+
+  <div class="teacher-calendar">
+    <div class="teacher-calendar-grid">
+      <!-- заголовок дней недели -->
+      <div class="teacher-cal-head">Пн</div>
+      <div class="teacher-cal-head">Вт</div>
+      <div class="teacher-cal-head">Ср</div>
+      <div class="teacher-cal-head">Чт</div>
+      <div class="teacher-cal-head">Пт</div>
+      <div class="teacher-cal-head">Сб</div>
+      <div class="teacher-cal-head">Вс</div>
+
+      <!-- сами дни -->
+      {% for week in weeks %}
+        {% for cell in week %}
+          <div class="teacher-cal-day {% if not cell.in_month %}other-month{% endif %}">
+            <div class="teacher-cal-date">
+              {{ cell.date.day }}
+            </div>
+
+            {% for l in cell.lessons %}
+              <div class="teacher-cal-lesson"
+                   title="{{ l.topic or '' }}{% if l.comment %} — {{ l.comment }}{% endif %}">
+                <span class="time">
+                  {{ l.start_at[11:16] }}
+                </span>
+                {% if l.student_name %}
+                  <span class="student">{{ l.student_name }}</span>
+                {% endif %}
+                {% if l.topic %}
+                  <span class="topic">{{ l.topic }}</span>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+{% elif teacher_id %}
+  <p style="margin-top:10px; color:#ff9b9b;">
+    Преподаватель не найден или на этот месяц занятий нет.
+  </p>
 {% endif %}
 
 {% endblock %}
