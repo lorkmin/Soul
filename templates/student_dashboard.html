@@ -334,30 +334,68 @@
             </form>
 
             {% if homework_list %}
-            <ul class="student-lessons-list">
+            <ul class="student-homework-list">
               {% for hw in homework_list %}
-              <li>
-                <span class="lesson-date"> {{ hw['created_at'] or '' }} </span>
-                ·
-                <strong>{{ hw['title'] or 'Без названия' }}</strong>
+              <li class="student-homework-item">
+                <div class="student-homework-header">
+                  <div>
+                    <span class="lesson-date">
+                      {{ hw['created_at'] or '' }}
+                    </span>
+                    ·
+                    <strong>{{ hw['title'] or 'Без названия' }}</strong>
+                  </div>
+                  <div class="student-homework-status">
+                    {% if hw['status'] == 'checked' %}
+                    <span class="lesson-status-badge lesson-status-done">
+                      Проверено
+                    </span>
+                    {% else %}
+                    <span class="lesson-status-badge lesson-status-planned">
+                      Отправлено
+                    </span>
+                    {% endif %}
+                  </div>
+                </div>
+
                 {% if hw['comment'] %}
-                <br /><span class="lesson-comment">{{ hw['comment'] }}</span>
+                <div class="lesson-comment" style="margin-top: 4px">
+                  Ваш комментарий: {{ hw['comment'] }}
+                </div>
                 {% endif %}
-                <br />
-                <a
-                  href="{{ url_for('static', filename=hw['file_path']) }}"
-                  target="_blank"
-                >
-                  Открыть файл
-                </a>
-                {% if hw['status'] == 'checked' %}
-                <span class="badge-lessons" style="margin-left: 6px"
-                  >Проверено</span
-                >
-                {% endif %} {% if hw['teacher_comment'] %}
-                <br /><span class="lesson-comment"
-                  >Комментарий преподавателя: {{ hw['teacher_comment'] }}</span
-                >
+
+                <div class="student-homework-files">
+                  {% if hw['file_path'] %}
+                  <div>
+                    <span class="lesson-topic">Ваш файл: </span>
+                    <a
+                      href="{{ url_for('static', filename=hw['file_path']) }}"
+                      target="_blank"
+                    >
+                      открыть
+                    </a>
+                  </div>
+                  {% endif %} {% if hw['teacher_file_path'] %}
+                  <div style="margin-top: 2px">
+                    <span class="lesson-topic">Файл от преподавателя: </span>
+                    <a
+                      href="{{ url_for('static', filename=hw['teacher_file_path']) }}"
+                      target="_blank"
+                    >
+                      скачать
+                    </a>
+                  </div>
+                  {% endif %}
+                </div>
+
+                {% if hw['teacher_comment'] %}
+                <div class="lesson-comment" style="margin-top: 6px">
+                  Комментарий преподавателя: {{ hw['teacher_comment'] }}
+                </div>
+                {% endif %} {% if hw['checked_at'] %}
+                <div class="student-homework-meta">
+                  Проверено: {{ hw['checked_at'] }}
+                </div>
                 {% endif %}
               </li>
               {% endfor %}

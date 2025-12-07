@@ -248,11 +248,22 @@ def init_db():
             file_path TEXT,    -- путь к файлу на диске
             status TEXT DEFAULT 'new',  -- new / checked
             teacher_comment TEXT,
+            teacher_file_name TEXT,         -- имя файла от препода
+            teacher_file_path TEXT,         -- путь к файлу от препода
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             checked_at DATETIME,
             FOREIGN KEY(student_id) REFERENCES student_accounts(id)
         );
     """)
+    try:
+        cur.execute("ALTER TABLE student_homework ADD COLUMN teacher_file_name TEXT")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        cur.execute("ALTER TABLE student_homework ADD COLUMN teacher_file_path TEXT")
+    except sqlite3.OperationalError:
+        pass
 
 
     conn.commit()
@@ -947,6 +958,97 @@ def teacher_students():
 
     conn.close()
     return render_template("teacher_students.html", students=students)
+
+@app.get("/teacher/homework")
+@teacher_login_required
+def teacher_homework_list():
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+
+    rows = conn.execute("""
+        SELECT
+            h.*,
+            s.name AS student_name,
+            s.public_code AS student_code,
+            s.course AS student_course
+        FROM student_homework h
+        JOIN student_accounts s ON s.id = h.student_id
+        ORDER BY
+            CASE h.status
+                WHEN 'new' THEN 0
+                ELSE 1
+            END,
+            h.created_at DESC
+        LIMIT 300
+    """).fetchall()
+
+    conn.close()
+    return render_template("teacher_homework_list.html", homework=rows)
+
+@app.route("/teacher/homework/<int:hw_id>", methods=["GET", "POST"])
+@teacher_login_required
+def teacher_homework_review(hw_id):
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+
+    hw = conn.execute("""
+        SELECT
+            h.*,
+            s.name AS student_name,
+            s.public_code AS student_code,
+            s.course AS student_course
+        FROM student_homework h
+        JOIN student_accounts s ON s.id = h.student_id
+        WHERE h.id = ?
+    """, (hw_id,)).fetchone()
+
+    if not hw:
+        conn.close()
+        flash("Домашнее задание не найдено", "error")
+        return redirect(url_for("teacher_homework_list"))
+
+    if request.method == "POST":
+        status = request.form.get("status") or "checked"
+        teacher_comment = (request.form.get("teacher_comment") or "").strip()
+        file = request.files.get("teacher_file")
+
+        teacher_file_name = hw["teacher_file_name"]
+        teacher_file_path = hw["teacher_file_path"]
+
+        if file and file.filename and hw_allowed(file.filename):
+            orig_name = secure_filename(file.filename)
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            new_name = f"hw{hw['id']}_reply_{ts}_{orig_name}"
+            abs_path = os.path.join(HOMEWORK_UPLOAD_FOLDER, new_name)
+            file.save(abs_path)
+
+            teacher_file_name = orig_name
+            teacher_file_path = f"uploads/homework/{new_name}"
+
+        conn.execute("""
+            UPDATE student_homework
+            SET
+                status = ?,
+                teacher_comment = ?,
+                teacher_file_name = ?,
+                teacher_file_path = ?,
+                checked_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+        """, (
+            status,
+            teacher_comment or None,
+            teacher_file_name,
+            teacher_file_path,
+            hw_id,
+        ))
+        conn.commit()
+        conn.close()
+
+        flash("Домашнее задание обновлено", "success")
+        return redirect(url_for("teacher_homework_list"))
+
+    conn.close()
+    return render_template("teacher_homework_review.html", hw=hw)
 
 
 
