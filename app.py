@@ -1041,36 +1041,6 @@ def teacher_students_edit(sid):
     )
 
 
-@app.get("/teacher/schedule")
-@teacher_login_required
-def teacher_schedule():
-    teacher_id = request.args.get("tid")
-    conn = get_db()
-    conn.row_factory = sqlite3.Row
-
-    teachers = conn.execute("SELECT * FROM teachers").fetchall()
-
-    lessons = []
-    teacher = None
-
-    if teacher_id:
-        teacher = conn.execute("SELECT * FROM teachers WHERE id = ?", (teacher_id,)).fetchone()
-
-        lessons = conn.execute("""
-            SELECT sl.*, sa.name AS student_name
-            FROM student_lessons sl
-            JOIN student_accounts sa ON sa.id = sl.student_id
-            WHERE sa.teacher_id = ?
-            ORDER BY sl.start_at
-        """, (teacher_id,)).fetchall()
-
-    conn.close()
-
-    return render_template("teacher_schedule.html",
-                           teachers=teachers,
-                           teacher=teacher,
-                           lessons=lessons)
-
 
 @app.post("/teacher/students/<int:sid>/delete")
 @teacher_login_required
