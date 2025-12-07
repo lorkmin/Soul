@@ -3521,3 +3521,381 @@ body.admin-page {
     word-break: break-word; /* если прям длинная фраза */
   }
 }
+/* ===========================
+   Личный кабинет ученика — kawaii + gamified
+   =========================== */
+
+body.student-dashboard {
+  background: radial-gradient(
+      circle at 0 0,
+      rgba(255, 210, 240, 0.4),
+      transparent 60%
+    ),
+    radial-gradient(circle at 100% 0, rgba(210, 230, 255, 0.4), transparent 55%),
+    #fff;
+}
+
+/* Главный герой-блок */
+
+.student-hero-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px 22px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fffafc, #f9fbff);
+  box-shadow: 0 12px 30px rgba(41, 24, 94, 0.06),
+    0 0 0 1px rgba(255, 255, 255, 0.8);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+/* мягкие искорки на фоне */
+.student-hero-card::before,
+.student-hero-card::after {
+  content: "";
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 190, 235, 0.5),
+    transparent 70%
+  );
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.student-hero-card::before {
+  top: -40px;
+  left: -30px;
+}
+
+.student-hero-card::after {
+  bottom: -50px;
+  right: -40px;
+  background: radial-gradient(
+    circle,
+    rgba(190, 215, 255, 0.6),
+    transparent 70%
+  );
+}
+
+.student-hero-main,
+.student-hero-side {
+  position: relative;
+  z-index: 1;
+}
+
+.student-hero-main {
+  flex: 2 1 260px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.student-hero-side {
+  flex: 1.4 1 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Аватар */
+
+.student-hero-avatar {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 20%, #ffe5f5, #ffc3ec);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 18px rgba(255, 120, 200, 0.4);
+  flex-shrink: 0;
+}
+
+.student-hero-avatar-char {
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: #6b184a;
+}
+
+.student-hero-avatar-sparkle {
+  position: absolute;
+  right: -6px;
+  top: -4px;
+  font-size: 0.9rem;
+}
+
+/* Инфо-блок */
+
+.student-hero-info {
+  flex: 1;
+}
+
+.student-hero-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.student-hero-name {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2b133f;
+}
+
+.student-hero-id-badge {
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(66, 32, 116, 0.08);
+  color: #432076;
+}
+
+.student-hero-course {
+  margin: 2px 0 6px;
+  font-size: 0.9rem;
+  color: #5a456f;
+}
+
+.student-hero-course span {
+  font-weight: 600;
+}
+
+.student-hero-sub {
+  margin: 0 0 10px;
+  font-size: 0.87rem;
+  color: #9073b0;
+}
+
+/* Цифры по занятиям */
+
+.student-hero-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.student-hero-number {
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 8px rgba(40, 19, 80, 0.06);
+  min-width: 90px;
+}
+
+.student-hero-number .label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #9f8ab8;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.student-hero-number .value {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #3a1b62;
+}
+
+/* Оплата и комментарий */
+
+.student-hero-payment {
+  font-size: 0.83rem;
+  margin-bottom: 5px;
+  color: #6f598e;
+}
+
+.student-hero-payment-label {
+  font-weight: 600;
+}
+
+.student-hero-comment {
+  font-size: 0.8rem;
+  color: #8a739e;
+  margin: 4px 0 0;
+}
+
+.student-hero-comment .comment-label {
+  font-weight: 600;
+}
+
+/* Прогресс */
+
+.student-progress-card {
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 3px 10px rgba(35, 16, 72, 0.07);
+}
+
+.student-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.student-progress-header .percent {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #5a2fb8;
+}
+
+.student-progress-bar {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(225, 213, 255, 0.5);
+  overflow: hidden;
+  position: relative;
+}
+
+.student-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #ff8fd8, #c08cff);
+  position: relative;
+  overflow: hidden;
+}
+
+/* маленький «блик» по прогресс-бару */
+.student-progress-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.9) 40%,
+    transparent 80%
+  );
+  transform: translateX(-100%);
+  animation: progressShine 2.6s infinite;
+  opacity: 0.7;
+}
+
+@keyframes progressShine {
+  0% {
+    transform: translateX(-120%);
+  }
+  60% {
+    transform: translateX(120%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+.student-progress-meta {
+  margin-top: 4px;
+  font-size: 0.78rem;
+  color: #7c679f;
+}
+
+/* Ачивки */
+
+.student-achievements-card {
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: #fff7ff;
+  box-shadow: 0 3px 10px rgba(146, 72, 170, 0.12);
+}
+
+.student-achievements-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.student-achievements-header .title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #5d276c;
+}
+
+.student-achievements-header .sparkle {
+  font-size: 0.9rem;
+}
+
+.student-achievements-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.student-achievements-list li {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  font-size: 0.78rem;
+  color: #6c3f77;
+}
+
+.badge-icon {
+  font-size: 0.9rem;
+  margin-top: 1px;
+}
+
+/* Маленькая «таблетка» */
+
+.chip.chip-soft {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(222, 207, 255, 0.4);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #5a30a5;
+}
+
+/* Адаптив */
+
+@media (max-width: 768px) {
+  .student-hero-card {
+    padding: 16px 14px;
+  }
+
+  .student-hero-main {
+    flex-direction: row;
+  }
+
+  .student-hero-side {
+    width: 100%;
+  }
+}
+
+@media (max-width: 580px) {
+  .student-hero-card {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .student-hero-main {
+    flex-direction: row;
+  }
+
+  .student-hero-numbers {
+    gap: 6px;
+  }
+
+  .student-hero-number {
+    padding: 6px 8px;
+  }
+}

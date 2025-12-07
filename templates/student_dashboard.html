@@ -50,112 +50,153 @@
               "
             />
 
-            <h4 style="margin-bottom: 10px">
-              {{ student['name'] or 'Ученик' }}
-            </h4>
+            {# подготовка чисел для прогресса #} {% set total =
+            (student['lessons_total'] or 0)|int %} {% set left =
+            (student['lessons_left'] or 0)|int %} {% if total > 0 %} {% set done
+            = total - left %} {% if done < 0 %}{% set done = 0 %}{% endif %} {%
+            if done > total %}{% set done = total %}{% endif %} {% set percent =
+            (done * 100 / total)|round(0)|int %} {% else %} {% set done = 0 %}
+            {% set percent = 0 %} {% endif %} {% set done_count =
+            lessons_done|length %}
 
-            {% if student['course'] %}
-            <p style="margin: 0 0 10px 0; color: #666">
-              Курс: {{ student['course'] }}
-            </p>
-            {% endif %}
+            <div class="student-hero-card">
+              <div class="student-hero-main">
+                <div class="student-hero-avatar">
+                  <span class="student-hero-avatar-char">
+                    {{ (student['name'] or 'U')[:1] }}
+                  </span>
+                  <span class="student-hero-avatar-sparkle">✨</span>
+                </div>
 
-            <p>
-              <strong>Всего занятий в пакете:</strong>
-              {{ student['lessons_total'] or '—' }}
-            </p>
-            <p>
-              <strong>Осталось занятий:</strong>
-              {{ student['lessons_left'] or '—' }}
-            </p>
-            {# ПРОГРЕСС ПО ЗАНЯТИЯМ #} {% set total = (student['lessons_total']
-            or 0)|int %} {% set left = (student['lessons_left'] or 0)|int %} {%
-            if total > 0 %} {% set done = total - left %} {% if done < 0 %}{%
-            set done = 0 %}{% endif %} {% if done > total %}{% set done = total
-            %}{% endif %} {% set percent = (done * 100 / total)|round(0) %}
+                <div class="student-hero-info">
+                  <div class="student-hero-title-row">
+                    <h4 class="student-hero-name">
+                      {{ student['name'] or 'Ученик' }}
+                    </h4>
+                    {% if student['public_code'] %}
+                    <span class="student-hero-id-badge">
+                      ID: {{ student['public_code'] }}
+                    </span>
+                    {% endif %}
+                  </div>
 
-            <div class="student-progress">
-              <div class="student-progress-top">
-                <span class="student-progress-label"> Прогресс по пакету </span>
-                <span class="student-progress-percent">
-                  {{ percent|int }}%
-                </span>
+                  {% if student['course'] %}
+                  <p class="student-hero-course">
+                    🌸 Курс: <span>{{ student['course'] }}</span>
+                  </p>
+                  {% endif %}
+
+                  <p class="student-hero-sub">
+                    Ваш уютный прогресс в корейском 💕
+                  </p>
+
+                  <div class="student-hero-numbers">
+                    <div class="student-hero-number">
+                      <span class="label">Всего занятий</span>
+                      <span class="value"
+                        >{{ total if total > 0 else '—' }}</span
+                      >
+                    </div>
+                    <div class="student-hero-number">
+                      <span class="label">Осталось</span>
+                      <span class="value"
+                        >{{ left if total > 0 else '—' }}</span
+                      >
+                    </div>
+                    <div class="student-hero-number">
+                      <span class="label">Пройдено</span>
+                      <span class="value">
+                        {% if total > 0 %}{{ done }} ({{ percent }}%){% else
+                        %}—{% endif %}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="student-hero-payment">
+                    <span class="student-hero-payment-label"
+                      >Последняя оплата:</span
+                    >
+                    <span class="student-hero-payment-value">
+                      {{ student['last_payment_date'] or '—' }} {% if
+                      student['last_payment_amount'] %} · {{
+                      student['last_payment_amount'] }} ₽ {% endif %}
+                    </span>
+                  </div>
+
+                  {% if student['comment'] %}
+                  <p class="student-hero-comment">
+                    <span class="comment-label">Комментарий от школы:</span>
+                    <span class="comment-text">{{ student['comment'] }}</span>
+                  </p>
+                  {% endif %}
+                </div>
               </div>
-              <div class="student-progress-bar">
-                <div
-                  class="student-progress-fill"
-                  style="width: {{ percent }}%;"
-                ></div>
-              </div>
-              <div class="student-progress-meta">
-                Пройдено {{ done }} из {{ total }} занятий
-              </div>
-            </div>
-            {% endif %} {# --- АЧИВКИ --- #} {% set done_count =
-            lessons_done|length %} {% set total = (student['lessons_total'] or
-            0)|int %} {% set left = (student['lessons_left'] or 0)|int %} {% if
-            total > 0 %} {% set done = total - left %} {% if done < 0 %}{% set
-            done = 0 %}{% endif %} {% if done > total %}{% set done = total %}{%
-            endif %} {% set percent = (done * 100 / total)|round(0)|int %} {%
-            else %} {% set done = done_count %} {% set percent = 0 %} {% endif
-            %} {% if done_count > 0 or total > 0 %}
-            <div class="student-achievements">
-              <div class="student-achievements-title">
-                Ваши маленькие достижения
-              </div>
-              <ul class="student-achievements-list">
-                {% if done_count >= 1 %}
-                <li>
-                  <span class="badge-icon">🌱</span>
-                  <span class="badge-text"
-                    >Первый шаг — вы уже начали курс!</span
-                  >
-                </li>
-                {% endif %} {% if done_count >= 3 %}
-                <li>
-                  <span class="badge-icon">🔥</span>
-                  <span class="badge-text"
-                    >Три занятия позади — вы держите ритм 💪</span
-                  >
-                </li>
-                {% endif %} {% if percent >= 50 and percent < 100 %}
-                <li>
-                  <span class="badge-icon">🌈</span>
-                  <span class="badge-text"
-                    >Половина курса пройдена — вы уже далеко продвинулись!</span
-                  >
-                </li>
-                {% endif %} {% if percent >= 90 and left > 0 %}
-                <li>
-                  <span class="badge-icon">🚀</span>
-                  <span class="badge-text"
-                    >Финиш близко — осталось всего несколько занятий.</span
-                  >
-                </li>
-                {% endif %} {% if total > 0 and left == 0 and done > 0 %}
-                <li>
-                  <span class="badge-icon">🏅</span>
-                  <span class="badge-text"
-                    >Вы прошли весь пакет — молодец!</span
-                  >
-                </li>
+
+              <div class="student-hero-side">
+                {% if total > 0 %}
+                <div class="student-progress-card">
+                  <div class="student-progress-header">
+                    <span class="chip chip-soft">Прогресс по пакету</span>
+                    <span class="percent">{{ percent }}%</span>
+                  </div>
+                  <div class="student-progress-bar">
+                    <div
+                      class="student-progress-fill"
+                      style="width: {{ percent }}%;"
+                    ></div>
+                  </div>
+                  <div class="student-progress-meta">
+                    Пройдено {{ done }} из {{ total }} уроков
+                  </div>
+                </div>
+                {% endif %} {% if done_count > 0 or total > 0 %}
+                <div class="student-achievements-card">
+                  <div class="student-achievements-header">
+                    <span class="title">Ваши маленькие ачивки</span>
+                    <span class="sparkle">✨</span>
+                  </div>
+                  <ul class="student-achievements-list">
+                    {% if done_count >= 1 %}
+                    <li>
+                      <span class="badge-icon">🌱</span>
+                      <span class="badge-text">
+                        Первый шаг — вы уже начали путь!
+                      </span>
+                    </li>
+                    {% endif %} {% if done_count >= 3 %}
+                    <li>
+                      <span class="badge-icon">🔥</span>
+                      <span class="badge-text">
+                        Три занятия позади — держите ритм 💪
+                      </span>
+                    </li>
+                    {% endif %} {% if percent >= 50 and percent < 100 %}
+                    <li>
+                      <span class="badge-icon">🌈</span>
+                      <span class="badge-text">
+                        Половина курса пройдена — вы уже далеко продвинулись!
+                      </span>
+                    </li>
+                    {% endif %} {% if percent >= 90 and left > 0 %}
+                    <li>
+                      <span class="badge-icon">🚀</span>
+                      <span class="badge-text">
+                        Финиш близко — осталось всего несколько уроков.
+                      </span>
+                    </li>
+                    {% endif %} {% if total > 0 and left == 0 and done > 0 %}
+                    <li>
+                      <span class="badge-icon">🏅</span>
+                      <span class="badge-text">
+                        Пакет завершён — вы большое умничка!
+                      </span>
+                    </li>
+                    {% endif %}
+                  </ul>
+                </div>
                 {% endif %}
-              </ul>
+              </div>
             </div>
-            {% endif %}
-
-            <p style="margin-top: 10px">
-              <strong>Последняя оплата:</strong>
-              {{ student['last_payment_date'] or '—' }} {% if
-              student['last_payment_amount'] %} · {{
-              student['last_payment_amount'] }} ₽ {% endif %}
-            </p>
-
-            {% if student['comment'] %}
-            <p style="margin-top: 10px; color: #777">
-              Комментарий от школы:<br />{{ student['comment'] }}
-            </p>
-            {% endif %}
 
             <!-- РАСПИСАНИЕ ЗАНЯТИЙ -->
             <hr
@@ -280,6 +321,7 @@
               будет ближайшее занятие 🙂
             </p>
             {% endif %} {% endif %}
+
             <hr
               style="
                 margin: 18px 0;
@@ -299,7 +341,6 @@
             >
               <input type="hidden" name="action" value="upload_homework" />
               <input type="hidden" name="code" value="{{ code }}" />
-              <!-- 👈 вот это важно -->
               <div class="form-field">
                 <label for="hw-title">Краткое название (по желанию)</label>
                 <input
