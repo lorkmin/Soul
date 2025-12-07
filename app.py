@@ -957,7 +957,17 @@ def teacher_students_add():
         return redirect(url_for("teacher_students"))
 
     # сюда ещё хорошо бы прокинуть список teachers, когда форму допилим
-    return render_template("teacher_student_form.html", student=None)
+    # получаем всех преподавателей для селекта
+    conn = get_db()
+    teachers = conn.execute("SELECT id, name FROM teachers ORDER BY name").fetchall()
+    conn.close()
+
+    return render_template(
+        "teacher_student_form.html",
+        student=None,
+        teachers=teachers
+    )
+
 
 
 
@@ -1018,7 +1028,17 @@ def teacher_students_edit(sid):
 
 
     conn.close()
-    return render_template("teacher_student_form.html", student=student)
+    # подтягиваем список преподавателей
+    conn = get_db()
+    teachers = conn.execute("SELECT id, name FROM teachers ORDER BY name").fetchall()
+    conn.close()
+
+    return render_template(
+        "teacher_student_form.html",
+        student=student,
+        teachers=teachers
+    )
+
 
 @app.get("/teacher/schedule")
 @teacher_login_required
