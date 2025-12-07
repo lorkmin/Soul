@@ -34,6 +34,9 @@ def format_paragraphs(text: str) -> str:
     return html
 
 app = Flask(__name__)
+
+app.config["MAX_CONTENT_LENGTH"] = 20 * 1024 * 1024  # 20 МБ
+
 # регистрируем фильтр ПОСЛЕ того, как создан app
 app.jinja_env.filters["paragraphs"] = format_paragraphs
 
