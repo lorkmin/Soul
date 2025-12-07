@@ -201,11 +201,7 @@ def init_db():
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
     """)
-    # новые поля под "Основное" и ачивки
-    try:
-        cur.execute("ALTER TABLE student_accounts ADD COLUMN teacher_id INTEGER")
-    except sqlite3.OperationalError:
-        pass
+
     # ---- STUDENT LESSONS (расписание) ----
     cur.execute("""
         CREATE TABLE IF NOT EXISTS student_lessons (
@@ -912,40 +908,40 @@ def teacher_students():
 @app.route("/teacher/students/add", methods=["GET", "POST"])
 @teacher_login_required
 def teacher_students_add():
-   if request.method == "POST":
-    name = (request.form.get("name") or "").strip()
-    course = (request.form.get("course") or "").strip()
-    last_payment_date = (request.form.get("last_payment_date") or "").strip()
-    last_payment_amount = request.form.get("last_payment_amount") or None
-    lessons_total = request.form.get("lessons_total") or None
-    lessons_left = request.form.get("lessons_left") or None
-    comment = (request.form.get("comment") or "").strip()
-    teacher_id = request.form.get("teacher_id") or None
+    if request.method == "POST":
+        name = (request.form.get("name") or "").strip()
+        course = (request.form.get("course") or "").strip()
+        last_payment_date = (request.form.get("last_payment_date") or "").strip()
+        last_payment_amount = request.form.get("last_payment_amount") or None
+        lessons_total = request.form.get("lessons_total") or None
+        lessons_left = request.form.get("lessons_left") or None
+        comment = (request.form.get("comment") or "").strip()
 
-    code = generate_student_code()
+        code = generate_student_code()
 
-    conn = get_db()
-    conn.execute(
-        """
-        INSERT INTO student_accounts (
-            public_code, name, course, last_payment_date,
-            last_payment_amount, lessons_total, lessons_left,
-            comment, teacher_id
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """,
-        (
-            code, name or None, course or None, last_payment_date or None,
-            int(last_payment_amount) if last_payment_amount else None,
-            int(lessons_total) if lessons_total else None,
-            int(lessons_left) if lessons_left else None,
-            comment or None,
-            int(teacher_id) if teacher_id else None,
-        ),
-    )
-    conn.commit()
-    conn.close()
-    return redirect(url_for("teacher_students"))
-
+        conn = get_db()
+        conn.execute(
+            """
+            INSERT INTO student_accounts (
+                public_code, name, course, last_payment_date,
+                last_payment_amount, lessons_total, lessons_left, comment
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                code,
+                name or None,
+                course or None,
+                last_payment_date or None,
+                int(last_payment_amount) if last_payment_amount else None,
+                int(lessons_total) if lessons_total else None,
+                int(lessons_left) if lessons_left else None,
+                comment or None,
+            ),
+        )
+        conn.commit()
+        conn.close()
+        # после создания просто возвращаемся к списку
+        return redirect(url_for("teacher_students"))
 
     return render_template("teacher_student_form.html", student=None)
 
@@ -972,8 +968,6 @@ def teacher_students_edit(sid):
         lessons_total = request.form.get("lessons_total") or None
         lessons_left = request.form.get("lessons_left") or None
         comment = (request.form.get("comment") or "").strip()
-        teacher_id = request.form.get("teacher_id") or None
-
 
         conn.execute(
             """
@@ -991,8 +985,7 @@ def teacher_students_edit(sid):
                 int(lessons_total) if lessons_total else None,
                 int(lessons_left) if lessons_left else None,
                 comment or None,
-                sid
-                , teacher_id = ?
+                sid,
             ),
         )
         conn.commit()
@@ -1001,36 +994,6 @@ def teacher_students_edit(sid):
 
     conn.close()
     return render_template("teacher_student_form.html", student=student)
-
-@app.get("/teacher/schedule")
-@teacher_login_required
-def teacher_schedule():
-    teacher_id = request.args.get("tid")
-    conn = get_db()
-    conn.row_factory = sqlite3.Row
-
-    teachers = conn.execute("SELECT * FROM teachers").fetchall()
-
-    lessons = []
-    teacher = None
-
-    if teacher_id:
-        teacher = conn.execute("SELECT * FROM teachers WHERE id = ?", (teacher_id,)).fetchone()
-
-        lessons = conn.execute("""
-            SELECT sl.*, sa.name AS student_name
-            FROM student_lessons sl
-            JOIN student_accounts sa ON sa.id = sl.student_id
-            WHERE sa.teacher_id = ?
-            ORDER BY sl.start_at
-        """, (teacher_id,)).fetchall()
-
-    conn.close()
-
-    return render_template("teacher_schedule.html",
-                           teachers=teachers,
-                           teacher=teacher,
-                           lessons=lessons)
 
 
 @app.post("/teacher/students/<int:sid>/delete")

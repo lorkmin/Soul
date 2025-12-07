@@ -30,21 +30,6 @@
     <label>Комментарий (для себя)</label>
     <textarea name="comment" rows="3" placeholder="Доп. инфо: формат, особые условия и т.п.">{{ student['comment'] if student else '' }}</textarea>
 
-<div class="form-field">
-  <label>Преподаватель</label>
-  <select name="teacher_id">
-    <option value="">— не выбран —</option>
-    {% for t in teachers %}
-      <option value="{{ t['id'] }}"
-        {% if student and student['teacher_id'] == t['id'] %}selected{% endif %}
-      >
-        {{ t['name'] }}
-      </option>
-    {% endfor %}
-  </select>
-</div>
-
-    
     <button class="admin-btn" type="submit">
       {{ 'Сохранить' if student else 'Создать' }}
     </button>
