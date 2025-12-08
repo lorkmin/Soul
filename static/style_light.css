@@ -3966,3 +3966,15 @@ body.student-dashboard .wrapper {
     align-items: flex-start;
   }
 }
+/* Центрируем ЛК ученика на странице */
+body.student-dashboard .wrapper {
+  max-width: 1200px; /* твоя желаемая ширина */
+  margin: 0 auto; /* центрируем всю обёртку */
+}
+
+body.student-dashboard .section-inner {
+  max-width: 1120px; /* чуть уже, чтобы были поля */
+  margin: 0 auto; /* тоже центрируем */
+  padding-left: 24px;
+  padding-right: 24px;
+}
