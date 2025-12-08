@@ -3906,19 +3906,19 @@ body.student-dashboard .section-inner {
 }
 
 .student-dashboard-card {
-  max-width: 100%;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 24px 28px;
 }
 
 /* Подкарточки "Ваши занятия" и "Домашние задания" */
 
-.student-subcard {
-  margin-top: 24px;
-  padding: 20px 22px;
-  border-radius: 20px;
-  background: #fffdf9;
-  box-shadow: 0 12px 30px rgba(220, 180, 120, 0.12);
+/* Контейнер двух нижних карточек (занятия + дз) */
+.student-subcards-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* две равные колонки */
+  gap: 28px;
+  margin-top: 25px;
+  max-width: 100%;
 }
 
 .student-subcard-title {
@@ -3950,12 +3950,13 @@ body.student-dashboard .section-inner {
     grid-column: 1 / -1;
   }
 }
-/* Обёртка для нижних карточек: расписание + ДЗ */
+/* Контейнер двух нижних карточек (занятия + дз) */
 .student-subcards-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-top: 28px;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* две равные колонки */
+  gap: 28px;
+  margin-top: 25px;
+  max-width: 100%;
 }
 
 /* На широких экранах — две колонки */
