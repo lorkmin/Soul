@@ -385,13 +385,16 @@ def index():
         SELECT * FROM courses
         ORDER BY created_at ASC
     """).fetchall()
+    hero_tags = []
+    if courses and courses[0]["hero_tags"]:
+        hero_tags = split_tags(courses[0]["hero_tags"])
 
     gallery = conn.execute("SELECT * FROM gallery ORDER BY created_at DESC LIMIT 12").fetchall()
 
     conn.close()
     return render_template("index.html", reviews=reviews,
                            teachers=teachers, courses=courses,
-                           gallery=gallery)
+                           gallery=gallery, hero_tags=hero_tags)
 
 
 
@@ -808,22 +811,34 @@ def admin_courses():
 @app.post("/admin/courses/add")
 @login_required
 def admin_courses_add():
-    title = request.form["title"]
-    price = request.form["price"]
-    lessons = request.form["lessons"]
-    description = request.form["description"]
+    title = (request.form.get("title") or "").strip()
+    price = request.form.get("price") or None
+    lessons = request.form.get("lessons") or None
+    description = (request.form.get("description") or "").strip()
+    hero_tags = (request.form.get("hero_tags") or "").strip()  # <-- читаем из формы
+
     photo = save_upload(request.files.get("photo"), COURSE_UPLOAD)
 
     conn = get_db()
-    conn.execute("""
-        INSERT INTO courses (title, price, lessons, description, photo)
-        VALUES (?, ?, ?, ?, ?)
-    """, (title, price, lessons, description, photo))
-
+    conn.execute(
+        """
+        INSERT INTO courses (
+            title,
+            price,
+            lessons,
+            description,
+            photo,
+            hero_tags
+        )
+        VALUES (?, ?, ?, ?, ?, ?)
+        """,
+        (title, price, lessons, description, photo, hero_tags),
+    )
     conn.commit()
     conn.close()
 
     return redirect(url_for("admin_courses"))
+
 
 @app.post("/admin/courses/delete/<int:cid>")
 @login_required
