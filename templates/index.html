@@ -159,9 +159,14 @@
                 </div>
               </div>
 
-              <div class="hero-k-footer">
+              <div class="hero-k-chips">
+                {% if hero_tags %} {% for tag in hero_tags %}
+                <div class="hero-k-chip">{{ tag }}</div>
+                {% endfor %} {% else %}
+                <!-- запасной вариант, если в БД ещё ничего не заведено -->
                 <div class="hero-k-chip">🌸 уютные онлайн-занятия</div>
                 <div class="hero-k-chip">📚 свои материалы</div>
+                {% endif %}
               </div>
 
               <!-- МИНИ-ИЛЛЮСТРАЦИИ ВОКРУГ -->

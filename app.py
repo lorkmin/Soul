@@ -192,7 +192,10 @@ def init_db():
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
     """)
-
+    try:
+        cur.execute("ALTER TABLE courses ADD COLUMN hero_tags TEXT")
+    except sqlite3.OperationalError:
+        pass
     # ---- GALLERY ----
     cur.execute("""
         CREATE TABLE IF NOT EXISTS gallery (
@@ -351,6 +354,12 @@ def send_enroll_email_to_user(payload: dict):
     """
     print("DEBUG: send_enroll_email_to_user called (stub). Payload:", payload)
     return
+
+#Раздлеление тегов в описании курса
+def split_tags(s: str):
+    if not s:
+        return []
+    return [t.strip() for t in s.split(",") if t.strip()]
 
 
 # ================== ПУБЛИЧНАЯ ЧАСТЬ ==================
@@ -845,22 +854,23 @@ def admin_courses_edit(cid):
         price = request.form["price"]
         lessons = request.form["lessons"]
         description = request.form["description"]
-
+        hero_tags = (request.form.get("hero_tags") or "").strip()
+        
         file = request.files.get("photo")
         new_photo = save_upload(file, COURSE_UPLOAD) if file and file.filename else None
 
         if new_photo:
             conn.execute("""
                 UPDATE courses
-                SET title=?, price=?, lessons=?, description=?, photo=?
+                SET title=?, price=?, lessons=?, description=?, photo=?, hero_tags = ?
                 WHERE id=?
-            """, (title, price, lessons, description, new_photo, cid))
+            """, (title, price, lessons, description, new_photo, hero_tags, cid))
         else:
             conn.execute("""
                 UPDATE courses
-                SET title=?, price=?, lessons=?, description=?
+                SET title=?, price=?, lessons=?, description=?, hero_tags = ?
                 WHERE id=?
-            """, (title, price, lessons, description, cid))
+            """, (title, price, lessons, description, hero_tags, cid))
 
         conn.commit()
         conn.close()
