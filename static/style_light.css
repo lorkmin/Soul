@@ -3902,24 +3902,24 @@ body.student-dashboard {
 /* === ЛК ученика: общая ширина и карточки === */
 
 body.student-dashboard .section-inner {
-  max-width: 1040px; /* Было около 600, делаем пошире только для ЛК */
+  max-width: 1200px; /* Было около 600, делаем пошире только для ЛК */
+}
+/* переопределяем узкий enroll-box только в ЛК ученика */
+body.student-dashboard .enroll-box {
+  max-width: 100%; /* снимаем ограничение 520px */
+}
+/* на всякий случай уберём ограничение у wrapper внутри ЛК */
+body.student-dashboard .wrapper {
+  max-width: 1200px;
 }
 
 .student-dashboard-card {
-  max-width: 900px;
+  width: 100%;
+  max-width: 1120px; /* ширина самой карты */
   margin: 0 auto;
 }
 
 /* Подкарточки "Ваши занятия" и "Домашние задания" */
-
-/* Контейнер двух нижних карточек (занятия + дз) */
-.student-subcards-wrapper {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* две равные колонки */
-  gap: 28px;
-  margin-top: 25px;
-  max-width: 100%;
-}
 
 .student-subcard-title {
   margin: 0 0 10px 0;
@@ -3953,16 +3953,15 @@ body.student-dashboard .section-inner {
 /* Контейнер двух нижних карточек (занятия + дз) */
 .student-subcards-wrapper {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* две равные колонки */
+  grid-template-columns: 1fr 1fr;
   gap: 28px;
   margin-top: 25px;
   max-width: 100%;
 }
 
-/* На широких экранах — две колонки */
+/* На широких экранах — 1.2fr / 1fr */
 @media (min-width: 960px) {
   .student-subcards-wrapper {
-    display: grid;
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
     align-items: flex-start;
   }
