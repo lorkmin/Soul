@@ -13,6 +13,17 @@
     </tr>
   </thead>
   <tbody>
+    <div class="admin-header-row">
+      <h2>Домашние задания</h2>
+      <a
+        href="{{ url_for('teacher_homework_add') }}"
+        class="admin-btn"
+        style="text-decoration: none"
+      >
+        + Выдать новое задание
+      </a>
+    </div>
+
     {% for hw in homework %}
     <tr>
       <td style="white-space: nowrap">{{ hw['created_at'] or '' }}</td>

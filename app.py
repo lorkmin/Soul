@@ -1269,7 +1269,6 @@ def student_dashboard():
 
         if file and file.filename and hw_allowed(file.filename):
             filename = secure_filename(file.filename)
-            # чтобы не было коллизий имён — добавим дату и ID
             ts = datetime.now().strftime("%Y%m%d_%H%M%S")
             new_name = f"stu{student['id']}_{ts}_{filename}"
             abs_path = os.path.join(HOMEWORK_UPLOAD_FOLDER, new_name)
@@ -1277,22 +1276,52 @@ def student_dashboard():
 
             rel_path = f"uploads/homework/{new_name}"
 
-            conn.execute(
-                """
-                INSERT INTO student_homework (
-                    student_id, title, comment,
-                    file_name, file_path, status
-                ) VALUES (?, ?, ?, ?, ?, 'new')
-                """,
-                (
+            # Пытаемся найти последнее "назначенное" задание без файла ученика
+            hw_assigned = conn.execute("""
+                SELECT id
+                FROM student_homework
+                WHERE student_id = ?
+                  AND status = 'assigned'
+                  AND (file_path IS NULL OR file_path = '')
+                ORDER BY created_at ASC
+                LIMIT 1
+            """, (student["id"],)).fetchone()
+
+            if hw_assigned:
+                # привязываем ответ к уже назначенному заданию
+                conn.execute("""
+                    UPDATE student_homework
+                    SET
+                        title = COALESCE(?, title),
+                        comment = ?,
+                        file_name = ?,
+                        file_path = ?,
+                        status = 'new'
+                    WHERE id = ?
+                """, (
+                    title or None,
+                    comment or None,
+                    filename,
+                    rel_path,
+                    hw_assigned["id"],
+                ))
+            else:
+                # обычное самостоятельное отправление ДЗ (как раньше)
+                conn.execute("""
+                    INSERT INTO student_homework (
+                        student_id, title, comment,
+                        file_name, file_path, status
+                    ) VALUES (?, ?, ?, ?, ?, 'new')
+                """, (
                     student["id"],
                     title or None,
                     comment or None,
                     filename,
                     rel_path,
-                ),
-            )
+                ))
+
             conn.commit()
+
 
         # после загрузки — обновим список ДЗ
         homework_list = conn.execute(
@@ -1349,6 +1378,67 @@ def teacher_homework_list():
     conn.close()
     return render_template("teacher_homework_list.html", homework=rows)
 
+@app.route("/teacher/homework/add", methods=["GET", "POST"])
+@teacher_login_required
+def teacher_homework_add():
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+
+    # список учеников для выбора
+    students = conn.execute("""
+        SELECT id, name, public_code, course
+        FROM student_accounts
+        ORDER BY name COLLATE NOCASE
+    """).fetchall()
+
+    if request.method == "POST":
+        student_id = request.form.get("student_id")
+        title = (request.form.get("title") or "").strip()
+        teacher_comment = (request.form.get("teacher_comment") or "").strip()
+        file = request.files.get("teacher_file")
+
+        if not student_id:
+            conn.close()
+            return redirect(url_for("teacher_homework_add"))
+
+        teacher_file_name = None
+        teacher_file_path = None
+
+        if file and file.filename and hw_allowed(file.filename):
+            orig_name = secure_filename(file.filename)
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            new_name = f"task_stu{student_id}_{ts}_{orig_name}"
+            abs_path = os.path.join(HOMEWORK_UPLOAD_FOLDER, new_name)
+            file.save(abs_path)
+
+            teacher_file_name = orig_name
+            teacher_file_path = f"uploads/homework/{new_name}"
+
+        conn.execute("""
+            INSERT INTO student_homework (
+                student_id,
+                title,
+                comment,
+                file_name,
+                file_path,
+                status,
+                teacher_comment,
+                teacher_file_name,
+                teacher_file_path
+            ) VALUES (?, ?, NULL, NULL, NULL, 'assigned', ?, ?, ?)
+        """, (
+            int(student_id),
+            title or None,
+            teacher_comment or None,
+            teacher_file_name,
+            teacher_file_path,
+        ))
+        conn.commit()
+        conn.close()
+        return redirect(url_for("teacher_homework_list"))
+
+    conn.close()
+    return render_template("teacher_homework_add.html", students=students)
 
 
 

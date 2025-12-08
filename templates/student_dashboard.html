@@ -388,18 +388,26 @@
                         ·
                         <strong>{{ hw['title'] or 'Без названия' }}</strong>
                       </div>
-                      <div class="student-homework-status">
-                        {% if hw['status'] == 'checked' %}
-                        <span class="lesson-status-badge lesson-status-done">
-                          Проверено
-                        </span>
-                        {% else %}
-                        <span class="lesson-status-badge lesson-status-planned">
-                          Отправлено
-                        </span>
-                        {% endif %}
-                      </div>
-                    </div>
+ <div class="student-homework-status">
+  {% if hw['status'] == 'checked' %}
+    <span class="lesson-status-badge lesson-status-done">
+      Проверено
+    </span>
+  {% elif hw['status'] == 'assigned' and not hw['file_path'] %}
+    <span class="lesson-status-badge lesson-status-planned">
+      Задание от преподавателя
+    </span>
+  {% elif hw['status'] == 'new' %}
+    <span class="lesson-status-badge lesson-status-planned">
+      Отправлено, ждёт проверки
+    </span>
+  {% else %}
+    <span class="lesson-status-badge lesson-status-planned">
+      В работе
+    </span>
+  {% endif %}
+</div>
+
 
                     {% if hw['comment'] %}
                     <div class="lesson-comment" style="margin-top: 4px">
@@ -407,31 +415,28 @@
                     </div>
                     {% endif %}
 
-                    <div class="student-homework-files">
-                      {% if hw['file_path'] %}
-                      <div>
-                        <span class="lesson-topic">Ваш файл: </span>
-                        <a
-                          href="{{ url_for('static', filename=hw['file_path']) }}"
-                          target="_blank"
-                        >
-                          открыть
-                        </a>
-                      </div>
-                      {% endif %} {% if hw['teacher_file_path'] %}
-                      <div style="margin-top: 2px">
-                        <span class="lesson-topic"
-                          >Файл от преподавателя:
-                        </span>
-                        <a
-                          href="{{ url_for('static', filename=hw['teacher_file_path']) }}"
-                          target="_blank"
-                        >
-                          скачать
-                        </a>
-                      </div>
-                      {% endif %}
-                    </div>
+<div class="student-homework-files">
+  {% if hw['file_path'] %}
+  <div>
+    <span class="lesson-topic">Ваш файл: </span>
+    <a href="{{ url_for('static', filename=hw['file_path']) }}" target="_blank">
+      открыть
+    </a>
+  </div>
+  {% endif %}
+  {% if hw['teacher_file_path'] %}
+  <div style="margin-top: 2px">
+    <span class="lesson-topic">Файл от преподавателя: </span>
+    <a
+      href="{{ url_for('static', filename=hw['teacher_file_path']) }}"
+      target="_blank"
+    >
+      скачать
+    </a>
+  </div>
+  {% endif %}
+</div>
+
 
                     {% if hw['teacher_comment'] %}
                     <div class="lesson-comment" style="margin-top: 6px">
