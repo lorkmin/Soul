@@ -1,0 +1,21 @@
+/* Цветовые переменные и базовая тема */
+:root {
+  --bg-page: #f7f5f1;
+  --bg-hero: linear-gradient(135deg, #fffaf1, #f3f5ff);
+  --bg-section: #ffffff;
+
+  --border-soft: rgba(0, 0, 0, 0.06);
+  --shadow-soft: 0 14px 40px rgba(15, 10, 5, 0.08);
+
+  --accent-yellow: #f4c94c;
+  --accent-yellow-soft: #f9d978;
+
+  --text-main: #1f1a10;
+  --text-muted: #7b7a78;
+
+  --radius-lg: 22px;
+  --radius-md: 16px;
+
+  --transition-fast: 0.16s ease;
+  --transition-med: 0.24s ease;
+}
