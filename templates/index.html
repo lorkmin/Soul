@@ -749,7 +749,7 @@
               <form
                 action="{{ url_for('enroll') }}"
                 method="post"
-                onsubmit="ym(105720041,'reachGoal','Purchase'); return true;"
+                onsubmit="if (typeof ym === 'function') { ym(105720041, 'reachGoal', 'Purchase'); } return true;"
               >
                 <div class="form-row">
                   <div class="form-field">
