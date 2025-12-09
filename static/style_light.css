@@ -4026,3 +4026,61 @@ body.student-dashboard .section-inner {
   transform: translateY(-1px);
   transition: 0.2s;
 }*/
+/* === ЛОГО С ИСКОРКАМИ === */
+
+.logo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+.logo:hover {
+  transform: translateY(-2px) scale(1.03);
+}
+
+/* Лого-картинка с подсветкой */
+.logo-img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.logo:hover .logo-img {
+  filter: drop-shadow(0 0 6px rgba(255, 200, 255, 0.6));
+}
+
+/* === Искорки === */
+
+.logo-sparkles {
+  position: absolute;
+  top: -8px;
+  left: -6px;
+  font-size: 1.1rem;
+  opacity: 0;
+  transform: scale(0.4) rotate(-10deg);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.logo:hover .logo-sparkles {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  animation: sparkle-float 1.2s infinite ease-in-out;
+}
+
+/* Анимация "парящей искорки" */
+@keyframes sparkle-float {
+  0% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.15) rotate(6deg);
+  }
+  100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+}
