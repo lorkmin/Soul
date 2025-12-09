@@ -4006,6 +4006,7 @@ body.student-dashboard .section-inner {
   font-size: 0.85rem;
   opacity: 0.8;
 }
+/*
 @media (max-width: 480px) {
   .logo-img {
     width: 34px;
@@ -4019,7 +4020,7 @@ body.student-dashboard .section-inner {
   .logo-tagline {
     font-size: 0.75rem;
   }
-}
+}*/
 .logo:hover {
   opacity: 0.9;
   transform: translateY(-1px);
