@@ -746,8 +746,11 @@
 
           <div class="enroll-wrapper">
             <div class="enroll-box">
-              <form action="{{ url_for('enroll') }}" method="post"
-                    onsubmit="ym(105720041, 'reachGoal', 'Purchase'); return true;"></form>>
+              <form
+                action="/enroll"
+                method="post"
+                onsubmit="ym(YOUR_COUNTER_ID, 'reachGoal', 'enroll_button'); return true;"
+              >
                 <div class="form-row">
                   <div class="form-field">
                     <label for="enroll-name">Имя</label>
