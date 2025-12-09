@@ -3978,3 +3978,50 @@ body.student-dashboard .section-inner {
   padding-left: 24px;
   padding-right: 24px;
 }
+/* === ЛОГО В ШАПКЕ === */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-img {
+  width: 42px; /* можно увеличить */
+  height: 42px;
+  object-fit: contain;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.logo-main {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.logo-tagline {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+@media (max-width: 480px) {
+  .logo-img {
+    width: 34px;
+    height: 34px;
+  }
+
+  .logo-main {
+    font-size: 1.3rem;
+  }
+
+  .logo-tagline {
+    font-size: 0.75rem;
+  }
+}
+.logo:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  transition: 0.2s;
+}
