@@ -4026,7 +4026,7 @@ body.student-dashboard .section-inner {
   transform: translateY(-1px);
   transition: 0.2s;
 }*/
-/* === ЛОГО С ИСКОРКАМИ === */
+/* === ЛОГО + АНИМАЦИЯ === */
 
 .logo {
   position: relative;
@@ -4034,53 +4034,154 @@ body.student-dashboard .section-inner {
   align-items: center;
   gap: 10px;
   cursor: pointer;
-  transition: transform 0.25s ease;
+  padding: 4px 10px;
+  border-radius: 999px;
+  transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
 }
 
+/* Лёгкое «поднятие» и подсветка фона при ховере */
 .logo:hover {
-  transform: translateY(-2px) scale(1.03);
+  transform: translateY(-1px) scale(1.03);
+  background: rgba(244, 236, 255, 0.8);
+  box-shadow: 0 8px 20px rgba(142, 82, 204, 0.18);
 }
 
-/* Лого-картинка с подсветкой */
+/* Картинка-лого */
 .logo-img {
   width: 42px;
   height: 42px;
   object-fit: contain;
-  transition: filter 0.3s ease, transform 0.3s ease;
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
 
+/* Подсветка самого логотипа */
 .logo:hover .logo-img {
-  filter: drop-shadow(0 0 6px rgba(255, 200, 255, 0.6));
+  transform: scale(1.06);
+  filter: drop-shadow(0 0 8px rgba(255, 210, 255, 0.8));
 }
 
-/* === Искорки === */
+/* Текстовая часть логотипа */
+.logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-main {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.logo-tagline {
+  font-size: 0.78rem;
+  opacity: 0.8;
+}
+
+/* Дополнительное мягкое свечение вокруг логотипа */
+.logo::before {
+  content: "";
+  position: absolute;
+  inset: -4px -8px;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at 30% 0%,
+    rgba(255, 220, 255, 0.5),
+    transparent 60%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.logo:hover::before {
+  opacity: 1;
+}
+
+/* === ИСКОРКИ ВОКРУГ ЛОГО === */
 
 .logo-sparkles {
   position: absolute;
-  top: -8px;
-  left: -6px;
-  font-size: 1.1rem;
-  opacity: 0;
-  transform: scale(0.4) rotate(-10deg);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  inset: 0;
   pointer-events: none;
 }
 
-.logo:hover .logo-sparkles {
-  opacity: 1;
-  transform: scale(1) rotate(0deg);
-  animation: sparkle-float 1.2s infinite ease-in-out;
+/* Базовый стиль искорки */
+.sparkle {
+  position: absolute;
+  font-size: 0.9rem;
+  opacity: 0;
+  transform: scale(0.4);
+  filter: drop-shadow(0 0 4px rgba(255, 240, 255, 0.9));
 }
 
-/* Анимация "парящей искорки" */
-@keyframes sparkle-float {
+/* Позиции искорок вокруг логотипа */
+.sparkle-1 {
+  top: -6px;
+  left: 8px;
+}
+
+.sparkle-2 {
+  top: -10px;
+  right: 28px;
+}
+
+.sparkle-3 {
+  bottom: -6px;
+  right: 4px;
+}
+
+/* Запуск анимации только при ховере */
+.logo:hover .sparkle-1 {
+  animation: sparkle-pop 1.4s ease-out infinite;
+  animation-delay: 0s;
+}
+
+.logo:hover .sparkle-2 {
+  animation: sparkle-pop 1.4s ease-out infinite;
+  animation-delay: 0.15s;
+}
+
+.logo:hover .sparkle-3 {
+  animation: sparkle-pop 1.4s ease-out infinite;
+  animation-delay: 0.3s;
+}
+
+/* Ключевые кадры «фейерверка» */
+@keyframes sparkle-pop {
   0% {
+    opacity: 0;
+    transform: translateY(4px) scale(0.2) rotate(-10deg);
+  }
+  20% {
+    opacity: 1;
     transform: translateY(0) scale(1) rotate(0deg);
   }
-  50% {
-    transform: translateY(-4px) scale(1.15) rotate(6deg);
+  60% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.15) rotate(8deg);
   }
   100% {
-    transform: translateY(0) scale(1) rotate(0deg);
+    opacity: 0;
+    transform: translateY(2px) scale(0.4) rotate(0deg);
+  }
+}
+
+/* Немного ужимаем лого на совсем маленьких экранах */
+@media (max-width: 480px) {
+  .logo {
+    padding: 2px 6px;
+    gap: 6px;
+  }
+
+  .logo-img {
+    width: 34px;
+    height: 34px;
+  }
+
+  .logo-main {
+    font-size: 1rem;
+  }
+
+  .logo-tagline {
+    font-size: 0.7rem;
   }
 }

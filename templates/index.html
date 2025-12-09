@@ -65,14 +65,21 @@
       <header id="mainHeader" class="top-bar">
         <div class="top-bar-inner">
           <div class="logo">
-            <div class="logo-sparkles">✨</div>
+            <!-- Искорки -->
+            <div class="logo-sparkles">
+              <span class="sparkle sparkle-1">✨</span>
+              <span class="sparkle sparkle-2">✦</span>
+              <span class="sparkle sparkle-3">✧</span>
+            </div>
 
+            <!-- Картинка-лого -->
             <img
               src="{{ url_for('static', filename='img/logo.png') }}"
               alt="K-Spark"
               class="logo-img"
             />
 
+            <!-- Текст рядом с логотипом -->
             <div class="logo-text">
               <div class="logo-main">K-Spark</div>
               <div class="logo-tagline">Онлайн школа корейского языка</div>
