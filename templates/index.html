@@ -64,7 +64,7 @@
       <!-- ШАПКА -->
       <header id="mainHeader" class="top-bar">
         <div class="top-bar-inner">
-          <div class="logo">
+          <div class="logo" id="site-logo">
             <!-- Искорки -->
             <div class="logo-sparkles">
               <span class="sparkle sparkle-1">✨</span>
@@ -1270,6 +1270,21 @@
             }
           });
         });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const logo = document.getElementById("site-logo");
+
+        if (logo) {
+          logo.addEventListener("click", (e) => {
+            e.preventDefault();
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          });
+        }
       });
     </script>
   </body>
