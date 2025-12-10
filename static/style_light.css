@@ -4316,3 +4316,21 @@ body.student-dashboard .section-inner {
     box-shadow: 0 0 0 rgba(255, 170, 0, 0.15);
   }
 }
+/* === Личный кабинет: единый фон страницы === */
+body.student-dashboard {
+  background: #faf7ff !important; /* единый светлый фон */
+  background-image: none !important;
+}
+
+/* На всякий случай убираем фоны у внутренних элементов */
+body.student-dashboard .wrapper,
+body.student-dashboard section,
+body.student-dashboard .section-inner {
+  background: transparent !important;
+}
+
+/* Если использовался спец-фон у hero/верхней карточки — отключаем */
+body.student-dashboard .student-hero-card::before,
+body.student-dashboard .student-hero-card::after {
+  background: none !important;
+}
