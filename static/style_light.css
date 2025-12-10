@@ -3902,8 +3902,9 @@ body.student-dashboard {
 /* === ЛК ученика: общая ширина и карточки === */
 
 body.student-dashboard .section-inner {
-  max-width: 1200px; /* Было около 600, делаем пошире только для ЛК */
+  max-width: 1040px; /* Было около 600, делаем пошире только для ЛК */
 }
+
 /* переопределяем узкий enroll-box только в ЛК ученика */
 body.student-dashboard .enroll-box {
   max-width: 100%; /* снимаем ограничение 520px */
@@ -4184,4 +4185,15 @@ body.student-dashboard .section-inner {
   .logo-tagline {
     font-size: 0.7rem;
   }
+}
+/* ЛК ученика: правильное центрирование и ширина */
+body.student-dashboard .wrapper {
+  max-width: 1120px; /* пошире, чем обычные страницы */
+  margin: 0 auto; /* центрируем по экрану */
+  padding: 0 24px; /* симметричные отступы слева/справа */
+  box-sizing: border-box;
+}
+
+body.student-dashboard .section-inner {
+  max-width: 100%; /* занимает всю ширину wrapper */
 }
