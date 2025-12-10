@@ -3902,8 +3902,9 @@ body.student-dashboard {
 /* === ЛК ученика: общая ширина и карточки === */
 
 body.student-dashboard .section-inner {
-  max-width: 1200px; /* Было около 600, делаем пошире только для ЛК */
+  max-width: 1040px; /* Было около 600, делаем пошире только для ЛК */
 }
+
 /* переопределяем узкий enroll-box только в ЛК ученика */
 body.student-dashboard .enroll-box {
   max-width: 100%; /* снимаем ограничение 520px */
@@ -4183,5 +4184,135 @@ body.student-dashboard .section-inner {
 
   .logo-tagline {
     font-size: 0.7rem;
+  }
+}
+/* ЛК ученика: правильное центрирование и ширина */
+body.student-dashboard .wrapper {
+  max-width: 1120px; /* пошире, чем обычные страницы */
+  margin: 0 auto; /* центрируем по экрану */
+  padding: 0 24px; /* симметричные отступы слева/справа */
+  box-sizing: border-box;
+}
+
+.student-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+
+  padding: 18px 20px;
+  margin: 26px 0;
+
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ffdf9e, #ffc363);
+  border: 2px solid #ffb84a;
+
+  box-shadow: 0 0 0 rgba(255, 170, 0, 0);
+  animation: studentAlertPulse 2s infinite ease-in-out;
+
+  color: #5a3500;
+}
+
+@keyframes studentAlertPulse {
+  0% {
+    box-shadow: 0 0 0 rgba(255, 170, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(255, 170, 0, 0.45);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(255, 170, 0, 0.2);
+  }
+}
+.student-alert {
+  margin: 18px 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 196, 0, 0.4);
+  background: rgba(255, 249, 219, 0.8);
+  font-size: 0.9rem;
+}
+
+.student-alert-warning {
+  /* можно добавить лёгкую тень по вкусу */
+  box-shadow: 0 6px 18px rgba(255, 196, 0, 0.18);
+}
+
+.student-alert-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.student-alert-title::before {
+  content: "🔔";
+  font-size: 1rem;
+}
+
+.student-alert-text {
+  color: #7a5a00;
+  line-height: 1.4;
+}
+
+.student-alert-icon {
+  font-size: 2rem;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.student-alert-content {
+  flex: 1;
+}
+
+.student-alert-title {
+  font-weight: 700;
+  font-size: 1.15rem;
+  margin-bottom: 6px;
+}
+
+.student-alert-text {
+  font-size: 0.95rem;
+  line-height: 1.45;
+  margin-bottom: 12px;
+}
+
+.student-alert-button {
+  display: inline-block;
+  background: #ff8f1f;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.25s;
+  box-shadow: 0 4px 10px rgba(255, 134, 20, 0.35);
+}
+
+.student-alert-button:hover {
+  background: #ff7704;
+  box-shadow: 0 6px 14px rgba(255, 134, 20, 0.55);
+}
+
+body.student-dashboard .section-inner {
+  max-width: 100%; /* занимает всю ширину wrapper */
+}
+.student-alert-wrapper {
+  max-width: 820px; /* Ширина как у карточек */
+  margin: 0 auto 25px; /* Отцентрируем */
+}
+.student-alert {
+  width: 100%;
+  box-sizing: border-box;
+}
+@keyframes studentAlertPulse {
+  0% {
+    box-shadow: 0 0 0 rgba(255, 170, 0, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(255, 170, 0, 0.35);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(255, 170, 0, 0.15);
   }
 }

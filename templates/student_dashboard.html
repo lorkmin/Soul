@@ -59,7 +59,24 @@
             (done * 100 / total)|round(0)|int %} {% else %} {% set done = 0 %}
             {% set percent = 0 %} {% endif %} {% set done_count =
             lessons_done|length %}
+{% if total > 0 and left <= 0 %}
+<div class="student-alert-wrapper">
+  <div class="student-alert student-alert-warning">
+    <div class="student-alert-icon">⚠️</div>
 
+    <div class="student-alert-content">
+      <div class="student-alert-title">
+        Пакет занятий закончился
+      </div>
+
+      <div class="student-alert-text">
+        Новые уроки не будут проводиться, пока вы не продлите обучение 💛  
+        Свяжитесь с преподавателем или администратором, чтобы купить следующий пакет.
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
             <!-- ВЕРХНЯЯ КАРТОЧКА С УЧЕНИКОМ -->
             <div class="student-hero-card">
               <div class="student-hero-main">
