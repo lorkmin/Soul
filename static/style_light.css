@@ -4223,6 +4223,37 @@ body.student-dashboard .wrapper {
     box-shadow: 0 0 0 rgba(255, 170, 0, 0.2);
   }
 }
+.student-alert {
+  margin: 18px 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 196, 0, 0.4);
+  background: rgba(255, 249, 219, 0.8);
+  font-size: 0.9rem;
+}
+
+.student-alert-warning {
+  /* можно добавить лёгкую тень по вкусу */
+  box-shadow: 0 6px 18px rgba(255, 196, 0, 0.18);
+}
+
+.student-alert-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.student-alert-title::before {
+  content: "🔔";
+  font-size: 1rem;
+}
+
+.student-alert-text {
+  color: #7a5a00;
+  line-height: 1.4;
+}
 
 .student-alert-icon {
   font-size: 2rem;
