@@ -1378,6 +1378,47 @@ def teacher_homework_list():
     conn.close()
     return render_template("teacher_homework_list.html", homework=rows)
 
+@app.post("/teacher/homework/<int:hw_id>/delete")
+@teacher_login_required
+def teacher_homework_delete(hw_id):
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+
+    hw = conn.execute(
+        "SELECT file_path, teacher_file_path FROM student_homework WHERE id = ?",
+        (hw_id,),
+    ).fetchone()
+
+    if not hw:
+        conn.close()
+        flash("Домашнее задание не найдено", "error")
+        return redirect(url_for("teacher_homework_list"))
+
+    # удаляем файлы (если есть)
+    def _delete_static_file(rel_path: str):
+        if not rel_path:
+            return
+        # rel_path у тебя вида "uploads/homework/xxx.ext"
+        abs_path = os.path.join(BASE_DIR, "static", rel_path)
+        try:
+            if os.path.exists(abs_path):
+                os.remove(abs_path)
+        except Exception:
+            # не валим удаление записи из БД из-за проблем с ФС
+            pass
+
+    _delete_static_file(hw["file_path"])
+    _delete_static_file(hw["teacher_file_path"])
+
+    # удаляем запись из таблицы
+    conn.execute("DELETE FROM student_homework WHERE id = ?", (hw_id,))
+    conn.commit()
+    conn.close()
+
+    flash("Домашнее задание удалено", "success")
+    return redirect(url_for("teacher_homework_list"))
+
+
 @app.route("/teacher/homework/add", methods=["GET", "POST"])
 @teacher_login_required
 def teacher_homework_add():

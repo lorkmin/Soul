@@ -66,13 +66,24 @@
         <span class="badge-status">{{ hw['status'] }}</span>
         {% endif %}
       </td>
-      <td>
+      <td style="white-space: nowrap">
         <a
           href="{{ url_for('teacher_homework_review', hw_id=hw['id']) }}"
           class="admin-btn"
         >
           Проверить
         </a>
+
+        <form
+          method="post"
+          action="{{ url_for('teacher_homework_delete', hw_id=hw['id']) }}"
+          style="display: inline"
+          onsubmit="return confirm('Удалить это ДЗ? Запись и файлы будут удалены.');"
+        >
+          <button type="submit" class="admin-btn admin-btn-danger">
+            Удалить
+          </button>
+        </form>
       </td>
     </tr>
     {% else %}

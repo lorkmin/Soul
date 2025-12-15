@@ -4334,3 +4334,11 @@ body.student-dashboard .student-hero-card::before,
 body.student-dashboard .student-hero-card::after {
   background: none !important;
 }
+.admin-btn-danger {
+  background: #ff4d4f;
+  color: #fff;
+  border: none;
+}
+.admin-btn-danger:hover {
+  filter: brightness(0.95);
+}
