@@ -4550,3 +4550,13 @@ body.student-dashboard .student-hero-card::after {
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.8);
 }
+.bot-toggle {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  cursor: pointer;
+}
+
+.bot-toggle input {
+  pointer-events: auto !important;
+  cursor: pointer;
+}
