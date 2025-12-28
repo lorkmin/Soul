@@ -4393,3 +4393,58 @@ body.student-dashboard .student-hero-card::after {
 .admin-row-bot:hover {
   background: rgba(255, 77, 77, 0.12);
 }
+.admin-col-bot {
+  text-align: center;
+  width: 90px;
+}
+
+.badge-bot {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: linear-gradient(135deg, #ff4d4d, #ff9f43);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(255, 77, 77, 0.35);
+}
+
+.badge-human {
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.admin-row-bot {
+  background: rgba(255, 77, 77, 0.06);
+}
+.admin-row-bot:hover {
+  background: rgba(255, 77, 77, 0.12);
+}
+
+.admin-enroll-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.admin-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.admin-input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fff;
+  outline: none;
+}
+
+.admin-btn.admin-btn-small {
+  padding: 8px 12px;
+  border-radius: 10px;
+}
