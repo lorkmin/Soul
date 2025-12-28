@@ -23,7 +23,7 @@
 
   <tbody>
     {% for e in enrolls %}
-    <tr class="{% if e.is_bot %}admin-row-bot{% endif %}">
+    <tr class="{% if e.is_bot %}enroll-is-bot{% endif %}">
       <td>{{ e.id }}</td>
 
       <td>
@@ -41,27 +41,25 @@
         <div class="admin-meta">{{ e.level or "—" }}</div>
       </td>
 
-      <td>
-        {{ e.comment or "" }} {% if e.admin_note %}
-        <div class="admin-note">📝 {{ e.admin_note }}</div>
-        {% endif %}
-      </td>
+      <td>{{ e.comment or "" }}</td>
 
-      <td class="admin-col-bot">
+      <!-- ✅ Отдельный столбец "Бот" -->
+      <td style="white-space: nowrap">
         {% if e.is_bot %}
-        <span class="badge-bot">🤖 BOT</span>
+        <span class="bot-badge">🤖 БОТ</span>
         {% else %}
-        <span class="badge-human">—</span>
+        <span class="bot-badge bot-badge--off">—</span>
         {% endif %}
       </td>
 
-      <td>
+      <!-- ✅ Действия: одна форма на строку -->
+      <td class="enroll-actions-cell">
         <form
           method="post"
           action="{{ url_for('admin_enroll_note', enroll_id=e.id) }}"
-          class="admin-enroll-actions"
+          class="enroll-actions-form"
         >
-          <label class="admin-checkbox">
+          <label class="bot-toggle">
             <input
               type="checkbox"
               name="is_bot"
@@ -73,23 +71,25 @@
               endif
               %}
             />
-            Это бот
+            <span class="bot-toggle-ui"></span>
+            <span class="bot-toggle-text">Это бот</span>
           </label>
 
           <input
             type="text"
             name="admin_note"
+            class="admin-note-input"
             placeholder="Заметка админа (для себя)"
             value="{{ e.admin_note or '' }}"
-            class="admin-input"
           />
 
-          <button type="submit" class="admin-btn admin-btn-small">
+          <button type="submit" class="admin-btn admin-btn-save">
             Сохранить
           </button>
         </form>
       </td>
     </tr>
+
     {% else %}
     <tr>
       <td colspan="7">Пока нет заявок.</td>

@@ -4448,3 +4448,105 @@ body.student-dashboard .student-hero-card::after {
   padding: 8px 12px;
   border-radius: 10px;
 }
+/* Яркий бейдж "БОТ" в отдельной колонке */
+.bot-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  background: rgba(255, 95, 95, 0.18);
+  border: 1px solid rgba(255, 95, 95, 0.35);
+  color: #ffb3b3;
+}
+
+.bot-badge--off {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* Ячейка действий */
+.enroll-actions-cell {
+  min-width: 360px;
+}
+
+/* Форма действий: аккуратная колонка */
+.enroll-actions-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+/* Поле заметки */
+.admin-note-input {
+  width: 100%;
+  height: 36px;
+  border-radius: 10px;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.18);
+  color: #fff;
+}
+
+/* Кнопка сохранить */
+.admin-btn-save {
+  width: 100%;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+/* Тумблер "Это бот" */
+.bot-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  user-select: none;
+}
+
+.bot-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bot-toggle-ui {
+  width: 44px;
+  height: 26px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  position: relative;
+  transition: 0.2s;
+  flex: 0 0 auto;
+}
+
+.bot-toggle-ui::after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  background: rgba(255, 255, 255, 0.85);
+  transition: 0.2s;
+}
+
+.bot-toggle input:checked + .bot-toggle-ui {
+  background: rgba(255, 95, 95, 0.35);
+  border-color: rgba(255, 95, 95, 0.55);
+}
+
+.bot-toggle input:checked + .bot-toggle-ui::after {
+  left: 22px;
+}
+
+.bot-toggle-text {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}

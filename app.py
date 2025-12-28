@@ -683,6 +683,7 @@ def admin_enrolls_export():
     )
 
 
+
 @app.post("/admin/enrolls/<int:enroll_id>/note")
 @login_required
 def admin_enroll_note(enroll_id: int):
