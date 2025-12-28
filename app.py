@@ -590,14 +590,27 @@ def admin_index():
 @login_required
 def admin_enrolls():
     conn = get_db()
+    conn.row_factory = sqlite3.Row
+
     enrolls = conn.execute(
         """
-        SELECT id, created_at, ip, name, contact, tariff, level, comment, is_bot, admin_note
+        SELECT
+            id,
+            created_at,
+            ip,
+            name,
+            contact,
+            tariff,
+            level,
+            comment,
+            COALESCE(admin_note, '') AS admin_note,
+            COALESCE(is_bot, 0)      AS is_bot
         FROM enrolls
         ORDER BY created_at DESC
         LIMIT 500
         """
     ).fetchall()
+
     conn.close()
     return render_template("admin_enrolls.html", enrolls=enrolls)
 
@@ -606,31 +619,59 @@ def admin_enrolls():
 @login_required
 def admin_enrolls_export():
     """
-    Экспорт заявок в CSV.
+    Экспорт заявок в CSV (с admin_note и is_bot).
     """
     conn = get_db()
+    conn.row_factory = sqlite3.Row
+
     rows = conn.execute(
         """
-        SELECT id, created_at, ip, name, contact, tariff, level, comment
+        SELECT
+            id,
+            created_at,
+            ip,
+            name,
+            contact,
+            tariff,
+            level,
+            comment,
+            COALESCE(admin_note, '') AS admin_note,
+            COALESCE(is_bot, 0)      AS is_bot
         FROM enrolls
         ORDER BY created_at DESC
         """
     ).fetchall()
+
     conn.close()
 
     output = io.StringIO()
     writer = csv.writer(output, delimiter=";")
-    writer.writerow(["id", "created_at", "ip", "name", "contact", "tariff", "level", "comment"])
-    for row in rows:
+
+    writer.writerow([
+        "id",
+        "created_at",
+        "ip",
+        "name",
+        "contact",
+        "tariff",
+        "level",
+        "comment",
+        "admin_note",
+        "is_bot",
+    ])
+
+    for r in rows:
         writer.writerow([
-            row["id"],
-            row["created_at"],
-            row["ip"],
-            row["name"],
-            row["contact"],
-            row["tariff"] or "",
-            row["level"] or "",
-            row["comment"] or "",
+            r["id"],
+            r["created_at"] or "",
+            r["ip"] or "",
+            r["name"] or "",
+            r["contact"] or "",
+            r["tariff"] or "",
+            r["level"] or "",
+            r["comment"] or "",
+            r["admin_note"] or "",
+            1 if (r["is_bot"] or 0) else 0,
         ])
 
     output.seek(0)
@@ -640,6 +681,7 @@ def admin_enrolls_export():
         as_attachment=True,
         download_name="enrolls.csv",
     )
+
 
 @app.post("/admin/enrolls/<int:enroll_id>/note")
 @login_required
