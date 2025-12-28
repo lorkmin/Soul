@@ -16,12 +16,12 @@
       <th>Имя / Контакт</th>
       <th>Пакет / Уровень</th>
       <th>Комментарий</th>
-      <th>Админ</th>
+      <th class="admin-col-bot">Бот</th>
     </tr>
   </thead>
   <tbody>
     {% for e in enrolls %}
-    <tr class="{% if e.is_bot %}row-bot{% endif %}">
+    <tr class="{% if e.is_bot %}admin-row-bot{% endif %}">
       <td>{{ e.id }}</td>
 
       <td>
@@ -30,14 +30,8 @@
       </td>
 
       <td>
-        <div><strong>{{ e.name }}</strong></div>
+        <div>{{ e.name }}</div>
         <div class="admin-meta">{{ e.contact }}</div>
-
-        {% if e.is_bot %}
-        <div style="margin-top: 4px">
-          <span class="badge-status badge-status-bot">🤖 Бот</span>
-        </div>
-        {% endif %}
       </td>
 
       <td>
@@ -45,48 +39,18 @@
         <div class="admin-meta">{{ e.level or "—" }}</div>
       </td>
 
-      <td>{{ e.comment or "" }}</td>
+      <td>
+        {{ e.comment or "" }} {% if e.admin_note %}
+        <div class="admin-note">📝 {{ e.admin_note }}</div>
+        {% endif %}
+      </td>
 
-      <td style="min-width: 220px">
-        <!-- заметка -->
-        <form
-          method="post"
-          action="{{ url_for('admin_enroll_note', enroll_id=e.id) }}"
-          style="margin-bottom: 6px"
-        >
-          <textarea
-            name="admin_note"
-            rows="2"
-            placeholder="Заметка админа…"
-            style="width: 100%; font-size: 0.85rem"
-          >
-{{ e.admin_note or "" }}</textarea
-          >
-          <button class="admin-btn admin-btn-small" type="submit">💾</button>
-        </form>
-
-        <!-- кнопки бот / не бот -->
-        <div style="display: flex; gap: 6px">
-          <form
-            method="post"
-            action="{{ url_for('admin_enroll_bot', enroll_id=e.id) }}"
-          >
-            <input type="hidden" name="value" value="1" />
-            <button class="admin-btn admin-btn-small" type="submit">
-              🤖 Бот
-            </button>
-          </form>
-
-          <form
-            method="post"
-            action="{{ url_for('admin_enroll_bot', enroll_id=e.id) }}"
-          >
-            <input type="hidden" name="value" value="0" />
-            <button class="admin-btn admin-btn-small" type="submit">
-              ✅ Не бот
-            </button>
-          </form>
-        </div>
+      <td class="admin-col-bot">
+        {% if e.is_bot %}
+        <span class="badge-bot">🤖 BOT</span>
+        {% else %}
+        <span class="badge-human">—</span>
+        {% endif %}
       </td>
     </tr>
     {% else %}

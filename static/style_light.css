@@ -4361,3 +4361,35 @@ body.student-dashboard .student-hero-card::after {
   padding: 4px 8px;
   font-size: 0.75rem;
 }
+/* ===== BOT BADGE ===== */
+
+.admin-col-bot {
+  text-align: center;
+  width: 90px;
+}
+
+.badge-bot {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: linear-gradient(135deg, #ff4d4d, #ff9f43);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(255, 77, 77, 0.35);
+}
+
+.badge-human {
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+/* Подсветка всей строки-бота */
+.admin-row-bot {
+  background: rgba(255, 77, 77, 0.06);
+}
+
+.admin-row-bot:hover {
+  background: rgba(255, 77, 77, 0.12);
+}
