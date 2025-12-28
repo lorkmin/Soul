@@ -154,6 +154,15 @@ def init_db():
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
     """)
+    try:
+        cur.execute("ALTER TABLE enrolls ADD COLUMN is_bot INTEGER DEFAULT 0")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        cur.execute("ALTER TABLE enrolls ADD COLUMN admin_note TEXT")
+    except sqlite3.OperationalError:
+        pass
 
 
     # ---- TEACHERS ----
@@ -583,7 +592,7 @@ def admin_enrolls():
     conn = get_db()
     enrolls = conn.execute(
         """
-        SELECT id, created_at, ip, name, contact, tariff, level, comment
+        SELECT id, created_at, ip, name, contact, tariff, level, comment, is_bot, admin_note
         FROM enrolls
         ORDER BY created_at DESC
         LIMIT 500
@@ -631,6 +640,38 @@ def admin_enrolls_export():
         as_attachment=True,
         download_name="enrolls.csv",
     )
+
+@app.post("/admin/enrolls/<int:enroll_id>/note")
+@login_required
+def admin_enroll_note(enroll_id: int):
+    note = (request.form.get("admin_note") or "").strip()
+
+    conn = get_db()
+    conn.execute(
+        "UPDATE enrolls SET admin_note = ? WHERE id = ?",
+        (note or None, enroll_id),
+    )
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for("admin_enrolls"))
+
+
+@app.post("/admin/enrolls/<int:enroll_id>/bot")
+@login_required
+def admin_enroll_bot(enroll_id: int):
+    value = 1 if (request.form.get("value") == "1") else 0
+
+    conn = get_db()
+    conn.execute(
+        "UPDATE enrolls SET is_bot = ? WHERE id = ?",
+        (value, enroll_id),
+    )
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for("admin_enrolls"))
+
 
 
 # ================== АДМИНКА: ОТЗЫВЫ ==================
