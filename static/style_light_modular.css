@@ -1,4 +1,5 @@
 /* Новый модульный стиль: подключает тему, базу и ЛК ученика */
-@import url('theme.css');
-@import url('base.css');
-@import url('student-dashboard.css');
+@import url("theme.css");
+@import url("base.css");
+@import url("student-dashboard.css");
+@import url("admin_enrolls.css");

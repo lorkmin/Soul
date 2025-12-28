@@ -1,0 +1,147 @@
+/* ===== Admin Enrolls: bot + notes (clean UI) ===== */
+
+.admin-note-box {
+  display: grid;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Top row: switch + status badge */
+.bot-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* BOT badge (in bot column) */
+.bot-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.85);
+}
+.bot-badge .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.35);
+}
+.bot-badge.is-bot {
+  background: rgba(255, 70, 70, 0.16);
+  border-color: rgba(255, 70, 70, 0.35);
+  color: rgba(255, 255, 255, 0.92);
+}
+.bot-badge.is-bot .dot {
+  background: rgba(255, 70, 70, 0.95);
+  box-shadow: 0 0 0 3px rgba(255, 70, 70, 0.18);
+}
+
+/* Switch */
+.bot-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  user-select: none;
+}
+.bot-switch input {
+  display: none;
+}
+.bot-switch .track {
+  width: 46px;
+  height: 26px;
+  border-radius: 999px;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.08);
+  transition: background 0.2s ease, border-color 0.2s ease;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+.bot-switch .thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  transition: transform 0.2s ease;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+.bot-switch .label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.88);
+}
+.bot-switch input:checked + .track {
+  background: rgba(255, 70, 70, 0.26);
+  border-color: rgba(255, 70, 70, 0.45);
+}
+.bot-switch input:checked + .track .thumb {
+  transform: translateX(20px);
+}
+
+/* Notes textarea */
+.admin-note-input {
+  width: 100%;
+  min-height: 62px;
+  resize: vertical;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.2);
+  color: rgba(255, 255, 255, 0.92);
+  outline: none;
+}
+.admin-note-input::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+.admin-note-input:focus {
+  border-color: rgba(255, 205, 90, 0.55);
+  box-shadow: 0 0 0 3px rgba(255, 205, 90, 0.12);
+}
+
+/* Saved note preview */
+.admin-note-preview {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 205, 90, 0.1);
+  border: 1px solid rgba(255, 205, 90, 0.22);
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.9rem;
+}
+.admin-note-preview .icon {
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.note-actions-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.note-hint {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.55);
+  margin-top: -4px;
+}
+
+/* optional: highlight bot rows */
+tr.is-bot-row {
+  background: rgba(255, 70, 70, 0.06);
+}
