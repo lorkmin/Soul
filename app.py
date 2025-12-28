@@ -590,16 +590,22 @@ def admin_index():
 @login_required
 def admin_enrolls():
     conn = get_db()
-    enrolls = conn.execute(
-        """
+    enrolls = conn.execute("""
         SELECT
-            id, created_at, ip, name, contact, tariff, level, comment,
-            is_bot, admin_note
+            id,
+            created_at,
+            ip,
+            name,
+            contact,
+            tariff,
+            level,
+            comment,
+            admin_note,
+            is_bot
         FROM enrolls
         ORDER BY created_at DESC
-        LIMIT 500
-        """
-    ).fetchall()
+    """).fetchall()
+
     conn.close()
     return render_template("admin_enrolls.html", enrolls=enrolls)
 
@@ -678,17 +684,26 @@ def admin_enrolls_export():
 @login_required
 def admin_enroll_note(enroll_id: int):
     note = (request.form.get("admin_note") or "").strip()
-    is_bot = 1 if request.form.get("is_bot") in ("1", "on", "true", "True") else 0
+
+    # Из-за hidden+checkbox приходят два значения: ['0'] или ['0','1']
+    is_bot_vals = request.form.getlist("is_bot")
+    is_bot = 1 if "1" in is_bot_vals else 0
 
     conn = get_db()
     conn.execute(
-        "UPDATE enrolls SET admin_note = ?, is_bot = ? WHERE id = ?",
+        """
+        UPDATE enrolls
+        SET admin_note = ?, is_bot = ?
+        WHERE id = ?
+        """,
         (note or None, is_bot, enroll_id),
     )
     conn.commit()
     conn.close()
 
     return redirect(url_for("admin_enrolls"))
+
+
 
 
 
