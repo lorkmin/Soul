@@ -1,5 +1,14 @@
 {% extends "admin_layout.html" %} {% block content %}
-<div class="top-actions">
+<div
+  class="top-actions"
+  style="
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+  "
+>
   <div>Всего заявок: {{ enrolls|length }}</div>
   <div>
     <a class="btn-link" href="{{ url_for('admin_enrolls_export') }}"
@@ -8,7 +17,80 @@
   </div>
 </div>
 
-<table class="admin-table">
+<style>
+  /* локальные стили, чтобы не ломать остальную админку */
+  .admin-enrolls-table td,
+  .admin-enrolls-table th {
+    vertical-align: top;
+  }
+  .admin-enrolls-meta {
+    opacity: 0.75;
+    font-size: 0.85rem;
+    margin-top: 4px;
+  }
+  .admin-enrolls-actions {
+    min-width: 340px;
+  }
+
+  .bot-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .bot-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .bot-toggle input {
+    width: 18px;
+    height: 18px;
+  }
+
+  .bot-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    background: rgba(255, 80, 120, 0.12);
+    border: 1px solid rgba(255, 80, 120, 0.35);
+    color: #ff8aa7;
+    white-space: nowrap;
+  }
+  .bot-pill.is-off {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 600;
+  }
+
+  .admin-note-input {
+    width: 100%;
+    min-height: 38px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(0, 0, 0, 0.15);
+    color: #fff;
+    resize: vertical;
+  }
+  .admin-note-input.admin-note-filled {
+    border-color: rgba(255, 215, 90, 0.55);
+    box-shadow: 0 0 0 3px rgba(255, 215, 90, 0.15);
+    background: rgba(255, 215, 90, 0.08);
+  }
+
+  .admin-save-btn {
+    width: 100%;
+    margin-top: 10px;
+  }
+</style>
+
+<table class="admin-table admin-enrolls-table">
   <thead>
     <tr>
       <th>#</th>
@@ -16,50 +98,53 @@
       <th>Имя / Контакт</th>
       <th>Пакет / Уровень</th>
       <th>Комментарий</th>
-      <th class="admin-col-bot">Бот</th>
-      <th style="width: 320px">Действия</th>
+      <th>Бот</th>
+      <th>Действия</th>
     </tr>
   </thead>
-
   <tbody>
     {% for e in enrolls %}
-    <tr class="{% if e.is_bot %}enroll-is-bot{% endif %}">
+    <tr>
       <td>{{ e.id }}</td>
 
-      <td>
+      <td style="white-space: nowrap">
         <div>{{ e.created_at }}</div>
-        <div class="admin-meta">{{ e.ip }}</div>
+        <div class="admin-enrolls-meta">{{ e.ip }}</div>
       </td>
 
       <td>
-        <div>{{ e.name }}</div>
-        <div class="admin-meta">{{ e.contact }}</div>
+        <div><strong>{{ e.name }}</strong></div>
+        <div class="admin-enrolls-meta">{{ e.contact }}</div>
       </td>
 
       <td>
         <div>{{ e.tariff or "—" }}</div>
-        <div class="admin-meta">{{ e.level or "—" }}</div>
+        <div class="admin-enrolls-meta">{{ e.level or "—" }}</div>
       </td>
 
-      <td>{{ e.comment or "" }}</td>
-
-      <!-- ✅ Отдельный столбец "Бот" -->
-      <td style="white-space: nowrap">
-        {% if e.is_bot %}
-        <span class="bot-badge">🤖 БОТ</span>
-        {% else %}
-        <span class="bot-badge bot-badge--off">—</span>
-        {% endif %}
+      <td>
+        <div>{{ e.comment or "" }}</div>
       </td>
 
-      <!-- ✅ Действия: одна форма на строку -->
-      <td class="enroll-actions-cell">
+      <td>
+        <div class="bot-cell">
+          {% if e.is_bot %}
+          <span class="bot-pill">🤖 БОТ</span>
+          {% else %}
+          <span class="bot-pill is-off">—</span>
+          {% endif %}
+        </div>
+      </td>
+
+      <td class="admin-enrolls-actions">
         <form
           method="post"
           action="{{ url_for('admin_enroll_note', enroll_id=e.id) }}"
-          class="enroll-actions-form"
         >
-          <label class="bot-toggle">
+          {# чтобы чекбокс всегда присылал значение #}
+          <input type="hidden" name="is_bot" value="0" />
+
+          <label class="bot-toggle" style="margin-bottom: 8px; display: flex">
             <input
               type="checkbox"
               name="is_bot"
@@ -71,25 +156,23 @@
               endif
               %}
             />
-            <span class="bot-toggle-ui"></span>
-            <span class="bot-toggle-text">Это бот</span>
+            <span style="opacity: 0.9">Пометить как бота</span>
           </label>
 
-          <input
-            type="text"
+          <textarea
             name="admin_note"
-            class="admin-note-input"
+            class="admin-note-input {% if e.admin_note %}admin-note-filled{% endif %}"
             placeholder="Заметка админа (для себя)"
-            value="{{ e.admin_note or '' }}"
-          />
+          >
+{{ e.admin_note or '' }}</textarea
+          >
 
-          <button type="submit" class="admin-btn admin-btn-save">
+          <button class="admin-btn admin-save-btn" type="submit">
             Сохранить
           </button>
         </form>
       </td>
     </tr>
-
     {% else %}
     <tr>
       <td colspan="7">Пока нет заявок.</td>

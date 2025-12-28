@@ -590,29 +590,19 @@ def admin_index():
 @login_required
 def admin_enrolls():
     conn = get_db()
-    conn.row_factory = sqlite3.Row
-
     enrolls = conn.execute(
         """
         SELECT
-            id,
-            created_at,
-            ip,
-            name,
-            contact,
-            tariff,
-            level,
-            comment,
-            COALESCE(admin_note, '') AS admin_note,
-            COALESCE(is_bot, 0)      AS is_bot
+            id, created_at, ip, name, contact, tariff, level, comment,
+            is_bot, admin_note
         FROM enrolls
         ORDER BY created_at DESC
         LIMIT 500
         """
     ).fetchall()
-
     conn.close()
     return render_template("admin_enrolls.html", enrolls=enrolls)
+
 
 
 @app.get("/admin/enrolls/export")
@@ -689,15 +679,26 @@ def admin_enrolls_export():
 def admin_enroll_note(enroll_id: int):
     note = (request.form.get("admin_note") or "").strip()
 
+    # чекбокс: если не отмечен — придёт "0" из hidden-поля
+    is_bot_raw = request.form.get("is_bot", "0")
+    is_bot = 1 if str(is_bot_raw) == "1" else 0
+
     conn = get_db()
     conn.execute(
-        "UPDATE enrolls SET admin_note = ? WHERE id = ?",
-        (note or None, enroll_id),
+        """
+        UPDATE enrolls
+        SET
+            admin_note = ?,
+            is_bot = ?
+        WHERE id = ?
+        """,
+        (note or None, is_bot, enroll_id),
     )
     conn.commit()
     conn.close()
 
     return redirect(url_for("admin_enrolls"))
+
 
 
 @app.post("/admin/enrolls/<int:enroll_id>/bot")
