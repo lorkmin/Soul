@@ -2,9 +2,9 @@
 <div class="top-actions">
   <div>Всего заявок: {{ enrolls|length }}</div>
   <div>
-    <a class="btn-link" href="{{ url_for('admin_enrolls_export') }}">
-      Экспорт в CSV
-    </a>
+    <a class="btn-link" href="{{ url_for('admin_enrolls_export') }}"
+      >Экспорт в CSV</a
+    >
   </div>
 </div>
 
@@ -17,8 +17,10 @@
       <th>Пакет / Уровень</th>
       <th>Комментарий</th>
       <th class="admin-col-bot">Бот</th>
+      <th style="width: 320px">Действия</th>
     </tr>
   </thead>
+
   <tbody>
     {% for e in enrolls %}
     <tr class="{% if e.is_bot %}admin-row-bot{% endif %}">
@@ -52,10 +54,45 @@
         <span class="badge-human">—</span>
         {% endif %}
       </td>
+
+      <td>
+        <form
+          method="post"
+          action="{{ url_for('admin_enroll_update', enroll_id=e.id) }}"
+          class="admin-enroll-actions"
+        >
+          <label class="admin-checkbox">
+            <input
+              type="checkbox"
+              name="is_bot"
+              value="1"
+              {%
+              if
+              e.is_bot
+              %}checked{%
+              endif
+              %}
+            />
+            Это бот
+          </label>
+
+          <input
+            type="text"
+            name="admin_note"
+            placeholder="Заметка админа (для себя)"
+            value="{{ e.admin_note or '' }}"
+            class="admin-input"
+          />
+
+          <button type="submit" class="admin-btn admin-btn-small">
+            Сохранить
+          </button>
+        </form>
+      </td>
     </tr>
     {% else %}
     <tr>
-      <td colspan="6">Пока нет заявок.</td>
+      <td colspan="7">Пока нет заявок.</td>
     </tr>
     {% endfor %}
   </tbody>
