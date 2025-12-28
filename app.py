@@ -678,24 +678,18 @@ def admin_enrolls_export():
 @login_required
 def admin_enroll_note(enroll_id: int):
     note = (request.form.get("admin_note") or "").strip()
-
-    # чекбокс: если отмечен — поле придёт в form, если нет — не придёт
-    # (или придёт "0" из hidden-поля — тоже ок)
     is_bot = 1 if request.form.get("is_bot") in ("1", "on", "true", "True") else 0
 
     conn = get_db()
     conn.execute(
-        """
-        UPDATE enrolls
-        SET admin_note = ?, is_bot = ?
-        WHERE id = ?
-        """,
+        "UPDATE enrolls SET admin_note = ?, is_bot = ? WHERE id = ?",
         (note or None, is_bot, enroll_id),
     )
     conn.commit()
     conn.close()
 
     return redirect(url_for("admin_enrolls"))
+
 
 
 
