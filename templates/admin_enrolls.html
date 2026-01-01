@@ -1,12 +1,168 @@
-{% extends "admin_layout.html" %}
-
-{% block content %}
-<div class="top-actions">
+{% extends "admin_layout.html" %} {% block content %}
+<div
+  class="top-actions"
+  style="
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  "
+>
   <div>Всего заявок: {{ enrolls|length }}</div>
   <div>
-    <a class="btn-link" href="{{ url_for('admin_enrolls_export') }}">Экспорт в CSV</a>
+    <a class="btn-link" href="{{ url_for('admin_enrolls_export') }}"
+      >Экспорт в CSV</a
+    >
   </div>
 </div>
+
+<style>
+  /* ===== Enrolls: bot + notes (clean UI) ===== */
+
+  .admin-note-box {
+    display: grid;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Top row: switch + status badge */
+  .bot-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* BOT badge (in bot column) */
+  .bot-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .bot-badge .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.35);
+  }
+  .bot-badge.is-bot {
+    background: rgba(255, 70, 70, 0.16);
+    border-color: rgba(255, 70, 70, 0.35);
+    color: rgba(255, 255, 255, 0.92);
+  }
+  .bot-badge.is-bot .dot {
+    background: rgba(255, 70, 70, 0.95);
+    box-shadow: 0 0 0 3px rgba(255, 70, 70, 0.18);
+  }
+
+  /* Switch */
+  .bot-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    user-select: none;
+  }
+  .bot-switch input {
+    display: none;
+  }
+  .bot-switch .track {
+    width: 46px;
+    height: 26px;
+    border-radius: 999px;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.08);
+    transition: background 0.2s ease, border-color 0.2s ease;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+  }
+  .bot-switch .thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    transition: transform 0.2s ease;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  }
+  .bot-switch .label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.88);
+  }
+
+  .bot-switch input:checked + .track {
+    background: rgba(255, 70, 70, 0.26);
+    border-color: rgba(255, 70, 70, 0.45);
+  }
+  .bot-switch input:checked + .track .thumb {
+    transform: translateX(20px);
+  }
+
+  /* Notes textarea */
+  .admin-note-input {
+    width: 100%;
+    min-height: 62px;
+    resize: vertical;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(0, 0, 0, 0.2);
+    color: rgba(255, 255, 255, 0.92);
+    outline: none;
+  }
+  .admin-note-input::placeholder {
+    color: rgba(255, 255, 255, 0.45);
+  }
+  .admin-note-input:focus {
+    border-color: rgba(255, 205, 90, 0.55);
+    box-shadow: 0 0 0 3px rgba(255, 205, 90, 0.12);
+  }
+
+  /* Saved note preview (compact, not duplicate-y) */
+  .admin-note-preview {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: rgba(255, 205, 90, 0.1);
+    border: 1px solid rgba(255, 205, 90, 0.22);
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 0.9rem;
+  }
+  .admin-note-preview .icon {
+    line-height: 1;
+    margin-top: 2px;
+  }
+
+  /* Save button row */
+  .note-actions-row {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  /* small helper text */
+  .note-hint {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.55);
+    margin-top: -4px;
+  }
+</style>
 
 <table class="admin-table">
   <thead>
@@ -16,30 +172,100 @@
       <th>Имя / Контакт</th>
       <th>Пакет / Уровень</th>
       <th>Комментарий</th>
+      <th>Бот</th>
+      <th style="min-width: 340px">Заметка админа</th>
+      <th></th>
     </tr>
   </thead>
+
   <tbody>
     {% for e in enrolls %}
-      <tr>
-        <td>{{ e.id }}</td>
-        <td>
-          <div>{{ e.created_at }}</div>
-          <div class="admin-meta">{{ e.ip }}</div>
-        </td>
-        <td>
-          <div>{{ e.name }}</div>
-          <div class="admin-meta">{{ e.contact }}</div>
-        </td>
-        <td>
-          <div>{{ e.tariff or "—" }}</div>
-          <div class="admin-meta">{{ e.level or "—" }}</div>
-        </td>
-        <td>{{ e.comment or "" }}</td>
-      </tr>
+    <tr>
+      <td>{{ e.id }}</td>
+
+      <td>
+        <div>{{ e.created_at }}</div>
+        <div class="admin-meta">{{ e.ip }}</div>
+      </td>
+
+      <td>
+        <div>{{ e.name }}</div>
+        <div class="admin-meta">{{ e.contact }}</div>
+      </td>
+
+      <td>
+        <div>{{ e.tariff or "—" }}</div>
+        <div class="admin-meta">{{ e.level or "—" }}</div>
+      </td>
+
+      <td>{{ e.comment or "" }}</td>
+
+      <td style="white-space: nowrap">
+        {% if e.is_bot %}
+        <span class="bot-badge is-bot"><span class="dot"></span> BOT</span>
+        {% else %}
+        <span class="bot-badge"><span class="dot"></span> —</span>
+        {% endif %}
+      </td>
+
+      <td>
+        {# ВАЖНО: чекбокс и textarea внутри ЭТОГО ЖЕ form, что и кнопка submit
+        #}
+        <form
+          method="post"
+          action="{{ url_for('admin_enroll_note', enroll_id=e.id) }}"
+          class="admin-note-box"
+        >
+          <div class="bot-actions">
+            <!-- hidden гарантирует 0 если чекбокс снят -->
+            <input type="hidden" name="is_bot" value="0" />
+
+            <label class="bot-switch">
+              <input
+                type="checkbox"
+                name="is_bot"
+                value="1"
+                {%
+                if
+                e.is_bot
+                %}checked{%
+                endif
+                %}
+              />
+              <span class="track"><span class="thumb"></span></span>
+              <span class="label">Бот</span>
+            </label>
+
+            <div class="note-hint">видно только админу</div>
+          </div>
+
+          <textarea
+            class="admin-note-input"
+            name="admin_note"
+            placeholder="Заметка админа: спам / перезвонить / не подходит по времени…"
+          >
+{{ e.admin_note or "" }}</textarea
+          >
+
+          {% if e.admin_note %}
+          <div class="admin-note-preview">
+            <span class="icon">💬</span>
+            <div>{{ e.admin_note }}</div>
+          </div>
+          {% endif %}
+
+          <div class="note-actions-row">
+            <button type="submit" class="admin-btn">Сохранить</button>
+          </div>
+        </form>
+      </td>
+
+      <td></td>
+    </tr>
     {% else %}
-      <tr>
-        <td colspan="5">Пока нет заявок.</td>
-      </tr>
+    <tr>
+      <td colspan="8">Пока нет заявок.</td>
+    </tr>
     {% endfor %}
   </tbody>
 </table>

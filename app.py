@@ -154,6 +154,15 @@ def init_db():
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
     """)
+    try:
+        cur.execute("ALTER TABLE enrolls ADD COLUMN is_bot INTEGER DEFAULT 0")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        cur.execute("ALTER TABLE enrolls ADD COLUMN admin_note TEXT")
+    except sqlite3.OperationalError:
+        pass
 
 
     # ---- TEACHERS ----
@@ -192,7 +201,10 @@ def init_db():
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
     """)
-
+    try:
+        cur.execute("ALTER TABLE courses ADD COLUMN hero_tags TEXT")
+    except sqlite3.OperationalError:
+        pass
     # ---- GALLERY ----
     cur.execute("""
         CREATE TABLE IF NOT EXISTS gallery (
@@ -352,6 +364,12 @@ def send_enroll_email_to_user(payload: dict):
     print("DEBUG: send_enroll_email_to_user called (stub). Payload:", payload)
     return
 
+#Раздлеление тегов в описании курса
+def split_tags(s: str):
+    if not s:
+        return []
+    return [t.strip() for t in s.split(",") if t.strip()]
+
 
 # ================== ПУБЛИЧНАЯ ЧАСТЬ ==================
 
@@ -376,13 +394,16 @@ def index():
         SELECT * FROM courses
         ORDER BY created_at ASC
     """).fetchall()
+    hero_tags = []
+    if courses and courses[0]["hero_tags"]:
+        hero_tags = split_tags(courses[0]["hero_tags"])
 
     gallery = conn.execute("SELECT * FROM gallery ORDER BY created_at DESC LIMIT 12").fetchall()
 
     conn.close()
     return render_template("index.html", reviews=reviews,
                            teachers=teachers, courses=courses,
-                           gallery=gallery)
+                           gallery=gallery, hero_tags=hero_tags)
 
 
 
@@ -569,47 +590,84 @@ def admin_index():
 @login_required
 def admin_enrolls():
     conn = get_db()
-    enrolls = conn.execute(
-        """
-        SELECT id, created_at, ip, name, contact, tariff, level, comment
+    enrolls = conn.execute("""
+        SELECT
+            id,
+            created_at,
+            ip,
+            name,
+            contact,
+            tariff,
+            level,
+            comment,
+            admin_note,
+            is_bot
         FROM enrolls
         ORDER BY created_at DESC
-        LIMIT 500
-        """
-    ).fetchall()
+    """).fetchall()
+
     conn.close()
     return render_template("admin_enrolls.html", enrolls=enrolls)
+
 
 
 @app.get("/admin/enrolls/export")
 @login_required
 def admin_enrolls_export():
     """
-    Экспорт заявок в CSV.
+    Экспорт заявок в CSV (с admin_note и is_bot).
     """
     conn = get_db()
+    conn.row_factory = sqlite3.Row
+
     rows = conn.execute(
         """
-        SELECT id, created_at, ip, name, contact, tariff, level, comment
+        SELECT
+            id,
+            created_at,
+            ip,
+            name,
+            contact,
+            tariff,
+            level,
+            comment,
+            COALESCE(admin_note, '') AS admin_note,
+            COALESCE(is_bot, 0)      AS is_bot
         FROM enrolls
         ORDER BY created_at DESC
         """
     ).fetchall()
+
     conn.close()
 
     output = io.StringIO()
     writer = csv.writer(output, delimiter=";")
-    writer.writerow(["id", "created_at", "ip", "name", "contact", "tariff", "level", "comment"])
-    for row in rows:
+
+    writer.writerow([
+        "id",
+        "created_at",
+        "ip",
+        "name",
+        "contact",
+        "tariff",
+        "level",
+        "comment",
+        "admin_note",
+        "is_bot",
+    ])
+
+    for r in rows:
         writer.writerow([
-            row["id"],
-            row["created_at"],
-            row["ip"],
-            row["name"],
-            row["contact"],
-            row["tariff"] or "",
-            row["level"] or "",
-            row["comment"] or "",
+            r["id"],
+            r["created_at"] or "",
+            r["ip"] or "",
+            r["name"] or "",
+            r["contact"] or "",
+            r["tariff"] or "",
+            r["level"] or "",
+            r["comment"] or "",
+            r["admin_note"] or "",
+            1 if (r["is_bot"] or 0) else 0,
         ])
 
     output.seek(0)
@@ -619,6 +677,53 @@ def admin_enrolls_export():
         as_attachment=True,
         download_name="enrolls.csv",
     )
+
+
+
+@app.post("/admin/enrolls/<int:enroll_id>/note")
+@login_required
+def admin_enroll_note(enroll_id: int):
+    note = (request.form.get("admin_note") or "").strip()
+
+    # Из-за hidden+checkbox приходят два значения: ['0'] или ['0','1']
+    is_bot_vals = request.form.getlist("is_bot")
+    is_bot = 1 if "1" in is_bot_vals else 0
+
+    conn = get_db()
+    conn.execute(
+        """
+        UPDATE enrolls
+        SET admin_note = ?, is_bot = ?
+        WHERE id = ?
+        """,
+        (note or None, is_bot, enroll_id),
+    )
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for("admin_enrolls"))
+
+
+
+
+
+
+
+@app.post("/admin/enrolls/<int:enroll_id>/bot")
+@login_required
+def admin_enroll_bot(enroll_id: int):
+    value = 1 if (request.form.get("value") == "1") else 0
+
+    conn = get_db()
+    conn.execute(
+        "UPDATE enrolls SET is_bot = ? WHERE id = ?",
+        (value, enroll_id),
+    )
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for("admin_enrolls"))
+
 
 
 # ================== АДМИНКА: ОТЗЫВЫ ==================
@@ -799,22 +904,34 @@ def admin_courses():
 @app.post("/admin/courses/add")
 @login_required
 def admin_courses_add():
-    title = request.form["title"]
-    price = request.form["price"]
-    lessons = request.form["lessons"]
-    description = request.form["description"]
+    title = (request.form.get("title") or "").strip()
+    price = request.form.get("price") or None
+    lessons = request.form.get("lessons") or None
+    description = (request.form.get("description") or "").strip()
+    hero_tags = (request.form.get("hero_tags") or "").strip()  # <-- читаем из формы
+
     photo = save_upload(request.files.get("photo"), COURSE_UPLOAD)
 
     conn = get_db()
-    conn.execute("""
-        INSERT INTO courses (title, price, lessons, description, photo)
-        VALUES (?, ?, ?, ?, ?)
-    """, (title, price, lessons, description, photo))
-
+    conn.execute(
+        """
+        INSERT INTO courses (
+            title,
+            price,
+            lessons,
+            description,
+            photo,
+            hero_tags
+        )
+        VALUES (?, ?, ?, ?, ?, ?)
+        """,
+        (title, price, lessons, description, photo, hero_tags),
+    )
     conn.commit()
     conn.close()
 
     return redirect(url_for("admin_courses"))
+
 
 @app.post("/admin/courses/delete/<int:cid>")
 @login_required
@@ -845,22 +962,23 @@ def admin_courses_edit(cid):
         price = request.form["price"]
         lessons = request.form["lessons"]
         description = request.form["description"]
-
+        hero_tags = (request.form.get("hero_tags") or "").strip()
+        
         file = request.files.get("photo")
         new_photo = save_upload(file, COURSE_UPLOAD) if file and file.filename else None
 
         if new_photo:
             conn.execute("""
                 UPDATE courses
-                SET title=?, price=?, lessons=?, description=?, photo=?
+                SET title=?, price=?, lessons=?, description=?, photo=?, hero_tags = ?
                 WHERE id=?
-            """, (title, price, lessons, description, new_photo, cid))
+            """, (title, price, lessons, description, new_photo, hero_tags, cid))
         else:
             conn.execute("""
                 UPDATE courses
-                SET title=?, price=?, lessons=?, description=?
+                SET title=?, price=?, lessons=?, description=?, hero_tags = ?
                 WHERE id=?
-            """, (title, price, lessons, description, cid))
+            """, (title, price, lessons, description, hero_tags, cid))
 
         conn.commit()
         conn.close()
@@ -1244,7 +1362,6 @@ def student_dashboard():
 
         if file and file.filename and hw_allowed(file.filename):
             filename = secure_filename(file.filename)
-            # чтобы не было коллизий имён — добавим дату и ID
             ts = datetime.now().strftime("%Y%m%d_%H%M%S")
             new_name = f"stu{student['id']}_{ts}_{filename}"
             abs_path = os.path.join(HOMEWORK_UPLOAD_FOLDER, new_name)
@@ -1252,22 +1369,52 @@ def student_dashboard():
 
             rel_path = f"uploads/homework/{new_name}"
 
-            conn.execute(
-                """
-                INSERT INTO student_homework (
-                    student_id, title, comment,
-                    file_name, file_path, status
-                ) VALUES (?, ?, ?, ?, ?, 'new')
-                """,
-                (
+            # Пытаемся найти последнее "назначенное" задание без файла ученика
+            hw_assigned = conn.execute("""
+                SELECT id
+                FROM student_homework
+                WHERE student_id = ?
+                  AND status = 'assigned'
+                  AND (file_path IS NULL OR file_path = '')
+                ORDER BY created_at ASC
+                LIMIT 1
+            """, (student["id"],)).fetchone()
+
+            if hw_assigned:
+                # привязываем ответ к уже назначенному заданию
+                conn.execute("""
+                    UPDATE student_homework
+                    SET
+                        title = COALESCE(?, title),
+                        comment = ?,
+                        file_name = ?,
+                        file_path = ?,
+                        status = 'new'
+                    WHERE id = ?
+                """, (
+                    title or None,
+                    comment or None,
+                    filename,
+                    rel_path,
+                    hw_assigned["id"],
+                ))
+            else:
+                # обычное самостоятельное отправление ДЗ (как раньше)
+                conn.execute("""
+                    INSERT INTO student_homework (
+                        student_id, title, comment,
+                        file_name, file_path, status
+                    ) VALUES (?, ?, ?, ?, ?, 'new')
+                """, (
                     student["id"],
                     title or None,
                     comment or None,
                     filename,
                     rel_path,
-                ),
-            )
+                ))
+
             conn.commit()
+
 
         # после загрузки — обновим список ДЗ
         homework_list = conn.execute(
@@ -1324,6 +1471,108 @@ def teacher_homework_list():
     conn.close()
     return render_template("teacher_homework_list.html", homework=rows)
 
+@app.post("/teacher/homework/<int:hw_id>/delete")
+@teacher_login_required
+def teacher_homework_delete(hw_id):
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+
+    hw = conn.execute(
+        "SELECT file_path, teacher_file_path FROM student_homework WHERE id = ?",
+        (hw_id,),
+    ).fetchone()
+
+    if not hw:
+        conn.close()
+        flash("Домашнее задание не найдено", "error")
+        return redirect(url_for("teacher_homework_list"))
+
+    # удаляем файлы (если есть)
+    def _delete_static_file(rel_path: str):
+        if not rel_path:
+            return
+        # rel_path у тебя вида "uploads/homework/xxx.ext"
+        abs_path = os.path.join(BASE_DIR, "static", rel_path)
+        try:
+            if os.path.exists(abs_path):
+                os.remove(abs_path)
+        except Exception:
+            # не валим удаление записи из БД из-за проблем с ФС
+            pass
+
+    _delete_static_file(hw["file_path"])
+    _delete_static_file(hw["teacher_file_path"])
+
+    # удаляем запись из таблицы
+    conn.execute("DELETE FROM student_homework WHERE id = ?", (hw_id,))
+    conn.commit()
+    conn.close()
+
+    flash("Домашнее задание удалено", "success")
+    return redirect(url_for("teacher_homework_list"))
+
+
+@app.route("/teacher/homework/add", methods=["GET", "POST"])
+@teacher_login_required
+def teacher_homework_add():
+    conn = get_db()
+    conn.row_factory = sqlite3.Row
+
+    # список учеников для выбора
+    students = conn.execute("""
+        SELECT id, name, public_code, course
+        FROM student_accounts
+        ORDER BY name COLLATE NOCASE
+    """).fetchall()
+
+    if request.method == "POST":
+        student_id = request.form.get("student_id")
+        title = (request.form.get("title") or "").strip()
+        teacher_comment = (request.form.get("teacher_comment") or "").strip()
+        file = request.files.get("teacher_file")
+
+        if not student_id:
+            conn.close()
+            return redirect(url_for("teacher_homework_add"))
+
+        teacher_file_name = None
+        teacher_file_path = None
+
+        if file and file.filename and hw_allowed(file.filename):
+            orig_name = secure_filename(file.filename)
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            new_name = f"task_stu{student_id}_{ts}_{orig_name}"
+            abs_path = os.path.join(HOMEWORK_UPLOAD_FOLDER, new_name)
+            file.save(abs_path)
+
+            teacher_file_name = orig_name
+            teacher_file_path = f"uploads/homework/{new_name}"
+
+        conn.execute("""
+            INSERT INTO student_homework (
+                student_id,
+                title,
+                comment,
+                file_name,
+                file_path,
+                status,
+                teacher_comment,
+                teacher_file_name,
+                teacher_file_path
+            ) VALUES (?, ?, NULL, NULL, NULL, 'assigned', ?, ?, ?)
+        """, (
+            int(student_id),
+            title or None,
+            teacher_comment or None,
+            teacher_file_name,
+            teacher_file_path,
+        ))
+        conn.commit()
+        conn.close()
+        return redirect(url_for("teacher_homework_list"))
+
+    conn.close()
+    return render_template("teacher_homework_add.html", students=students)
 
 
 
