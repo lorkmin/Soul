@@ -1,490 +1,449 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Личный дашборд ученика — Soul</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style_light.css') }}"
-    />
-  </head>
-  <body class="student-dashboard">
-    <div class="wrapper">
-      <section>
-        <div class="section-inner">
-          <div class="section-title">
-            <h3>Личный кабинет ученика</h3>
-            <span>посмотрите ваши оплаты и оставшиеся занятия</span>
-          </div>
 
-          <div class="enroll-box student-dashboard-card">
-            <form method="post">
-              <div class="form-field">
-                <label for="code">Ваш 6-значный ID</label>
-                <input
-                  id="code"
-                  name="code"
-                  type="text"
-                  maxlength="6"
-                  placeholder="например, 038421"
-                  value="{{ code or '' }}"
-                  required
-                />
-              </div>
-              <button class="btn-primary form-submit" type="submit">
-                Показать данные
-              </button>
-            </form>
+<head>
+  <meta charset="UTF-8" />
+  <title>Личный дашборд ученика — Soul</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style_light.css') }}" />
+</head>
 
-            {% if not_found %}
-            <p style="color: #c00; margin-top: 10px">
-              Запись с таким ID не найдена. Проверьте код или спросите у
-              преподавателя.
-            </p>
-            {% endif %} {% if student %}
+<body class="student-dashboard">
+  <div class="wrapper">
+    <section>
+      <div class="section-inner">
+        <div class="section-title">
+          <h3>Личный кабинет ученика</h3>
+          <span>посмотрите ваши оплаты и оставшиеся занятия</span>
+        </div>
 
-            <hr
-              style="
+        <div class="enroll-box student-dashboard-card">
+          <form method="post">
+            <div class="form-field">
+              <label for="code">Ваш 6-значный ID</label>
+              <input id="code" name="code" type="text" maxlength="6" placeholder="например, 038421"
+                value="{{ code or '' }}" required />
+            </div>
+            <button class="btn-primary form-submit" type="submit">
+              Показать данные
+            </button>
+          </form>
+
+          {% if not_found %}
+          <p style="color: #c00; margin-top: 10px">
+            Запись с таким ID не найдена. Проверьте код или спросите у
+            преподавателя.
+          </p>
+          {% endif %} {% if student %}
+
+          <hr style="
                 margin: 20px 0;
                 border: none;
                 border-top: 1px solid rgba(0, 0, 0, 0.06);
-              "
-            />
+              " />
 
-            {# подготовка чисел для прогресса #} {% set total =
-            (student['lessons_total'] or 0)|int %} {% set left =
-            (student['lessons_left'] or 0)|int %} {% if total > 0 %} {% set done
-            = total - left %} {% if done < 0 %}{% set done = 0 %}{% endif %} {%
-            if done > total %}{% set done = total %}{% endif %} {% set percent =
+          {# подготовка чисел для прогресса #} {% set total =
+          (student['lessons_total'] or 0)|int %} {% set left =
+          (student['lessons_left'] or 0)|int %} {% if total > 0 %} {% set done
+          = total - left %} {% if done < 0 %}{% set done=0 %}{% endif %} {% if done> total %}{% set done = total %}{%
+            endif %} {% set percent =
             (done * 100 / total)|round(0)|int %} {% else %} {% set done = 0 %}
             {% set percent = 0 %} {% endif %} {% set done_count =
             lessons_done|length %}
-{% if total > 0 and left <= 0 %}
-<div class="student-alert-wrapper">
-  <div class="student-alert student-alert-warning">
-    <div class="student-alert-icon">⚠️</div>
+            {% if total > 0 and left <= 0 %} <div class="student-alert-wrapper">
+              <div class="student-alert student-alert-warning">
+                <div class="student-alert-icon">⚠️</div>
 
-    <div class="student-alert-content">
-      <div class="student-alert-title">
-        Пакет занятий закончился
-      </div>
-
-      <div class="student-alert-text">
-        Новые уроки не будут проводиться, пока вы не продлите обучение 💛  
-        Свяжитесь с преподавателем или администратором, чтобы купить следующий пакет.
-      </div>
-    </div>
-  </div>
-</div>
-{% endif %}
-            <!-- ВЕРХНЯЯ КАРТОЧКА С УЧЕНИКОМ -->
-            <div class="student-hero-card">
-              <div class="student-hero-main">
-                <div class="student-hero-avatar">
-                  <span class="student-hero-avatar-char">
-                    {{ (student['name'] or 'U')[:1] }}
-                  </span>
-                  <span class="student-hero-avatar-sparkle">✨</span>
-                </div>
-
-                <div class="student-hero-info">
-                  <div class="student-hero-title-row">
-                    <h4 class="student-hero-name">
-                      {{ student['name'] or 'Ученик' }}
-                    </h4>
-                    {% if student['public_code'] %}
-                    <span class="student-hero-id-badge">
-                      ID: {{ student['public_code'] }}
-                    </span>
-                    {% endif %}
+                <div class="student-alert-content">
+                  <div class="student-alert-title">
+                    Пакет занятий закончился
                   </div>
 
-                  {% if student['course'] %}
-                  <p class="student-hero-course">
-                    🌸 Курс: <span>{{ student['course'] }}</span>
-                  </p>
-                  {% endif %}
-
-                  <p class="student-hero-sub">
-                    Ваш уютный прогресс в корейском 💕
-                  </p>
-
-                  <div class="student-hero-numbers">
-                    <div class="student-hero-number">
-                      <span class="label">Всего занятий</span>
-                      <span class="value">
-                        {{ total if total > 0 else '—' }}
-                      </span>
-                    </div>
-                    <div class="student-hero-number">
-                      <span class="label">Осталось</span>
-                      <span class="value">
-                        {{ left if total > 0 else '—' }}
-                      </span>
-                    </div>
-                    <div class="student-hero-number">
-                      <span class="label">Пройдено</span>
-                      <span class="value">
-                        {% if total > 0 %}{{ done }} ({{ percent }}%){% else
-                        %}—{% endif %}
-                      </span>
-                    </div>
+                  <div class="student-alert-text">
+                    Новые уроки не будут проводиться, пока вы не продлите обучение 💛
+                    Свяжитесь с преподавателем или администратором, чтобы купить следующий пакет.
                   </div>
-
-                  <div class="student-hero-payment">
-                    <span class="student-hero-payment-label"
-                      >Последняя оплата:</span
-                    >
-                    <span class="student-hero-payment-value">
-                      {{ student['last_payment_date'] or '—' }} {% if
-                      student['last_payment_amount'] %} · {{
-                      student['last_payment_amount'] }} ₽ {% endif %}
-                    </span>
-                  </div>
-
-                  {% if student['comment'] %}
-                  <p class="student-hero-comment">
-                    <span class="comment-label">Комментарий от школы:</span>
-                    <span class="comment-text">{{ student['comment'] }}</span>
-                  </p>
-                  {% endif %}
                 </div>
               </div>
-
-              <div class="student-hero-side">
-                {% if total > 0 %}
-                <div class="student-progress-card">
-                  <div class="student-progress-header">
-                    <span class="chip chip-soft">Прогресс по пакету</span>
-                    <span class="percent">{{ percent }}%</span>
-                  </div>
-                  <div class="student-progress-bar">
-                    <div
-                      class="student-progress-fill"
-                      style="width: {{ percent }}%;"
-                    ></div>
-                  </div>
-                  <div class="student-progress-meta">
-                    Пройдено {{ done }} из {{ total }} уроков
-                  </div>
-                </div>
-                {% endif %} {% if done_count > 0 or total > 0 %}
-                <div class="student-achievements-card">
-                  <div class="student-achievements-header">
-                    <span class="title">Ваши маленькие достижения</span>
-                    <span class="sparkle">✨</span>
-                  </div>
-                  <ul class="student-achievements-list">
-                    {% if done_count >= 1 %}
-                    <li>
-                      <span class="badge-icon">🌱</span>
-                      <span class="badge-text">
-                        Первый шаг — вы уже начали путь!
-                      </span>
-                    </li>
-                    {% endif %} {% if done_count >= 3 %}
-                    <li>
-                      <span class="badge-icon">🔥</span>
-                      <span class="badge-text">
-                        Три занятия позади — держите ритм 💪
-                      </span>
-                    </li>
-                    {% endif %} {% if percent >= 50 and percent < 100 %}
-                    <li>
-                      <span class="badge-icon">🌈</span>
-                      <span class="badge-text">
-                        Половина курса пройдена — вы уже далеко продвинулись!
-                      </span>
-                    </li>
-                    {% endif %} {% if percent >= 90 and left > 0 %}
-                    <li>
-                      <span class="badge-icon">🚀</span>
-                      <span class="badge-text">
-                        Финиш близко — осталось всего несколько уроков.
-                      </span>
-                    </li>
-                    {% endif %} {% if total > 0 and left == 0 and done > 0 %}
-                    <li>
-                      <span class="badge-icon">🏅</span>
-                      <span class="badge-text">
-                        Пакет завершён — вы большое умничка!
-                      </span>
-                    </li>
-                    {% endif %}
-                  </ul>
-                </div>
-                {% endif %}
-              </div>
+        </div>
+        {% endif %}
+        <!-- ВЕРХНЯЯ КАРТОЧКА С УЧЕНИКОМ -->
+        <div class="student-hero-card">
+          <div class="student-hero-main">
+            <div class="student-hero-avatar">
+              <span class="student-hero-avatar-char">
+                {{ (student['name'] or 'U')[:1] }}
+              </span>
+              <span class="student-hero-avatar-sparkle">✨</span>
             </div>
 
-            <!-- НИЖНИЕ КАРТОЧКИ: РАСПИСАНИЕ + ДЗ -->
-            <div class="student-subcards-wrapper">
-              <!-- ВАШИ ЗАНЯТИЯ -->
-              <div class="student-subcard">
-                <h4 style="margin-bottom: 8px">Ваши занятия</h4>
-
-                {% if lessons_planned or lessons_rescheduled or lessons_done or
-                lessons_canceled %}
-                <div class="student-lessons-sections">
-                  {% if lessons_planned %}
-                  <div class="student-lessons-section">
-                    <p class="student-lessons-label">Ближайшие занятия</p>
-                    <ul class="student-lessons-list">
-                      {% for l in lessons_planned %}
-                      <li
-                        class="lesson-row {% if loop.first %}lesson-next{% endif %}"
-                      >
-                        <div class="lesson-main">
-                          <div>
-                            {% if loop.first %}
-                            <span class="lesson-next-badge">Скоро</span>
-                            {% endif %}
-                            <span class="lesson-date">{{ l['start_at'] }}</span>
-                            {% if l['topic'] %}
-                            <span class="lesson-dot">•</span>
-                            <span class="lesson-topic">{{ l['topic'] }}</span>
-                            {% endif %}
-                          </div>
-
-                          {% if l['comment'] %}
-                          <div class="lesson-comment">{{ l['comment'] }}</div>
-                          {% endif %}
-                        </div>
-
-                        <span class="lesson-status-badge lesson-status-planned">
-                          Запланировано
-                        </span>
-                      </li>
-                      {% endfor %}
-                    </ul>
-                  </div>
-                  {% endif %} {% if lessons_rescheduled %}
-                  <div class="student-lessons-section">
-                    <p class="student-lessons-label">Перенесённые занятия</p>
-                    <ul class="student-lessons-list">
-                      {% for l in lessons_rescheduled %}
-                      <li class="lesson-row">
-                        <div class="lesson-main">
-                          <span class="lesson-date">{{ l['start_at'] }}</span>
-                          {% if l['rescheduled_to'] %}
-                          <span class="lesson-arrow">→</span>
-                          <span class="lesson-date"
-                            >{{ l['rescheduled_to'] }}</span
-                          >
-                          {% endif %} {% if l['topic'] %}
-                          <span class="lesson-dot">•</span>
-                          <span class="lesson-topic">{{ l['topic'] }}</span>
-                          {% endif %} {% if l['comment'] %}
-                          <div class="lesson-comment">{{ l['comment'] }}</div>
-                          {% endif %}
-                        </div>
-                        <span
-                          class="lesson-status-badge lesson-status-rescheduled"
-                        >
-                          Перенесено
-                        </span>
-                      </li>
-                      {% endfor %}
-                    </ul>
-                  </div>
-                  {% endif %} {% if lessons_done %}
-                  <div class="student-lessons-section">
-                    <p class="student-lessons-label">Проведённые занятия</p>
-                    <ul class="student-lessons-list">
-                      {% for l in lessons_done %}
-                      <li class="lesson-row">
-                        <div class="lesson-main">
-                          <span class="lesson-date">{{ l['start_at'] }}</span>
-                          {% if l['topic'] %}
-                          <span class="lesson-dot">•</span>
-                          <span class="lesson-topic">{{ l['topic'] }}</span>
-                          {% endif %} {% if l['comment'] %}
-                          <div class="lesson-comment">{{ l['comment'] }}</div>
-                          {% endif %}
-                        </div>
-                        <span class="lesson-status-badge lesson-status-done">
-                          Проведено
-                        </span>
-                      </li>
-                      {% endfor %}
-                    </ul>
-                  </div>
-                  {% endif %} {% if lessons_canceled %}
-                  <div class="student-lessons-section">
-                    <p class="student-lessons-label">Отменённые занятия</p>
-                    <ul class="student-lessons-list">
-                      {% for l in lessons_canceled %}
-                      <li class="lesson-row">
-                        <div class="lesson-main">
-                          <span class="lesson-date">{{ l['start_at'] }}</span>
-                          {% if l['topic'] %}
-                          <span class="lesson-dot">•</span>
-                          <span class="lesson-topic">{{ l['topic'] }}</span>
-                          {% endif %} {% if l['comment'] %}
-                          <div class="lesson-comment">{{ l['comment'] }}</div>
-                          {% endif %}
-                        </div>
-                        <span
-                          class="lesson-status-badge lesson-status-canceled"
-                        >
-                          Отменено
-                        </span>
-                      </li>
-                      {% endfor %}
-                    </ul>
-                  </div>
-                  {% endif %}
-                </div>
-                {% else %}
-                <p style="font-size: 0.9rem; color: #777; margin-top: 6px">
-                  Расписание пока не заполнено. Спросите у преподавателя, когда
-                  будет ближайшее занятие 🙂
-                </p>
+            <div class="student-hero-info">
+              <div class="student-hero-title-row">
+                <h4 class="student-hero-name">
+                  {{ student['name'] or 'Ученик' }}
+                </h4>
+                {% if student['public_code'] %}
+                <span class="student-hero-id-badge">
+                  ID: {{ student['public_code'] }}
+                </span>
                 {% endif %}
               </div>
 
-              <!-- ДОМАШНИЕ ЗАДАНИЯ -->
-              <div class="student-subcard">
-                <h4 style="margin-bottom: 8px">Домашние задания</h4>
+              {% if student['course'] %}
+              <p class="student-hero-course">
+                🌸 Курс: <span>{{ student['course'] }}</span>
+              </p>
+              {% endif %}
 
-                <form
-                  method="post"
-                  enctype="multipart/form-data"
-                  class="enroll-box"
-                  style="
-                    max-width: 520px;
-                    padding: 14px 16px;
-                    margin-bottom: 14px;
-                  "
-                >
-                  <input type="hidden" name="action" value="upload_homework" />
-                  <input type="hidden" name="code" value="{{ code }}" />
+              <p class="student-hero-sub">
+                Ваш уютный прогресс в корейском 💕
+              </p>
 
-                  <div class="form-field">
-                    <label for="hw-title">Краткое название (по желанию)</label>
-                    <input
-                      id="hw-title"
-                      type="text"
-                      name="hw_title"
-                      placeholder="Например: ДЗ по теме «Приветствия»"
-                    />
-                  </div>
+              <div class="student-hero-numbers">
+                <div class="student-hero-number">
+                  <span class="label">Всего занятий</span>
+                  <span class="value">
+                    {{ total if total > 0 else '—' }}
+                  </span>
+                </div>
+                <div class="student-hero-number">
+                  <span class="label">Осталось</span>
+                  <span class="value">
+                    {{ left if total > 0 else '—' }}
+                  </span>
+                </div>
+                <div class="student-hero-number">
+                  <span class="label">Пройдено</span>
+                  <span class="value">
+                    {% if total > 0 %}{{ done }} ({{ percent }}%){% else
+                    %}—{% endif %}
+                  </span>
+                </div>
+              </div>
 
-                  <div class="form-field">
-                    <label for="hw-comment">Комментарий</label>
-                    <textarea
-                      id="hw-comment"
-                      name="hw_comment"
-                      rows="2"
-                      placeholder="Что вы отправляете, вопросы к преподавателю…"
-                    ></textarea>
-                  </div>
+              <div class="student-hero-payment">
+                <span class="student-hero-payment-label">Последняя оплата:</span>
+                <span class="student-hero-payment-value">
+                  {{ student['last_payment_date'] or '—' }} {% if
+                  student['last_payment_amount'] %} · {{
+                  student['last_payment_amount'] }} ₽ {% endif %}
+                </span>
+              </div>
 
-                  <div class="form-field">
-                    <label for="hw-file">Файл домашнего задания</label>
-                    <input id="hw-file" type="file" name="hw_file" required />
-                    <p class="form-note" style="margin-top: 4px">
-                      Можно отправить фото тетради, PDF или документ.
-                    </p>
-                  </div>
+              {% if student['comment'] %}
+              <p class="student-hero-comment">
+                <span class="comment-label">Комментарий от школы:</span>
+                <span class="comment-text">{{ student['comment'] }}</span>
+              </p>
+              {% endif %}
+            </div>
+          </div>
 
-                  <button class="btn-primary form-submit" type="submit">
-                    Отправить домашнее задание
-                  </button>
-                </form>
+          <div class="student-hero-side">
+            {% if total > 0 %}
+            <div class="student-progress-card">
+              <div class="student-progress-header">
+                <span class="chip chip-soft">Прогресс по пакету</span>
+                <span class="percent">{{ percent }}%</span>
+              </div>
+              <div class="student-progress-bar">
+                <div class="student-progress-fill" style="width: {{ percent }}%;"></div>
+              </div>
+              <div class="student-progress-meta">
+                Пройдено {{ done }} из {{ total }} уроков
+              </div>
+            </div>
+            {% endif %} {% if done_count > 0 or total > 0 %}
+            <div class="student-achievements-card">
+              <div class="student-achievements-header">
+                <span class="title">Ваши маленькие достижения</span>
+                <span class="sparkle">✨</span>
+              </div>
+              <ul class="student-achievements-list">
+                {% if done_count >= 1 %}
+                <li>
+                  <span class="badge-icon">🌱</span>
+                  <span class="badge-text">
+                    Первый шаг — вы уже начали путь!
+                  </span>
+                </li>
+                {% endif %} {% if done_count >= 3 %}
+                <li>
+                  <span class="badge-icon">🔥</span>
+                  <span class="badge-text">
+                    Три занятия позади — держите ритм 💪
+                  </span>
+                </li>
+                {% endif %} {% if percent >= 50 and percent < 100 %} <li>
+                  <span class="badge-icon">🌈</span>
+                  <span class="badge-text">
+                    Половина курса пройдена — вы уже далеко продвинулись!
+                  </span>
+                  </li>
+                  {% endif %} {% if percent >= 90 and left > 0 %}
+                  <li>
+                    <span class="badge-icon">🚀</span>
+                    <span class="badge-text">
+                      Финиш близко — осталось всего несколько уроков.
+                    </span>
+                  </li>
+                  {% endif %} {% if total > 0 and left == 0 and done > 0 %}
+                  <li>
+                    <span class="badge-icon">🏅</span>
+                    <span class="badge-text">
+                      Пакет завершён — вы большое умничка!
+                    </span>
+                  </li>
+                  {% endif %}
+              </ul>
+            </div>
+            {% endif %}
+          </div>
+        </div>
 
-                {% if homework_list %}
-                <ul class="student-homework-list">
-                  {% for hw in homework_list %}
-                  <li class="student-homework-item">
-                    <div class="student-homework-header">
+        <!-- НИЖНИЕ КАРТОЧКИ: РАСПИСАНИЕ + ДЗ -->
+        <div class="student-subcards-wrapper">
+          <!-- ВАШИ ЗАНЯТИЯ -->
+          <div class="student-subcard">
+            <h4 style="margin-bottom: 8px">Ваши занятия</h4>
+
+            {% if lessons_planned or lessons_rescheduled or lessons_done or
+            lessons_canceled %}
+            <div class="student-lessons-sections">
+              {% if lessons_planned %}
+              <div class="student-lessons-section">
+                <p class="student-lessons-label">Ближайшие занятия</p>
+                <ul class="student-lessons-list">
+                  {% for l in lessons_planned %}
+                  <li class="lesson-row {% if loop.first %}lesson-next{% endif %}">
+                    <div class="lesson-main">
                       <div>
-                        <span class="lesson-date">
-                          {{ hw['created_at'] or '' }}
-                        </span>
-                        ·
-                        <strong>{{ hw['title'] or 'Без названия' }}</strong>
+                        {% if loop.first %}
+                        <span class="lesson-next-badge">Скоро</span>
+                        {% endif %}
+                        <span class="lesson-date">{{ l['start_at'] }}</span>
+                        {% if l['topic'] %}
+                        <span class="lesson-dot">•</span>
+                        <span class="lesson-topic">{{ l['topic'] }}</span>
+                        {% endif %}
                       </div>
- <div class="student-homework-status">
-  {% if hw['status'] == 'checked' %}
-    <span class="lesson-status-badge lesson-status-done">
-      Проверено
-    </span>
-  {% elif hw['status'] == 'assigned' and not hw['file_path'] %}
-    <span class="lesson-status-badge lesson-status-planned">
-      Задание от преподавателя
-    </span>
-  {% elif hw['status'] == 'new' %}
-    <span class="lesson-status-badge lesson-status-planned">
-      Отправлено, ждёт проверки
-    </span>
-  {% else %}
-    <span class="lesson-status-badge lesson-status-planned">
-      В работе
-    </span>
-  {% endif %}
-</div>
 
-
-                    {% if hw['comment'] %}
-                    <div class="lesson-comment" style="margin-top: 4px">
-                      Ваш комментарий: {{ hw['comment'] }}
+                      {% if l['comment'] %}
+                      <div class="lesson-comment">{{ l['comment'] }}</div>
+                      {% endif %}
                     </div>
-                    {% endif %}
 
-<div class="student-homework-files">
-  {% if hw['file_path'] %}
-  <div>
-    <span class="lesson-topic">Ваш файл: </span>
-    <a href="{{ url_for('static', filename=hw['file_path']) }}" target="_blank">
-      открыть
-    </a>
-  </div>
-  {% endif %}
-  {% if hw['teacher_file_path'] %}
-  <div style="margin-top: 2px">
-    <span class="lesson-topic">Файл от преподавателя: </span>
-    <a
-      href="{{ url_for('static', filename=hw['teacher_file_path']) }}"
-      target="_blank"
-    >
-      скачать
-    </a>
-  </div>
-  {% endif %}
-</div>
-
-
-                    {% if hw['teacher_comment'] %}
-                    <div class="lesson-comment" style="margin-top: 6px">
-                      Комментарий преподавателя: {{ hw['teacher_comment'] }}
-                    </div>
-                    {% endif %} {% if hw['checked_at'] %}
-                    <div class="student-homework-meta">
-                      Проверено: {{ hw['checked_at'] }}
-                    </div>
-                    {% endif %}
+                    <span class="lesson-status-badge lesson-status-planned">
+                      Запланировано
+                    </span>
                   </li>
                   {% endfor %}
                 </ul>
-                {% else %}
-                <p style="font-size: 0.9rem; color: #777; margin-top: 6px">
-                  Пока нет загруженных домашних заданий.
-                </p>
-                {% endif %}
               </div>
+              {% endif %} {% if lessons_rescheduled %}
+              <div class="student-lessons-section">
+                <p class="student-lessons-label">Перенесённые занятия</p>
+                <ul class="student-lessons-list">
+                  {% for l in lessons_rescheduled %}
+                  <li class="lesson-row">
+                    <div class="lesson-main">
+                      <span class="lesson-date">{{ l['start_at'] }}</span>
+                      {% if l['rescheduled_to'] %}
+                      <span class="lesson-arrow">→</span>
+                      <span class="lesson-date">{{ l['rescheduled_to'] }}</span>
+                      {% endif %} {% if l['topic'] %}
+                      <span class="lesson-dot">•</span>
+                      <span class="lesson-topic">{{ l['topic'] }}</span>
+                      {% endif %} {% if l['comment'] %}
+                      <div class="lesson-comment">{{ l['comment'] }}</div>
+                      {% endif %}
+                    </div>
+                    <span class="lesson-status-badge lesson-status-rescheduled">
+                      Перенесено
+                    </span>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %} {% if lessons_done %}
+              <div class="student-lessons-section">
+                <p class="student-lessons-label">Проведённые занятия</p>
+                <ul class="student-lessons-list">
+                  {% for l in lessons_done %}
+                  <li class="lesson-row">
+                    <div class="lesson-main">
+                      <span class="lesson-date">{{ l['start_at'] }}</span>
+                      {% if l['topic'] %}
+                      <span class="lesson-dot">•</span>
+                      <span class="lesson-topic">{{ l['topic'] }}</span>
+                      {% endif %} {% if l['comment'] %}
+                      <div class="lesson-comment">{{ l['comment'] }}</div>
+                      {% endif %}
+                    </div>
+                    <span class="lesson-status-badge lesson-status-done">
+                      Проведено
+                    </span>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %} {% if lessons_canceled %}
+              <div class="student-lessons-section">
+                <p class="student-lessons-label">Отменённые занятия</p>
+                <ul class="student-lessons-list">
+                  {% for l in lessons_canceled %}
+                  <li class="lesson-row">
+                    <div class="lesson-main">
+                      <span class="lesson-date">{{ l['start_at'] }}</span>
+                      {% if l['topic'] %}
+                      <span class="lesson-dot">•</span>
+                      <span class="lesson-topic">{{ l['topic'] }}</span>
+                      {% endif %} {% if l['comment'] %}
+                      <div class="lesson-comment">{{ l['comment'] }}</div>
+                      {% endif %}
+                    </div>
+                    <span class="lesson-status-badge lesson-status-canceled">
+                      Отменено
+                    </span>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %}
             </div>
-            <!-- /student-subcards-wrapper -->
-
             {% else %}
-            <p style="font-size: 0.9rem; color: #777; margin-top: 12px">
-              Введите ID ученика, чтобы посмотреть прогресс и отправить домашнее
-              задание.
+            <p style="font-size: 0.9rem; color: #777; margin-top: 6px">
+              Расписание пока не заполнено. Спросите у преподавателя, когда
+              будет ближайшее занятие 🙂
+            </p>
+            {% endif %}
+          </div>
+
+          <!-- ДОМАШНИЕ ЗАДАНИЯ -->
+          <div class="student-subcard">
+            <h4 style="margin-bottom: 8px">Домашние задания</h4>
+
+            <form method="post" enctype="multipart/form-data" class="enroll-box" style="
+                    max-width: 520px;
+                    padding: 14px 16px;
+                    margin-bottom: 14px;
+                  ">
+              <input type="hidden" name="action" value="upload_homework" />
+              <input type="hidden" name="code" value="{{ code }}" />
+
+              <div class="form-field">
+                <label for="hw-title">Краткое название (по желанию)</label>
+                <input id="hw-title" type="text" name="hw_title" placeholder="Например: ДЗ по теме «Приветствия»" />
+              </div>
+
+              <div class="form-field">
+                <label for="hw-comment">Комментарий</label>
+                <textarea id="hw-comment" name="hw_comment" rows="2"
+                  placeholder="Что вы отправляете, вопросы к преподавателю…"></textarea>
+              </div>
+
+              <div class="form-field">
+                <label for="hw-file">Файл домашнего задания</label>
+                <input id="hw-file" type="file" name="hw_file" required />
+                <p class="form-note" style="margin-top: 4px">
+                  Можно отправить фото тетради, PDF или документ.
+                </p>
+              </div>
+
+              <button class="btn-primary form-submit" type="submit">
+                Отправить домашнее задание
+              </button>
+            </form>
+
+            {% if homework_list %}
+            <ul class="student-homework-list">
+              {% for hw in homework_list %}
+              <li class="student-homework-item">
+                <div class="student-homework-header">
+                  <div>
+                    <span class="lesson-date">
+                      {{ hw['created_at'] or '' }}
+                    </span>
+                    ·
+                    <strong>{{ hw['title'] or 'Без названия' }}</strong>
+                  </div>
+                  <div class="student-homework-status">
+                    {% if hw['status'] == 'checked' %}
+                    <span class="lesson-status-badge lesson-status-done">
+                      Проверено
+                    </span>
+                    {% elif hw['status'] == 'assigned' and not hw['file_path'] %}
+                    <span class="lesson-status-badge lesson-status-planned">
+                      Задание от преподавателя
+                    </span>
+                    {% elif hw['status'] == 'new' %}
+                    <span class="lesson-status-badge lesson-status-planned">
+                      Отправлено, ждёт проверки
+                    </span>
+                    {% else %}
+                    <span class="lesson-status-badge lesson-status-planned">
+                      В работе
+                    </span>
+                    {% endif %}
+                  </div>
+
+
+                  {% if hw['comment'] %}
+                  <div class="lesson-comment" style="margin-top: 4px">
+                    Ваш комментарий: {{ hw['comment'] }}
+                  </div>
+                  {% endif %}
+
+                  <div class="student-homework-files">
+                    {% if hw['file_path'] %}
+                    <div>
+                      <span class="lesson-topic">Ваш файл: </span>
+                      <a href="{{ url_for('static', filename=hw['file_path']) }}" target="_blank">
+                        открыть
+                      </a>
+                    </div>
+                    {% endif %}
+                    {% if hw['teacher_file_path'] %}
+                    <div style="margin-top: 2px">
+                      <span class="lesson-topic">Файл от преподавателя: </span>
+                      <a href="{{ url_for('static', filename=hw['teacher_file_path']) }}" target="_blank">
+                        скачать
+                      </a>
+                    </div>
+                    {% endif %}
+                  </div>
+
+
+                  {% if hw['teacher_comment'] %}
+                  <div class="lesson-comment" style="margin-top: 6px">
+                    Комментарий преподавателя: {{ hw['teacher_comment'] }}
+                  </div>
+                  {% endif %} {% if hw['checked_at'] %}
+                  <div class="student-homework-meta">
+                    Проверено: {{ hw['checked_at'] }}
+                  </div>
+                  {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <p style="font-size: 0.9rem; color: #777; margin-top: 6px">
+              Пока нет загруженных домашних заданий.
             </p>
             {% endif %}
           </div>
         </div>
-      </section>
-    </div>
-  </body>
+        <!-- /student-subcards-wrapper -->
+
+        {% else %}
+        <p style="font-size: 0.9rem; color: #777; margin-top: 12px">
+          Введите ID ученика, чтобы посмотреть прогресс и отправить домашнее
+          задание.
+        </p>
+        {% endif %}
+      </div>
+  </div>
+  </section>
+  </div>
+</body>
+
 </html>
