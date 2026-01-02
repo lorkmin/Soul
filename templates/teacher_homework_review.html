@@ -1,6 +1,6 @@
 {% extends "admin_layout.html" %}
-
 {% block content %}
+
 <h2>Проверка домашнего задания</h2>
 
 <div class="admin-form">
@@ -18,54 +18,64 @@
       <strong>Название ДЗ:</strong>
       {{ hw['title'] or 'Без названия' }}
     </p>
+
     {% if hw['comment'] %}
-      <p>
-        <strong>Комментарий ученика:</strong><br>
-        {{ hw['comment'] }}
-      </p>
+    <p class="hw-student-comment">
+      <strong>Комментарий ученика:</strong><br>
+      {{ hw['comment'] }}
+    </p>
     {% endif %}
+
     {% if hw['file_path'] %}
-      <p>
-        <strong>Файл ученика:</strong><br>
-        <a href="{{ url_for('static', filename=hw['file_path']) }}" target="_blank">
-          Открыть файл
-        </a>
-      </p>
+    <p>
+      <strong>Файл ученика:</strong><br>
+      <a href="{{ url_for('static', filename=hw['file_path']) }}" target="_blank">
+        Открыть файл
+      </a>
+    </p>
     {% endif %}
   </div>
 
-  <form method="post" enctype="multipart/form-data" class="admin-form" style="margin-top:16px;">
+  <form method="post" enctype="multipart/form-data" class="admin-form hw-review-form">
     <div class="form-field">
       <label for="status">Статус</label>
       <select id="status" name="status">
-        <option value="checked" {% if hw['status'] == 'checked' %}selected{% endif %}>Проверено</option>
-        <option value="new" {% if hw['status'] == 'new' %}selected{% endif %}>Оставить как новое</option>
+        <option value="checked" {% if hw['status']=='checked' %}selected{% endif %}>
+          Проверено
+        </option>
+        <option value="new" {% if hw['status']=='new' %}selected{% endif %}>
+          Оставить как новое
+        </option>
       </select>
     </div>
 
     <div class="form-field">
       <label for="teacher_comment">Комментарий ученику</label>
       <textarea id="teacher_comment" name="teacher_comment" rows="3"
-                placeholder="Что получилось хорошо, над чем ещё поработать…">{{ hw['teacher_comment'] or '' }}</textarea>
+        placeholder="Что получилось хорошо, над чем ещё поработать…">{{- hw['teacher_comment'] or '' -}}</textarea>
     </div>
 
     <div class="form-field">
       <label for="teacher_file">Файл от преподавателя (по желанию)</label>
       <input id="teacher_file" type="file" name="teacher_file">
+
       {% if hw['teacher_file_path'] %}
-        <p class="admin-note" style="margin-top:4px;">
-          Уже загружен файл:
-          <a href="{{ url_for('static', filename=hw['teacher_file_path']) }}" target="_blank">
-            посмотреть
-          </a>.
-          Если выбрать новый файл, он заменит существующий.
-        </p>
+      <p class="hw-existing-file">
+        Уже загружен файл:
+        <a href="{{ url_for('static', filename=hw['teacher_file_path']) }}" target="_blank">
+          посмотреть
+        </a>.
+        Если выбрать новый файл, он заменит существующий.
+      </p>
       {% endif %}
     </div>
 
-    <button class="admin-btn-main" type="submit">
-      Сохранить проверку
-    </button>
+    <div class="admin-form-actions">
+      <button class="admin-btn-main" type="submit">
+        Сохранить проверку
+      </button>
+    </div>
   </form>
 </div>
+
 {% endblock %}
