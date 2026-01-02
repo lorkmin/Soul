@@ -23,3 +23,43 @@
   font-size: 0.85rem;
   color: var(--text-muted);
 }
+/* ===== Homework list ===== */
+
+.hw-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.hw-add-btn {
+  text-decoration: none;
+}
+
+.hw-date {
+  white-space: nowrap;
+}
+
+.hw-task .admin-note {
+  margin-top: 4px;
+}
+
+.hw-link-row {
+  margin-top: 4px;
+}
+
+.hw-teacher-reply {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.hw-actions {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.inline-form {
+  display: inline-block;
+  margin-left: 6px;
+}

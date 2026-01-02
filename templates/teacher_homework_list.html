@@ -1,5 +1,13 @@
 {% extends "admin_layout.html" %} {% block content %}
-<table class="admin-table">
+
+<div class="hw-header">
+  <h2>Домашние задания</h2>
+  <a href="{{ url_for('teacher_homework_add') }}" class="admin-btn hw-add-btn">
+    + Выдать новое задание
+  </a>
+</div>
+
+<table class="admin-table hw-table">
   <thead>
     <tr>
       <th>Дата</th>
@@ -10,53 +18,46 @@
       <th></th>
     </tr>
   </thead>
-  <tbody>
-    <div class="admin-header-row">
-      <h2>Домашние задания</h2>
-      <a
-        href="{{ url_for('teacher_homework_add') }}"
-        class="admin-btn"
-        style="text-decoration: none"
-      >
-        + Выдать новое задание
-      </a>
-    </div>
 
+  <tbody>
     {% for hw in homework %}
     <tr>
-      <td style="white-space: nowrap">{{ hw['created_at'] or '' }}</td>
+      <td class="hw-date">{{ hw['created_at'] or '' }}</td>
+
       <td>
         <div><strong>{{ hw['student_name'] or 'Без имени' }}</strong></div>
         {% if hw['student_code'] %}
         <div class="student-code">ID: {{ hw['student_code'] }}</div>
         {% endif %}
       </td>
+
       <td>{{ hw['student_course'] or 'Не указан' }}</td>
-      <td>
+
+      <td class="hw-task">
         <div>{{ hw['title'] or 'Без названия' }}</div>
+
         {% if hw['comment'] %}
         <div class="admin-note">{{ hw['comment'] }}</div>
-        {% endif %} {% if hw['file_path'] %}
-        <div style="margin-top: 4px">
-          <a
-            href="{{ url_for('static', filename=hw['file_path']) }}"
-            target="_blank"
-          >
+        {% endif %}
+
+        {% if hw['file_path'] %}
+        <div class="hw-link-row">
+          <a href="{{ url_for('static', filename=hw['file_path']) }}" target="_blank">
             Открыть файл ученика
           </a>
         </div>
-        {% endif %} {% if hw['teacher_file_path'] %}
-        <div style="margin-top: 4px; font-size: 0.85rem">
+        {% endif %}
+
+        {% if hw['teacher_file_path'] %}
+        <div class="hw-link-row hw-teacher-reply">
           Ответ:
-          <a
-            href="{{ url_for('static', filename=hw['teacher_file_path']) }}"
-            target="_blank"
-          >
+          <a href="{{ url_for('static', filename=hw['teacher_file_path']) }}" target="_blank">
             файл преподавателя
           </a>
         </div>
         {% endif %}
       </td>
+
       <td>
         {% if hw['status'] == 'new' %}
         <span class="badge-status badge-status-new">Новое</span>
@@ -66,20 +67,14 @@
         <span class="badge-status">{{ hw['status'] }}</span>
         {% endif %}
       </td>
-      <td style="white-space: nowrap">
-        <a
-          href="{{ url_for('teacher_homework_review', hw_id=hw['id']) }}"
-          class="admin-btn"
-        >
+
+      <td class="hw-actions">
+        <a href="{{ url_for('teacher_homework_review', hw_id=hw['id']) }}" class="admin-btn">
           Проверить
         </a>
 
-        <form
-          method="post"
-          action="{{ url_for('teacher_homework_delete', hw_id=hw['id']) }}"
-          style="display: inline"
-          onsubmit="return confirm('Удалить это ДЗ? Запись и файлы будут удалены.');"
-        >
+        <form method="post" action="{{ url_for('teacher_homework_delete', hw_id=hw['id']) }}" class="inline-form"
+          onsubmit="return confirm('Удалить это ДЗ? Запись и файлы будут удалены.');">
           <button type="submit" class="admin-btn admin-btn-danger">
             Удалить
           </button>
@@ -93,4 +88,5 @@
     {% endfor %}
   </tbody>
 </table>
+
 {% endblock %}
