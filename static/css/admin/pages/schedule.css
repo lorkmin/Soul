@@ -145,3 +145,47 @@
     font-size: 0.7rem;
   }
 }
+/* ===== Dark select (admin) ===== */
+
+.teacher-schedule-header select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  padding: 8px 36px 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(0, 0, 0, 0.35);
+  color: var(--text-main);
+  font-size: 0.9rem;
+  cursor: pointer;
+
+  background-image: linear-gradient(45deg, transparent 50%, #f4c94c 50%),
+    linear-gradient(135deg, #f4c94c 50%, transparent 50%);
+  background-position: calc(100% - 18px) 55%, calc(100% - 12px) 55%;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+}
+
+.teacher-schedule-header select option {
+  background: #1c1f26;
+  color: #fff;
+}
+/* ===== Month input ===== */
+
+.teacher-schedule-header input[type="month"] {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(0, 0, 0, 0.35);
+  color: var(--text-main);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* иконка календаря */
+.teacher-schedule-header
+  input[type="month"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(1.2);
+  cursor: pointer;
+}
