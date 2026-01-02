@@ -128,3 +128,35 @@
   display: inline-block;
   margin-left: 6px;
 }
+/* ===== Course edit form layout ===== */
+
+.admin-form,
+.admin-form * {
+  box-sizing: border-box;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.form-field {
+  min-width: 0; /* чтобы контент не раздувал колонку */
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field input,
+.form-field textarea,
+.form-field select {
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
