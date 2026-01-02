@@ -1,0 +1,8 @@
+.admin-container {
+  max-width: 1200px;
+  margin: 50px auto;
+  background: rgba(255, 255, 255, 0.07);
+  padding: 30px;
+  border-radius: 20px;
+  backdrop-filter: blur(8px);
+}

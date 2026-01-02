@@ -1,0 +1,21 @@
+:root {
+  --bg-main: #05040a;
+  --bg-gradient-top: #0b0c1a;
+  --bg-gradient-bottom: #030308;
+
+  --glass-light: rgba(255, 255, 255, 0.06);
+  --glass-strong: rgba(5, 5, 5, 0.7);
+
+  --accent-yellow: #f7d66a;
+  --accent-yellow-soft: #f2c85a;
+  --accent-yellow-muted: rgba(247, 214, 106, 0.18);
+
+  --text-main: #f7f7f7;
+  --text-muted: #a7a9c2;
+
+  --radius-lg: 24px;
+  --radius-md: 18px;
+
+  --transition-fast: 0.18s ease;
+  --transition-med: 0.26s ease;
+}
