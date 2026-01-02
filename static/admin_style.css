@@ -14,5 +14,5 @@
 @import url("css/admin/50_teacher_portal.css");
 
 /* Temporary: legacy public styles currently inside admin_style.css.
-   We'll delete this later after we move them to style_light.css. */
-@import url("css/admin/90_legacy_public.css");
+   We'll delete this later after we move them to style_light.css. 
+@import url("css/admin/90_legacy_public.css");*/
