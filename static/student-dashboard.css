@@ -1,0 +1,79 @@
+/* === ЛК ученика: общая ширина и карточки === */
+
+body.student-dashboard .section-inner {
+  max-width: 1200px; /* Было около 600, делаем пошире только для ЛК */
+}
+/* переопределяем узкий enroll-box только в ЛК ученика */
+body.student-dashboard .enroll-box {
+  max-width: 100%; /* снимаем ограничение 520px */
+}
+/* на всякий случай уберём ограничение у wrapper внутри ЛК */
+body.student-dashboard .wrapper {
+  max-width: 1200px;
+}
+
+.student-dashboard-card {
+  width: 100%;
+  max-width: 1120px; /* ширина самой карты */
+  margin: 0 auto;
+}
+
+/* Подкарточки "Ваши занятия" и "Домашние задания" */
+
+.student-subcard-title {
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.student-subcard-empty {
+  font-size: 0.9rem;
+  color: #777;
+  margin: 6px 0 0 0;
+}
+
+/* Чуть растянем блоки расписания, чтобы не казались "кирпичами" */
+
+.student-lessons-sections {
+  display: grid;
+  gap: 12px;
+}
+
+@media (min-width: 900px) {
+  .student-lessons-sections {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* чтобы "Ближайшие занятия" тянулись во всю ширину, если их немного */
+  .student-lessons-section:nth-child(1) {
+    grid-column: 1 / -1;
+  }
+}
+/* Контейнер двух нижних карточек (занятия + дз) */
+.student-subcards-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  margin-top: 25px;
+  max-width: 100%;
+}
+
+/* На широких экранах — 1.2fr / 1fr */
+@media (min-width: 960px) {
+  .student-subcards-wrapper {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: flex-start;
+  }
+}
+/* Центрируем ЛК ученика на странице */
+body.student-dashboard .wrapper {
+  max-width: 1200px; /* твоя желаемая ширина */
+  margin: 0 auto; /* центрируем всю обёртку */
+}
+
+body.student-dashboard .section-inner {
+  max-width: 1120px; /* чуть уже, чтобы были поля */
+  margin: 0 auto; /* тоже центрируем */
+  padding-left: 24px;
+  padding-right: 24px;
+}
