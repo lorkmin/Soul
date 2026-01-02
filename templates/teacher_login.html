@@ -1,43 +1,35 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Вход для преподавателя — Soul</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style_light.css') }}"
-    />
-  </head>
-  <body>
-    <div class="wrapper">
-      <section>
-        <div class="section-inner admin-container">
-          <div class="section-title">
-            <h3>Вход для преподавателя</h3>
-            <span>доступ к данным учеников</span>
-          </div>
 
-          <div class="admin-form">
-            {% if error %}
-            <p style="color: #c00; margin-bottom: 10px">{{ error }}</p>
-            {% endif %}
-            <form
-              action="{{ url_for('teacher_login_post', next=request.args.get('next')) }}"
-              method="post"
-            >
-              <label for="code">ID преподавателя</label>
-              <input
-                type="password"
-                id="code"
-                name="code"
-                placeholder="Введите длинный ID"
-                required
-              />
-              <button class="admin-btn" type="submit">Войти</button>
-            </form>
-          </div>
+<head>
+  <meta charset="UTF-8" />
+  <title>Вход для преподавателя — Soul</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style_unified.css') }}">
+
+</head>
+
+<body>
+  <div class="wrapper">
+    <section>
+      <div class="section-inner admin-container">
+        <div class="section-title">
+          <h3>Вход для преподавателя</h3>
+          <span>доступ к данным учеников</span>
         </div>
-      </section>
-    </div>
-  </body>
+
+        <div class="admin-form">
+          {% if error %}
+          <p style="color: #c00; margin-bottom: 10px">{{ error }}</p>
+          {% endif %}
+          <form action="{{ url_for('teacher_login_post', next=request.args.get('next')) }}" method="post">
+            <label for="code">ID преподавателя</label>
+            <input type="password" id="code" name="code" placeholder="Введите длинный ID" required />
+            <button class="admin-btn" type="submit">Войти</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+
 </html>
