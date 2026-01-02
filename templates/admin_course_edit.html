@@ -2,59 +2,31 @@
 <h2>Редактирование курса</h2>
 
 <div class="admin-form">
-  <form
-    action="{{ url_for('admin_courses_edit', cid=course['id']) }}"
-    method="post"
-    enctype="multipart/form-data"
-  >
+  <form action="{{ url_for('admin_courses_edit', cid=course['id']) }}" method="post" enctype="multipart/form-data">
     <div class="form-row">
       <div class="form-field">
         <label for="title">Название курса</label>
-        <input
-          id="title"
-          type="text"
-          name="title"
-          value="{{ course['title'] }}"
-          required
-        />
+        <input id="title" type="text" name="title" value="{{ course['title'] }}" required />
       </div>
 
       <div class="form-field">
         <label for="price">Стоимость (₽)</label>
-        <input
-          id="price"
-          type="number"
-          name="price"
-          value="{{ course['price'] or '' }}"
-          min="0"
-          step="100"
-        />
+        <input id="price" type="number" name="price" value="{{ course['price'] or '' }}" min="0" step="100" />
       </div>
     </div>
 
     <div class="form-row">
       <div class="form-field">
         <label for="lessons">Количество уроков</label>
-        <input
-          id="lessons"
-          type="number"
-          name="lessons"
-          value="{{ course['lessons'] or '' }}"
-          min="1"
-          step="1"
-        />
+        <input id="lessons" type="number" name="lessons" value="{{ course['lessons'] or '' }}" min="1" step="1" />
       </div>
     </div>
 
     <div class="form-field">
       <label for="description">Описание курса</label>
-      <textarea
-        id="description"
-        name="description"
-        rows="8"
-        placeholder="Текст описания курса"
-      >
-{{ course['description'] or '' }}</textarea
+      <textarea id="description" name="description" rows="8"
+        placeholder="Текст описания курса">{{- course['description'] or '' -}}</textarea>
+
       >
       <p class="admin-hint">
         Можно делать абзацы — пустая строка будет превращаться в отдельный блок
@@ -63,13 +35,8 @@
     </div>
     <div class="form-field">
       <label for="hero_tags">Теги для плашек на главной</label>
-      <input
-        id="hero_tags"
-        name="hero_tags"
-        type="text"
-        placeholder="🌸 уютные онлайн-занятия, 📚 свои материалы"
-        value="{{ course['hero_tags'] or '' }}"
-      />
+      <input id="hero_tags" name="hero_tags" type="text" placeholder="🌸 уютные онлайн-занятия, 📚 свои материалы"
+        value="{{ course['hero_tags'] or '' }}" />
       <p class="form-note">
         Введите несколько тегов через запятую. Можно использовать эмодзи —
         каждый тег станет отдельной цветной плашкой.
@@ -80,29 +47,15 @@
       <label>Обложка курса</label>
 
       {% if course['photo'] %}
-      <div
-        style="
-          margin-bottom: 8px;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        "
-      >
-        <img
-          src="{{ url_for('static', filename='uploads/courses/' ~ course['photo']) }}"
-          alt="Текущая обложка"
-          style="
-            width: 140px;
-            height: auto;
-            border-radius: 10px;
-            object-fit: cover;
-          "
-        />
-        <span style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.7)">
+      <div class="course-edit-cover">
+        <img class="course-edit-cover-img" src="{{ url_for('static', filename='uploads/courses/' ~ course['photo']) }}"
+          alt="Текущая обложка курса" />
+        <span class="course-edit-cover-note">
           Можно оставить как есть или загрузить новую картинку.
         </span>
       </div>
       {% endif %}
+
 
       <input type="file" name="photo" accept="image/*" />
     </div>
