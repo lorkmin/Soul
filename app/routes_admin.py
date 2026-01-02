@@ -1,7 +1,7 @@
 import csv
 import io
 import sqlite3
-from flask import Flask, render_template, request, redirect, url_for, send_file, session
+from flask import Flask, app, render_template, request, redirect, url_for, send_file, session
 
 from .auth import login_required
 from .db import get_db
@@ -59,9 +59,9 @@ def register_admin_routes(app: Flask) -> None:
         """Update admin note + bot flag for an enroll row."""
         note = (request.form.get("admin_note") or "").strip()
 
-        # checkbox sends "1" when checked; we also have hidden is_bot=0
-        is_bot_raw = request.form.get("is_bot", "0")
-        is_bot = 1 if str(is_bot_raw).strip() in ("1", "true", "on", "yes") else 0
+        # из-за hidden + checkbox может прийти ["0"] или ["0","1"]
+        is_bot_vals = [v.strip().lower() for v in request.form.getlist("is_bot")]
+        is_bot = 1 if "1" in is_bot_vals or "true" in is_bot_vals or "on" in is_bot_vals or "yes" in is_bot_vals else 0
 
         conn = get_db()
         conn.execute(
@@ -69,6 +69,8 @@ def register_admin_routes(app: Flask) -> None:
             (note or None, is_bot, enroll_id),
         )
         conn.commit()
+        return redirect(url_for("admin_enrolls"))
+
         return redirect(url_for("admin_enrolls"))
 
     @app.get("/admin/enrolls/export")

@@ -1,18 +1,13 @@
 {% extends "admin_layout.html" %} {% block content %}
-<div
-  class="top-actions"
-  style="
+<div class="top-actions" style="
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 12px;
-  "
->
+  ">
   <div>Всего заявок: {{ enrolls|length }}</div>
   <div>
-    <a class="btn-link" href="{{ url_for('admin_enrolls_export') }}"
-      >Экспорт в CSV</a
-    >
+    <a class="btn-link" href="{{ url_for('admin_enrolls_export') }}">Экспорт в CSV</a>
   </div>
 </div>
 
@@ -52,17 +47,20 @@
     background: rgba(255, 255, 255, 0.06);
     color: rgba(255, 255, 255, 0.85);
   }
+
   .bot-badge .dot {
     width: 8px;
     height: 8px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.35);
   }
+
   .bot-badge.is-bot {
     background: rgba(255, 70, 70, 0.16);
     border-color: rgba(255, 70, 70, 0.35);
     color: rgba(255, 255, 255, 0.92);
   }
+
   .bot-badge.is-bot .dot {
     background: rgba(255, 70, 70, 0.95);
     box-shadow: 0 0 0 3px rgba(255, 70, 70, 0.18);
@@ -75,9 +73,11 @@
     gap: 10px;
     user-select: none;
   }
+
   .bot-switch input {
     display: none;
   }
+
   .bot-switch .track {
     width: 46px;
     height: 26px;
@@ -88,6 +88,7 @@
     transition: background 0.2s ease, border-color 0.2s ease;
     box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
   }
+
   .bot-switch .thumb {
     position: absolute;
     top: 3px;
@@ -99,17 +100,19 @@
     transition: transform 0.2s ease;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
   }
+
   .bot-switch .label {
     font-size: 0.9rem;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.88);
   }
 
-  .bot-switch input:checked + .track {
+  .bot-switch input:checked+.track {
     background: rgba(255, 70, 70, 0.26);
     border-color: rgba(255, 70, 70, 0.45);
   }
-  .bot-switch input:checked + .track .thumb {
+
+  .bot-switch input:checked+.track .thumb {
     transform: translateX(20px);
   }
 
@@ -125,9 +128,11 @@
     color: rgba(255, 255, 255, 0.92);
     outline: none;
   }
+
   .admin-note-input::placeholder {
     color: rgba(255, 255, 255, 0.45);
   }
+
   .admin-note-input:focus {
     border-color: rgba(255, 205, 90, 0.55);
     box-shadow: 0 0 0 3px rgba(255, 205, 90, 0.12);
@@ -145,6 +150,7 @@
     color: rgba(255, 255, 255, 0.88);
     font-size: 0.9rem;
   }
+
   .admin-note-preview .icon {
     line-height: 1;
     margin-top: 2px;
@@ -211,27 +217,13 @@
       <td>
         {# ВАЖНО: чекбокс и textarea внутри ЭТОГО ЖЕ form, что и кнопка submit
         #}
-        <form
-          method="post"
-          action="{{ url_for('admin_enroll_note', enroll_id=e.id) }}"
-          class="admin-note-box"
-        >
+        <form method="post" action="{{ url_for('admin_enroll_note', enroll_id=e.id) }}" class="admin-note-box">
           <div class="bot-actions">
             <!-- hidden гарантирует 0 если чекбокс снят -->
             <input type="hidden" name="is_bot" value="0" />
 
             <label class="bot-switch">
-              <input
-                type="checkbox"
-                name="is_bot"
-                value="1"
-                {%
-                if
-                e.is_bot
-                %}checked{%
-                endif
-                %}
-              />
+              <input type="checkbox" name="is_bot" value="1" {% if e.is_bot %}checked{% endif %} />
               <span class="track"><span class="thumb"></span></span>
               <span class="label">Бот</span>
             </label>
@@ -239,13 +231,9 @@
             <div class="note-hint">видно только админу</div>
           </div>
 
-          <textarea
-            class="admin-note-input"
-            name="admin_note"
-            placeholder="Заметка админа: спам / перезвонить / не подходит по времени…"
-          >
-{{ e.admin_note or "" }}</textarea
-          >
+          <textarea class="admin-note-input" name="admin_note"
+            placeholder="Заметка админа: спам / перезвонить / не подходит по времени…">
+{{ e.admin_note or "" }}</textarea>
 
           {% if e.admin_note %}
           <div class="admin-note-preview">
