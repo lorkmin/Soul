@@ -44,3 +44,33 @@ h2 + .admin-form {
   margin-top: 12px;
   margin-bottom: 24px;
 }
+/* ===== Teacher edit page ===== */
+
+.teacher-edit-current-photo {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.teacher-edit-note {
+  font-size: 0.9rem;
+  margin: 8px 0;
+}
+
+.teacher-edit-no-photo {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.teacher-edit-cancel {
+  margin-left: 10px;
+}
+/* multiline lists: highlights & badges */
+#highlights,
+#badges {
+  font-family: inherit;
+  line-height: 1.5;
+}
