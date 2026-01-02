@@ -63,3 +63,52 @@
   display: inline-block;
   margin-left: 6px;
 }
+/* ===== Homework file links ===== */
+
+.hw-link-row a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 4px 10px;
+  border-radius: 999px;
+
+  font-size: 0.8rem;
+  text-decoration: none;
+  white-space: nowrap;
+
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-main);
+
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.hw-link-row a:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+/* иконка для файла ученика */
+.hw-link-row a::before {
+  content: "📎";
+  font-size: 0.85rem;
+}
+
+/* ===== Teacher reply ===== */
+
+.hw-teacher-reply {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.hw-teacher-reply a {
+  background: rgba(255, 205, 90, 0.14);
+  border-color: rgba(255, 205, 90, 0.45);
+  color: #ffe3a1;
+}
+
+.hw-teacher-reply a::before {
+  content: "🧑‍🏫";
+}
