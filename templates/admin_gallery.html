@@ -2,19 +2,11 @@
 <h2>Галерея</h2>
 
 <div class="admin-form">
-  <form
-    action="{{ url_for('admin_gallery_add') }}"
-    method="post"
-    enctype="multipart/form-data"
-  >
+  <form action="{{ url_for('admin_gallery_add') }}" method="post" enctype="multipart/form-data">
     <h3>Добавить фото</h3>
 
     <input type="text" name="title" placeholder="Подпись (по желанию)" />
-    <textarea
-      name="description"
-      rows="2"
-      placeholder="Короткое описание (по желанию)"
-    ></textarea>
+    <textarea name="description" rows="2" placeholder="Короткое описание (по желанию)"></textarea>
 
     <label style="margin-top: 10px">Файл изображения</label>
     <input type="file" name="photo" accept="image/*" required />
@@ -37,25 +29,19 @@
     {% for img in images %}
     <tr>
       <td>
-        <img
-          src="{{ url_for('static', filename='uploads/gallery/' ~ img['photo']) }}"
-          style="
-            width: 120px;
-            height: 70px;
-            object-fit: cover;
-            border-radius: 6px;
-          "
-        />
+        <img class="gallery-thumb" src="{{ url_for('static', filename='uploads/gallery/' ~ img['photo']) }}"
+          alt="Фото галереи" />
+
       </td>
       <td>{{ img['title'] or '—' }}</td>
-      <td>{{ img['description'] or '—' }}</td>
+      <td class="gallery-desc-cell" title="{{ img['description'] }}">
+        {{ img['description'] or '—' }}
+      </td>
+
       <td>{{ img['created_at'] }}</td>
       <td>
-        <form
-          action="{{ url_for('admin_gallery_delete', gid=img['id']) }}"
-          method="post"
-          onsubmit="return confirm('Удалить это фото?');"
-        >
+        <form action="{{ url_for('admin_gallery_delete', gid=img['id']) }}" method="post"
+          onsubmit="return confirm('Удалить это фото?');">
           <button class="admin-delete-btn">Удалить</button>
         </form>
       </td>

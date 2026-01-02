@@ -1,0 +1,41 @@
+/* ===== Admin Gallery page ===== */
+
+/* превью изображения */
+.gallery-thumb {
+  width: 120px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+}
+
+/* колонка с превью */
+.admin-table th:first-child,
+.admin-table td:first-child {
+  width: 140px;
+  text-align: center;
+}
+
+/* описание — не раздуваем таблицу */
+.gallery-desc-cell {
+  max-width: 420px;
+  white-space: normal;
+  font-size: 0.9rem;
+  line-height: 1.45;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* кнопка удаления справа */
+.admin-table td:last-child {
+  white-space: nowrap;
+  text-align: right;
+}
+
+/* форма добавления */
+.admin-form h3 {
+  margin: 0 0 10px;
+}
