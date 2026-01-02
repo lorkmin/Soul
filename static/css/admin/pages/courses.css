@@ -59,3 +59,63 @@
 .admin-secondary-link:hover {
   text-decoration: underline;
 }
+/* ===== Courses list page ===== */
+
+.course-row-img {
+  width: 84px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+}
+
+/* колонка с фото */
+.admin-table th:first-child,
+.admin-table td:first-child {
+  width: 110px;
+  text-align: center;
+}
+
+/* описание — не раздуваем таблицу */
+.admin-table td:nth-child(5) {
+  max-width: 520px;
+  white-space: normal;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+/* кнопки справа */
+.admin-table td:last-child,
+.admin-table td:nth-last-child(2) {
+  white-space: nowrap;
+}
+
+.admin-form h3 {
+  margin: 0 0 10px;
+}
+/* ===== Courses list ===== */
+
+.course-row-img {
+  width: 84px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+}
+
+.course-desc-cell {
+  max-width: 520px;
+  white-space: normal;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.course-actions-cell {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.inline-form {
+  display: inline-block;
+  margin-left: 6px;
+}

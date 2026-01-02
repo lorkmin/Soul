@@ -2,23 +2,14 @@
 <h2>Курсы</h2>
 
 <div class="admin-form">
-  <form action="/admin/courses/add" method="post" enctype="multipart/form-data">
+  <form action="{{ url_for('admin_courses_add') }}" method="post" enctype="multipart/form-data">
     <h3>Добавить курс</h3>
 
     <input type="text" name="title" placeholder="Название курса" required />
-    <input type="number" name="price" placeholder="Цена" required />
-    <input
-      type="number"
-      name="lessons"
-      placeholder="Количество уроков"
-      required
-    />
+    <input type="number" name="price" placeholder="Цена" min="0" step="100" />
+    <input type="number" name="lessons" placeholder="Количество уроков" min="1" step="1" />
 
-    <textarea
-      name="description"
-      rows="4"
-      placeholder="Описание курса"
-    ></textarea>
+    <textarea name="description" rows="4" placeholder="Описание курса"></textarea>
 
     <label>Фото:</label>
     <input type="file" name="photo" accept="image/*" />
@@ -42,25 +33,33 @@
   <tbody>
     {% for c in courses %}
     <tr>
-      <td><img src="/static/uploads/courses/{{ c.photo }}" /></td>
-      <td>{{ c.title }}</td>
-      <td>{{ c.price }}₽</td>
-      <td>{{ c.lessons }}</td>
-      <td>{{ c.description }}</td>
-
       <td>
-        <a
-          href="{{ url_for('admin_courses_edit', cid=c['id']) }}"
-          class="admin-btn"
-        >
-          Редактировать
-        </a>
+        {% if c.photo %}
+        <img class="course-row-img" src="{{ url_for('static', filename='uploads/courses/' ~ c.photo) }}"
+          alt="Обложка курса" />
+        {% else %}
+        —
+        {% endif %}
       </td>
-      <td>
-        <form action="/admin/courses/delete/{{ c.id }}" method="post">
+      <td>{{ c.title }}</td>
+      <td>{% if c.price %}{{ c.price }}₽{% else %}—{% endif %}</td>
+      <td>{% if c.lessons %}{{ c.lessons }}{% else %}—{% endif %}</td>
+      <td class="course-desc-cell">
+        {{ c.description or '' }}
+      </td>
+
+      <td class="course-actions-cell">
+        <a href="{{ url_for('admin_courses_edit', cid=c['id']) }}" class="admin-btn">Редактировать</a>
+
+        <form action="{{ url_for('admin_courses_delete', cid=c.id) }}" method="post" class="inline-form"
+          onsubmit="return confirm('Удалить курс «{{ c.title }}»?');">
           <button class="admin-delete-btn">Удалить</button>
         </form>
       </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="6">Пока нет курсов.</td>
     </tr>
     {% endfor %}
   </tbody>
