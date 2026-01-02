@@ -5,6 +5,7 @@
 
 <div class="admin-form">
   <form method="post">
+
     <div class="form-field">
       <label>Имя ученика</label>
       <input type="text" name="name" placeholder="Имя ученика" value="{{ student['name'] if student else '' }}"
@@ -15,18 +16,6 @@
       <label>Курс / группа</label>
       <input type="text" name="course" placeholder="Например: Начальный-1"
         value="{{ student['course'] if student else '' }}" />
-    </div>
-
-    <div class="form-field">
-      <label>Email</label>
-      <input type="email" name="email" placeholder="email@example.com"
-        value="{{ student['email'] if student else '' }}" />
-    </div>
-
-    <div class="form-field">
-      <label>Телефон</label>
-      <input type="text" name="phone" placeholder="+7 999 123-45-67"
-        value="{{ student['phone'] if student else '' }}" />
     </div>
 
     <div class="form-field">
@@ -65,6 +54,7 @@
         Отменить
       </a>
     </div>
+
   </form>
 </div>
 
