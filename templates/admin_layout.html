@@ -1,39 +1,40 @@
 <!DOCTYPE html>
 <html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Админка K-Spark</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body class="admin-page">
+    <div class="wrapper">
+      <section>
+        <div class="section-inner admin-container">
+          <div class="section-title">
+            <h3>Админ-панель</h3>
+            <span>управление школой</span>
+          </div>
 
-<head>
-  <meta charset="UTF-8" />
-  <title>Админка K-Spark</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='style_unified.css') }}">
+          <nav class="admin-nav">
+            <a href="{{ url_for('admin_enrolls') }}">Заявки</a>
+            <a href="{{ url_for('admin_reviews') }}">Отзывы</a>
+            <a href="{{ url_for('admin_teachers') }}">Преподаватели</a>
+            <a href="{{ url_for('admin_courses') }}">Курсы</a>
+            <a href="{{ url_for('admin_gallery') }}">Галерея</a>
+            <a href="{{ url_for('teacher_students') }}">Ученики</a>
+            <a href="{{ url_for('teacher_schedule') }}">Расписание</a>
+            <a href="{{ url_for('teacher_homework_list') }}"
+              >Домашние задания</a
+            >
+            <a href="{{ url_for('admin_logout') }}">Выйти</a>
+          </nav>
 
-</head>
-
-<body class="theme-dark">
-  <div class="wrapper">
-    <section>
-      <div class="section-inner admin-container">
-        <div class="section-title">
-          <h3>Админ-панель</h3>
-          <span>управление школой</span>
+          {% block content %}{% endblock %}
         </div>
-
-        <nav class="admin-nav">
-          <a href="{{ url_for('admin_enrolls') }}">Заявки</a>
-          <a href="{{ url_for('admin_reviews') }}">Отзывы</a>
-          <a href="{{ url_for('admin_teachers') }}">Преподаватели</a>
-          <a href="{{ url_for('admin_courses') }}">Курсы</a>
-          <a href="{{ url_for('admin_gallery') }}">Галерея</a>
-          <a href="{{ url_for('teacher_students') }}">Ученики</a>
-          <a href="{{ url_for('teacher_schedule') }}">Расписание</a>
-          <a href="{{ url_for('teacher_homework_list') }}">Домашние задания</a>
-          <a href="{{ url_for('admin_logout') }}">Выйти</a>
-        </nav>
-
-        {% block content %}{% endblock %}
-      </div>
-    </section>
-  </div>
-</body>
-
+      </section>
+    </div>
+  </body>
 </html>
