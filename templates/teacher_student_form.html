@@ -1,53 +1,71 @@
 ﻿{% extends "admin_layout.html" %}
-
 {% block content %}
+
 <h2>{{ 'Редактировать ученика' if student else 'Добавить ученика' }}</h2>
 
 <div class="admin-form">
   <form method="post">
-    {% if student %}
-      <p>Код для ученика: <code>{{ student['public_code'] }}</code></p>
-    {% endif %}
+    <div class="form-field">
+      <label>Имя ученика</label>
+      <input type="text" name="name" placeholder="Имя ученика" value="{{ student['name'] if student else '' }}"
+        required />
+    </div>
 
-    <label>Имя</label>
-    <input type="text" name="name" value="{{ student['name'] if student else '' }}" placeholder="Имя ученика">
+    <div class="form-field">
+      <label>Курс / группа</label>
+      <input type="text" name="course" placeholder="Например: Начальный-1"
+        value="{{ student['course'] if student else '' }}" />
+    </div>
 
-    <label>Курс / группа</label>
-    <input type="text" name="course" value="{{ student['course'] if student else '' }}" placeholder="Например: Начальный-1">
+    <div class="form-field">
+      <label>Email</label>
+      <input type="email" name="email" placeholder="email@example.com"
+        value="{{ student['email'] if student else '' }}" />
+    </div>
 
-    <label>Дата последней оплаты (ГГГГ-ММ-ДД)</label>
-    <input type="text" name="last_payment_date" value="{{ student['last_payment_date'] if student else '' }}" placeholder="2025-02-01">
+    <div class="form-field">
+      <label>Телефон</label>
+      <input type="text" name="phone" placeholder="+7 999 123-45-67"
+        value="{{ student['phone'] if student else '' }}" />
+    </div>
 
-    <label>Сумма последней оплаты</label>
-    <input type="number" name="last_payment_amount" value="{{ student['last_payment_amount'] if student else '' }}" min="0">
+    <div class="form-field">
+      <label>Осталось занятий</label>
+      <input type="number" name="lessons_left" min="0" placeholder="0"
+        value="{{ student['lessons_left'] if student else 0 }}" />
+    </div>
 
-    <label>Всего занятий в пакете</label>
-    <input type="number" name="lessons_total" value="{{ student['lessons_total'] if student else '' }}" min="0">
+    <div class="form-field">
+      <label>Статус</label>
+      <select name="status">
+        <option value="active" {% if student and student['status']=='active' %}selected{% endif %}>
+          Активен
+        </option>
+        <option value="paused" {% if student and student['status']=='paused' %}selected{% endif %}>
+          Пауза
+        </option>
+        <option value="finished" {% if student and student['status']=='finished' %}selected{% endif %}>
+          Завершил обучение
+        </option>
+      </select>
+    </div>
 
-    <label>Осталось занятий</label>
-    <input type="number" name="lessons_left" value="{{ student['lessons_left'] if student else '' }}" min="0">
+    <div class="form-field">
+      <label>Комментарий</label>
+      <textarea name="comment" rows="3"
+        placeholder="Доп. инфо: формат, особые условия и т.п.">{{- student['comment'] if student else '' -}}</textarea>
+    </div>
 
-    <label>Комментарий (для себя)</label>
-    <textarea name="comment" rows="3" placeholder="Доп. инфо: формат, особые условия и т.п.">{{ student['comment'] if student else '' }}</textarea>
+    <div class="admin-form-actions">
+      <button type="submit" class="admin-btn">
+        {{ 'Сохранить изменения' if student else 'Добавить ученика' }}
+      </button>
 
-<div class="form-field">
-  <label>Преподаватель</label>
-  <select name="teacher_id">
-    <option value="">— не выбран —</option>
-    {% for t in teachers %}
-      <option value="{{ t['id'] }}"
-        {% if student and student['teacher_id'] == t['id'] %}selected{% endif %}
-      >
-        {{ t['name'] }}
-      </option>
-    {% endfor %}
-  </select>
-</div>
-
-    
-    <button class="admin-btn" type="submit">
-      {{ 'Сохранить' if student else 'Создать' }}
-    </button>
+      <a href="{{ url_for('teacher_students') }}" class="admin-secondary-link">
+        Отменить
+      </a>
+    </div>
   </form>
 </div>
+
 {% endblock %}
