@@ -483,7 +483,7 @@ def register_teacher_routes(app: Flask) -> None:
                 orig_name = secure_filename(file.filename)
                 ts = datetime.now().strftime("%Y%m%d_%H%M%S")
                 new_name = f"task_stu{student_id}_{ts}_{orig_name}"
-                abs_path = os.path.join(HOMEWORK_UPLOAD_FOLDER, new_name)
+                abs_path = os.path.join(app.config["HOMEWORK_UPLOAD_FOLDER"], new_name)
                 file.save(abs_path)
 
                 teacher_file_name = orig_name
