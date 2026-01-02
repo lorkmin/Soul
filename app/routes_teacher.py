@@ -452,5 +452,67 @@ def register_teacher_routes(app: Flask) -> None:
         flash("Домашнее задание удалено", "success")
         return redirect(url_for("teacher_homework_list"))
 
+    @app.route("/teacher/homework/add", methods=["GET", "POST"])
+    @teacher_login_required
+    def teacher_homework_add():
+        conn = get_db()
+        conn.row_factory = sqlite3.Row
+
+        # список учеников для выбора
+        students = conn.execute("""
+            SELECT id, name, public_code, course
+            FROM student_accounts
+            ORDER BY name COLLATE NOCASE
+        """).fetchall()
+
+        if request.method == "POST":
+            student_id = request.form.get("student_id")
+            title = (request.form.get("title") or "").strip()
+            teacher_comment = (request.form.get("teacher_comment") or "").strip()
+            file = request.files.get("teacher_file")
+
+            if not student_id:
+                conn.close()
+                return redirect(url_for("teacher_homework_add"))
+
+            teacher_file_name = None
+            teacher_file_path = None
+
+            if file and file.filename and hw_allowed(file.filename):
+                orig_name = secure_filename(file.filename)
+                ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+                new_name = f"task_stu{student_id}_{ts}_{orig_name}"
+                abs_path = os.path.join(HOMEWORK_UPLOAD_FOLDER, new_name)
+                file.save(abs_path)
+
+                teacher_file_name = orig_name
+                teacher_file_path = f"uploads/homework/{new_name}"
+
+            conn.execute("""
+                INSERT INTO student_homework (
+                    student_id,
+                    title,
+                    comment,
+                    file_name,
+                    file_path,
+                    status,
+                    teacher_comment,
+                    teacher_file_name,
+                    teacher_file_path
+                ) VALUES (?, ?, NULL, NULL, NULL, 'assigned', ?, ?, ?)
+            """, (
+                int(student_id),
+                title or None,
+                teacher_comment or None,
+                teacher_file_name,
+                teacher_file_path,
+            ))
+            conn.commit()
+            conn.close()
+            return redirect(url_for("teacher_homework_list"))
+
+        conn.close()
+        return render_template("teacher_homework_add.html", students=students)
+
     # NOTE: выдача нового задания ученику (teacher_homework_add) оставлена как ранее,
     # но для работы нужен шаблон teacher_homework_add.html.
