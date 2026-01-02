@@ -1,0 +1,225 @@
+/* ===== Students page ===== */
+
+.students-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.students-header h2 {
+  margin: 0 0 4px;
+  font-size: 1.3rem;
+}
+
+.students-header p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* главная кнопка */
+.admin-btn-main {
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: none;
+  background: #f4c94c;
+  color: #3a2c0a;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(244, 201, 76, 0.55);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.admin-btn-main:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(244, 201, 76, 0.75);
+}
+
+/* controls */
+.students-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.students-search {
+  flex: 1 1 220px;
+}
+
+.students-search input {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 0.9rem;
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--text-main);
+}
+
+.students-search input:focus {
+  outline: none;
+  border-color: #f4c94c;
+  box-shadow: 0 0 0 1px rgba(244, 201, 76, 0.5);
+}
+
+.students-legend {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  align-items: center;
+}
+
+/* badges */
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.badge-lessons-ok {
+  background: rgba(70, 180, 110, 0.18);
+  color: #7fe0a6;
+  border-color: rgba(70, 180, 110, 0.45);
+}
+
+.badge-lessons-low {
+  background: rgba(255, 200, 80, 0.18);
+  color: #ffd27a;
+  border-color: rgba(255, 200, 80, 0.45);
+}
+
+.badge-lessons-critical {
+  background: rgba(255, 90, 90, 0.2);
+  color: #ffb1b1;
+  border-color: rgba(255, 90, 90, 0.45);
+}
+
+.badge-status-muted {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.badge-course {
+  background: rgba(120, 100, 255, 0.18);
+  color: #cfc7ff;
+  border-color: rgba(120, 100, 255, 0.45);
+}
+
+/* table */
+.students-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.students-table th,
+.students-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  vertical-align: middle;
+}
+
+.students-table th {
+  text-align: left;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.students-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.student-name {
+  font-weight: 600;
+}
+
+.student-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85rem;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.student-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.student-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+/* links */
+.btn-link {
+  border-radius: 999px;
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--text-main);
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.btn-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px);
+}
+
+.btn-link-danger {
+  color: #ff9a8a;
+  border-color: rgba(255, 100, 80, 0.45);
+  background: rgba(255, 80, 60, 0.15);
+}
+
+.btn-link-danger:hover {
+  background: rgba(255, 80, 60, 0.25);
+}
+
+/* responsive */
+@media (max-width: 800px) {
+  .students-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-btn-main {
+    align-self: stretch;
+    text-align: center;
+  }
+
+  .students-table th:nth-child(4),
+  .students-table td:nth-child(4) {
+    display: none;
+  }
+}
+.admin-btn-outline {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+  box-shadow: none;
+}
