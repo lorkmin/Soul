@@ -1,0 +1,81 @@
+/* ===== Admin Reviews page ===== */
+
+.reviews-admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 16px;
+}
+
+.review-admin-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.review-admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.review-admin-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.review-admin-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.review-admin-text {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.review-admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+}
+
+/* ===== Badges ===== */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+
+.badge.approved {
+  background: rgba(80, 200, 120, 0.18);
+  border-color: rgba(80, 200, 120, 0.45);
+  color: rgba(170, 255, 200, 0.95);
+}
+
+.badge.pending {
+  background: rgba(255, 200, 80, 0.18);
+  border-color: rgba(255, 200, 80, 0.45);
+  color: rgba(255, 220, 160, 0.95);
+}
+
+/* ===== Mini buttons ===== */
+
+.btn-mini {
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  border-radius: 10px;
+}
