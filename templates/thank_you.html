@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <title>Заявка отправлена — Soul</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='admin_style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style_light.css') }}">
 </head>
 
 <body>
@@ -13,16 +13,21 @@
     {% include 'partials_header_stub.html' ignore missing %}
 
     <section>
-      <div class="section-inner" style="text-align:center; max-width:600px; margin:40px auto;">
-        <h2 style="margin-bottom:10px;">Спасибо за заявку! ✨</h2>
-        <p style="color:var(--text-muted); margin-bottom:12px;">
+      <div class="thankyou-container">
+        <h2 class="thankyou-title">Спасибо за заявку! ✨</h2>
+
+        <p class="thankyou-text">
           Мы получили вашу заявку и свяжемся с вами в ближайшее время,
           чтобы подобрать удобное время пробного урока.
         </p>
-        <p style="color:var(--text-muted); margin-bottom:20px;">
+
+        <p class="thankyou-text">
           Если вы указали Telegram, ожидайте сообщение от аккаунта школы.
         </p>
-        <a href="{{ url_for('index') }}" class="btn btn-primary">Вернуться на главную</a>
+
+        <a href="{{ url_for('index') }}" class="btn btn-primary">
+          Вернуться на главную
+        </a>
       </div>
     </section>
   </div>
