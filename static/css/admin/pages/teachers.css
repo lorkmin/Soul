@@ -1,0 +1,46 @@
+/* ===== Admin Teachers page ===== */
+
+/* Фото преподавателя в таблице */
+.admin-table td img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+}
+
+/* Колонка с фото уже */
+.admin-table th:first-child,
+.admin-table td:first-child {
+  width: 80px;
+  text-align: center;
+}
+
+/* Биография — читаемо, но без разрастания */
+.admin-table td:nth-child(4) {
+  font-size: 0.9rem;
+  line-height: 1.45;
+  max-width: 420px;
+  white-space: normal;
+}
+
+/* Кнопки действий справа */
+.admin-table td:last-child {
+  text-align: right;
+}
+
+/* Небольшой отступ между кнопками */
+.admin-table .admin-btn {
+  margin-right: 6px;
+}
+
+/* Форма добавления преподавателя */
+.admin-form textarea {
+  resize: vertical;
+}
+
+/* Немного воздуха между заголовком и формой */
+h2 + .admin-form {
+  margin-top: 12px;
+  margin-bottom: 24px;
+}
