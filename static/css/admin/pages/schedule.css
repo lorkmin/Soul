@@ -189,3 +189,43 @@
   filter: invert(1) brightness(1.2);
   cursor: pointer;
 }
+.lesson-student-info {
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+/* ===== Student lessons list ===== */
+
+.lesson-student-info {
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.lesson-actions {
+  margin-bottom: 16px;
+}
+
+.lesson-back-btn {
+  margin-left: 8px;
+}
+
+.lesson-table .lesson-date {
+  white-space: nowrap;
+}
+
+.lesson-comment {
+  max-width: 520px;
+  white-space: normal;
+  line-height: 1.45;
+}
+
+.lesson-row-actions {
+  white-space: nowrap;
+  text-align: right;
+}
+.badge-status-canceled {
+  background: rgba(255, 80, 80, 0.18);
+  border: 1px solid rgba(255, 80, 80, 0.4);
+  color: rgba(255, 190, 190, 0.95);
+}

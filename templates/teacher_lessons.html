@@ -1,23 +1,24 @@
 {% extends "admin_layout.html" %}
-
 {% block content %}
+
 <h2>Занятия ученика</h2>
 
-<p style="margin-bottom: 10px;">
+<p class="lesson-student-info">
   <strong>{{ student['name'] or 'Ученик' }}</strong>
   {% if student['course'] %} · курс: {{ student['course'] }}{% endif %}
 </p>
 
-<div class="admin-form" style="margin-bottom: 16px;">
+<div class="lesson-actions">
   <a class="admin-btn" href="{{ url_for('teacher_student_lesson_add', sid=student['id']) }}">
     Добавить занятие
   </a>
-  <a class="admin-btn" href="{{ url_for('teacher_students') }}" style="margin-left:8px;">
+
+  <a class="admin-btn lesson-back-btn" href="{{ url_for('teacher_students') }}">
     К списку учеников
   </a>
 </div>
 
-<table class="admin-table">
+<table class="admin-table lesson-table">
   <thead>
     <tr>
       <th>Дата и время</th>
@@ -28,30 +29,43 @@
       <th></th>
     </tr>
   </thead>
+
   <tbody>
     {% for l in lessons %}
-      <tr>
-        <td>{{ l['start_at'] }}</td>
-        <td>
-          {% if l['status'] == 'done' %}Проведено{% elif l['status'] == 'canceled' %}
-            Отменено{% elif l['status'] == 'rescheduled' %}Перенесено{% else %}Запланировано{% endif %}
-        </td>
-        <td>{{ l['rescheduled_to'] or '—' }}</td>
-        <td>{{ l['topic'] or '—' }}</td>
-        <td>{{ l['comment'] or '—' }}</td>
-        <td>
-          <a class="admin-btn" href="{{ url_for('teacher_lesson_edit', lid=l['id']) }}">Изм.</a>
-          <form action="{{ url_for('teacher_lesson_delete', lid=l['id']) }}"
-                method="post"
-                style="display:inline;"
-                onsubmit="return confirm('Удалить это занятие?');">
-            <button class="admin-delete-btn" type="submit">×</button>
-          </form>
-        </td>
-      </tr>
+    <tr>
+      <td class="lesson-date">{{ l['start_at'] }}</td>
+
+      <td>
+        {% if l['status'] == 'done' %}
+        <span class="badge-status badge-status-checked">Проведено</span>
+        {% elif l['status'] == 'canceled' %}
+        <span class="badge-status badge-status-canceled">Отменено</span>
+        {% elif l['status'] == 'rescheduled' %}
+        <span class="badge-status badge-status-new">Перенесено</span>
+        {% else %}
+        <span class="badge-status">Запланировано</span>
+        {% endif %}
+      </td>
+
+      <td class="lesson-date">{{ l['rescheduled_to'] or '—' }}</td>
+      <td>{{ l['topic'] or '—' }}</td>
+      <td class="lesson-comment">{{ l['comment'] or '—' }}</td>
+
+      <td class="lesson-row-actions">
+        <a class="admin-btn" href="{{ url_for('teacher_lesson_edit', lid=l['id']) }}">Изм.</a>
+
+        <form action="{{ url_for('teacher_lesson_delete', lid=l['id']) }}" method="post" class="inline-form"
+          onsubmit="return confirm('Удалить это занятие?');">
+          <button class="admin-delete-btn" type="submit">×</button>
+        </form>
+      </td>
+    </tr>
     {% else %}
-      <tr><td colspan="6">Пока нет занятий.</td></tr>
+    <tr>
+      <td colspan="6">Пока нет занятий.</td>
+    </tr>
     {% endfor %}
   </tbody>
 </table>
+
 {% endblock %}

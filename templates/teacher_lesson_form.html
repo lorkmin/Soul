@@ -1,46 +1,64 @@
 {% extends "admin_layout.html" %}
-
 {% block content %}
+
 <h2>{{ 'Изменить занятие' if lesson else 'Добавить занятие' }}</h2>
 
-<p style="margin-bottom: 10px;">
-  Для ученика: <strong>{{ student['name'] or 'Ученик' }}</strong>
+<p class="lesson-student-info">
+  Для ученика:
+  <strong>{{ student['name'] or 'Ученик' }}</strong>
   {% if student['course'] %} · {{ student['course'] }}{% endif %}
 </p>
 
 <div class="admin-form">
   <form method="post">
-    <label>Дата и время (формат: 2025-02-01 19:00)</label>
-    <input type="text" name="start_at"
-           value="{{ lesson['start_at'] if lesson else '' }}"
-           placeholder="2025-02-01 19:00" required>
 
-    <label>Статус</label>
-    <select name="status">
+    <div class="form-field">
+      <label>Дата и время</label>
+      <input type="text" name="start_at" placeholder="2025-02-01 19:00"
+        value="{{ lesson['start_at'] if lesson else '' }}" required />
+      <p class="form-note">Формат: ГГГГ-ММ-ДД ЧЧ:ММ</p>
+    </div>
+
+    <div class="form-field">
+      <label>Статус</label>
       {% set st = lesson['status'] if lesson else 'planned' %}
-      <option value="planned"     {{ 'selected' if st == 'planned' else '' }}>Запланировано</option>
-      <option value="done"        {{ 'selected' if st == 'done' else '' }}>Проведено</option>
-      <option value="canceled"    {{ 'selected' if st == 'canceled' else '' }}>Отменено</option>
-      <option value="rescheduled" {{ 'selected' if st == 'rescheduled' else '' }}>Перенесено</option>
-    </select>
+      <select name="status">
+        <option value="planned" {{ 'selected' if st=='planned' else '' }}>Запланировано</option>
+        <option value="done" {{ 'selected' if st=='done' else '' }}>Проведено</option>
+        <option value="canceled" {{ 'selected' if st=='canceled' else '' }}>Отменено</option>
+        <option value="rescheduled" {{ 'selected' if st=='rescheduled' else '' }}>Перенесено</option>
+      </select>
+    </div>
 
-    <label>Новая дата/время (если перенесено)</label>
-    <input type="text" name="rescheduled_to"
-           value="{{ lesson['rescheduled_to'] if lesson else '' }}"
-           placeholder="2025-02-05 19:00">
+    <div class="form-field">
+      <label>Новая дата / время (если перенесено)</label>
+      <input type="text" name="rescheduled_to" placeholder="2025-02-05 19:00"
+        value="{{ lesson['rescheduled_to'] if lesson else '' }}" />
+    </div>
 
-    <label>Тема занятия (по желанию)</label>
-    <input type="text" name="topic"
-           value="{{ lesson['topic'] if lesson else '' }}"
-           placeholder="Например: алфавит, чтение, диалоги">
+    <div class="form-field">
+      <label>Тема занятия</label>
+      <input type="text" name="topic" placeholder="Например: алфавит, чтение, диалоги"
+        value="{{ lesson['topic'] if lesson else '' }}" />
+    </div>
 
-    <label>Комментарий (виден ученику)</label>
-    <textarea name="comment" rows="3"
-              placeholder="Например: перенос по просьбе ученика или детали домашки">{{ lesson['comment'] if lesson else '' }}</textarea>
+    <div class="form-field">
+      <label>Комментарий (виден ученику)</label>
+      <textarea name="comment" rows="3"
+        placeholder="Например: перенос по просьбе ученика или детали домашки">{{- lesson['comment'] if lesson else '' -}}</textarea>
+    </div>
 
-    <button class="admin-btn" type="submit">
-      {{ 'Сохранить' if lesson else 'Добавить' }}
-    </button>
+    <div class="admin-form-actions">
+      <button class="admin-btn" type="submit">
+        {{ 'Сохранить' if lesson else 'Добавить' }}
+      </button>
+
+      <a href="{{ url_for('teacher_schedule') }}" class="admin-secondary-link">
+        Отмена
+      </a>
+    </div>
+
   </form>
 </div>
+
 {% endblock %}
