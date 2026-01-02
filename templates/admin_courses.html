@@ -44,9 +44,10 @@
       <td>{{ c.title }}</td>
       <td>{% if c.price %}{{ c.price }}₽{% else %}—{% endif %}</td>
       <td>{% if c.lessons %}{{ c.lessons }}{% else %}—{% endif %}</td>
-      <td class="course-desc-cell">
+      <td class="course-desc-cell" title="{{ c.description }}">
         {{ c.description or '' }}
       </td>
+
 
       <td class="course-actions-cell">
         <a href="{{ url_for('admin_courses_edit', cid=c['id']) }}" class="admin-btn">Редактировать</a>

@@ -103,11 +103,20 @@
   display: block;
 }
 
+/* ===== Course description cell ===== */
+
 .course-desc-cell {
-  max-width: 520px;
+  max-width: 420px;
   white-space: normal;
   font-size: 0.9rem;
   line-height: 1.45;
+
+  /* главное */
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* сколько строк показываем */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .course-actions-cell {
