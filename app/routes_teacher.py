@@ -73,7 +73,7 @@ def register_teacher_routes(app: Flask) -> None:
             FROM student_accounts s
             LEFT JOIN teachers t ON t.id = s.teacher_id
             {where_sql}
-            ORDER BY s.created_at DESC
+            ORDER BY s.id DESC
             """,
             params,
         ).fetchall()
