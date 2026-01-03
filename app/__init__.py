@@ -27,7 +27,8 @@ def create_app() -> Flask:
         app.config["COURSE_UPLOAD"],
         app.config["GALLERY_UPLOAD"],
         app.config["HOMEWORK_UPLOAD_FOLDER"],
-        app.config["MATERIALS_UPLOAD_FOLDER"],
+        app.config.get("MATERIALS_UPLOAD_FOLDER", os.path.join(app.static_folder, "uploads", "materials")),
+
 
     ):
         os.makedirs(p, exist_ok=True)
@@ -43,5 +44,5 @@ def create_app() -> Flask:
     register_error_handlers(app)
     register_admin_materials_routes(app)
     register_student_materials_routes(app)
-    
+
     return app

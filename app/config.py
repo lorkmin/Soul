@@ -41,3 +41,4 @@ class Config:
 
         MATERIALS_UPLOAD_FOLDER = os.path.join(base_dir, "static", "uploads", "materials")
 
+
