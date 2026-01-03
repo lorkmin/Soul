@@ -6,92 +6,93 @@
     <a class="btn-link" href="{{ url_for('admin_enrolls_export') }}">Экспорт в CSV</a>
   </div>
 </div>
+<div class="table-scroll">
+  <table class="admin-table enrolls-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Дата / IP</th>
+        <th>Имя / Контакт</th>
+        <th>Пакет / Уровень</th>
+        <th>Комментарий</th>
+        <th>Бот</th>
+        <th style="min-width: 340px">Заметка админа</th>
+        <th></th>
+      </tr>
+    </thead>
 
-<table class="admin-table enrolls-table">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Дата / IP</th>
-      <th>Имя / Контакт</th>
-      <th>Пакет / Уровень</th>
-      <th>Комментарий</th>
-      <th>Бот</th>
-      <th style="min-width: 340px">Заметка админа</th>
-      <th></th>
-    </tr>
-  </thead>
+    <tbody>
+      {% for e in enrolls %}
+      <tr>
+        <td>{{ e.id }}</td>
 
-  <tbody>
-    {% for e in enrolls %}
-    <tr>
-      <td>{{ e.id }}</td>
+        <td>
+          <div>{{ e.created_at }}</div>
+          <div class="admin-meta">{{ e.ip }}</div>
+        </td>
 
-      <td>
-        <div>{{ e.created_at }}</div>
-        <div class="admin-meta">{{ e.ip }}</div>
-      </td>
+        <td>
+          <div>{{ e.name }}</div>
+          <div class="admin-meta">{{ e.contact }}</div>
+        </td>
 
-      <td>
-        <div>{{ e.name }}</div>
-        <div class="admin-meta">{{ e.contact }}</div>
-      </td>
+        <td>
+          <div>{{ e.tariff or "—" }}</div>
+          <div class="admin-meta">{{ e.level or "—" }}</div>
+        </td>
 
-      <td>
-        <div>{{ e.tariff or "—" }}</div>
-        <div class="admin-meta">{{ e.level or "—" }}</div>
-      </td>
+        <td>{{ e.comment or "" }}</td>
 
-      <td>{{ e.comment or "" }}</td>
-
-      <td style="white-space: nowrap">
-        {% if e.is_bot %}
-        <span class="bot-badge is-bot"><span class="dot"></span> BOT</span>
-        {% else %}
-        <span class="bot-badge"><span class="dot"></span> —</span>
-        {% endif %}
-      </td>
-
-      <td>
-        {# ВАЖНО: чекбокс и textarea внутри ЭТОГО ЖЕ form, что и кнопка submit
-        #}
-        <form method="post" action="{{ url_for('admin_enroll_note', enroll_id=e.id) }}" class="admin-note-box">
-          <div class="bot-actions">
-            <!-- hidden гарантирует 0 если чекбокс снят -->
-            <input type="hidden" name="is_bot" value="0" />
-
-            <label class="bot-switch">
-              <input type="checkbox" name="is_bot" value="1" {% if e.is_bot %}checked{% endif %} />
-              <span class="track"><span class="thumb"></span></span>
-              <span class="label">Бот</span>
-            </label>
-
-            <div class="note-hint">видно только админу</div>
-          </div>
-
-          <textarea class="admin-note-input" name="admin_note"
-            placeholder="Заметка админа: спам / перезвонить / не подходит по времени…">{{- e.admin_note or "" -}}</textarea>
-
-
-          {% if e.admin_note %}
-          <div class="admin-note-preview">
-            <span class="icon">💬</span>
-            <div>{{ e.admin_note }}</div>
-          </div>
+        <td style="white-space: nowrap">
+          {% if e.is_bot %}
+          <span class="bot-badge is-bot"><span class="dot"></span> BOT</span>
+          {% else %}
+          <span class="bot-badge"><span class="dot"></span> —</span>
           {% endif %}
+        </td>
 
-          <div class="note-actions-row">
-            <button type="submit" class="admin-btn">Сохранить</button>
-          </div>
-        </form>
-      </td>
+        <td>
+          {# ВАЖНО: чекбокс и textarea внутри ЭТОГО ЖЕ form, что и кнопка submit
+          #}
+          <form method="post" action="{{ url_for('admin_enroll_note', enroll_id=e.id) }}" class="admin-note-box">
+            <div class="bot-actions">
+              <!-- hidden гарантирует 0 если чекбокс снят -->
+              <input type="hidden" name="is_bot" value="0" />
 
-      <td></td>
-    </tr>
-    {% else %}
-    <tr>
-      <td colspan="8">Пока нет заявок.</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+              <label class="bot-switch">
+                <input type="checkbox" name="is_bot" value="1" {% if e.is_bot %}checked{% endif %} />
+                <span class="track"><span class="thumb"></span></span>
+                <span class="label">Бот</span>
+              </label>
+
+              <div class="note-hint">видно только админу</div>
+            </div>
+
+            <textarea class="admin-note-input" name="admin_note"
+              placeholder="Заметка админа: спам / перезвонить / не подходит по времени…">{{- e.admin_note or "" -}}</textarea>
+
+
+            {% if e.admin_note %}
+            <div class="admin-note-preview">
+              <span class="icon">💬</span>
+              <div>{{ e.admin_note }}</div>
+            </div>
+            {% endif %}
+
+            <div class="note-actions-row">
+              <button type="submit" class="admin-btn">Сохранить</button>
+            </div>
+          </form>
+        </td>
+
+        <td></td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="8">Пока нет заявок.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

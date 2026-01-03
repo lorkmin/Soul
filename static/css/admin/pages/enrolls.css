@@ -224,3 +224,36 @@
   word-break: break-word;
   white-space: normal;
 }
+/* === Enrolls: don't break headers into letters === */
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* таблица не должна ужиматься до состояния "буквы столбиком" */
+.admin-table.enrolls-table {
+  width: 100%;
+  min-width: 1100px; /* подстрой если нужно */
+  table-layout: auto;
+}
+
+/* заголовки — без переносов */
+.admin-table.enrolls-table th {
+  white-space: nowrap;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+/* контент в ячейках можно переносить, но НЕ по буквам */
+.admin-table.enrolls-table td {
+  white-space: normal;
+  word-break: break-word; /* ок для текста */
+  overflow-wrap: break-word;
+}
+
+/* колонка заметки — фикс ширина, чтобы форма не ломала сетку */
+.admin-table.enrolls-table th:nth-child(7),
+.admin-table.enrolls-table td:nth-child(7) {
+  width: 380px;
+}
