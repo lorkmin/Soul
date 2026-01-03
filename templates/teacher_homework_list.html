@@ -1,4 +1,5 @@
-{% extends "admin_layout.html" %} {% block content %}
+{% extends "admin_layout.html" %}
+{% block content %}
 
 <div class="hw-header">
   <h2>Домашние задания</h2>
@@ -6,6 +7,51 @@
     + Выдать новое задание
   </a>
 </div>
+
+{# ===== ФИЛЬТРЫ ===== #}
+<form method="get" class="admin-form hw-filters" style="margin: 14px 0 18px;">
+  <div class="form-row" style="align-items:flex-end; gap:12px; flex-wrap:wrap;">
+
+    <div class="form-field" style="min-width:240px;">
+      <label>Преподаватель (чьи ученики)</label>
+      <select name="teacher_id">
+        <option value="">— все —</option>
+        {% for t in teachers %}
+        <option value="{{ t['id'] }}" {% if f_teacher_id and f_teacher_id|int==t['id'] %}selected{% endif %}>
+          {{ t['name'] }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-field" style="min-width:240px;">
+      <label>Ученик</label>
+      <select name="student_id">
+        <option value="">— все —</option>
+        {% for s in students %}
+        <option value="{{ s['id'] }}" {% if f_student_id and f_student_id|int==s['id'] %}selected{% endif %}>
+          {{ s['name'] or ('#' ~ s['id']) }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-field" style="min-width:200px;">
+      <label>Статус</label>
+      <select name="status">
+        <option value="" {% if not f_status %}selected{% endif %}>— любой —</option>
+        <option value="new" {% if f_status=='new' %}selected{% endif %}>Новое</option>
+        <option value="checked" {% if f_status=='checked' %}selected{% endif %}>Проверено</option>
+      </select>
+    </div>
+
+    <div class="form-field" style="display:flex; gap:10px;">
+      <button class="admin-btn" type="submit">Применить</button>
+      <a class="admin-btn admin-btn-secondary" href="{{ url_for('teacher_homework_list') }}">Сброс</a>
+    </div>
+
+  </div>
+</form>
 
 <table class="admin-table hw-table">
   <thead>
@@ -26,8 +72,14 @@
 
       <td>
         <div><strong>{{ hw['student_name'] or 'Без имени' }}</strong></div>
+
         {% if hw['student_code'] %}
         <div class="student-code">ID: {{ hw['student_code'] }}</div>
+        {% endif %}
+
+        {# Если из SQL добавишь teacher_name — будет красиво показывать #}
+        {% if hw['teacher_name'] %}
+        <div class="admin-note">Преподаватель: {{ hw['teacher_name'] }}</div>
         {% endif %}
       </td>
 

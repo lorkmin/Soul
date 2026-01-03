@@ -397,18 +397,55 @@ def register_teacher_routes(app: Flask) -> None:
     @teacher_login_required
     def teacher_homework_list():
         conn = get_db()
-        rows = conn.execute("""
+
+        # фильтры из query string
+        teacher_id = (request.args.get("teacher_id") or "").strip()
+        student_id = (request.args.get("student_id") or "").strip()
+        status = (request.args.get("status") or "").strip()
+
+        where = []
+        params = []
+
+        if teacher_id.isdigit():
+            where.append("s.teacher_id = ?")
+            params.append(int(teacher_id))
+
+        if student_id.isdigit():
+            where.append("h.student_id = ?")
+            params.append(int(student_id))
+
+        if status:
+            where.append("h.status = ?")
+            params.append(status)
+
+        where_sql = ("WHERE " + " AND ".join(where)) if where else ""
+
+        rows = conn.execute(f"""
             SELECT
                 h.*,
-                s.name AS student_name,
-                s.public_code AS student_code,
-                s.course AS student_course
+                s.name  AS student_name,
+                s.course AS student_course,
+                t.name  AS teacher_name
             FROM student_homework h
             JOIN student_accounts s ON s.id = h.student_id
+            LEFT JOIN teachers t ON t.id = s.teacher_id
+            {where_sql}
             ORDER BY h.created_at DESC
-            LIMIT 200
-        """).fetchall()
-        return render_template("teacher_homework_list.html", homework=rows)
+        """, params).fetchall()
+
+        # для выпадающих списков
+        teachers = conn.execute("SELECT id, name FROM teachers ORDER BY name").fetchall()
+        students = conn.execute("SELECT id, name FROM student_accounts ORDER BY name LIMIT 500").fetchall()
+
+        return render_template(
+            "teacher_homework_list.html",
+            rows=rows,
+            teachers=teachers,
+            students=students,
+            filt_teacher_id=teacher_id,
+            filt_student_id=student_id,
+            filt_status=status,
+        )
 
     @app.route("/teacher/homework/<int:hw_id>", methods=["GET", "POST"])
     @teacher_login_required
