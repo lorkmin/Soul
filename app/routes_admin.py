@@ -6,8 +6,79 @@ from flask import Flask, app, render_template, request, redirect, url_for, send_
 from .auth import login_required
 from .db import get_db
 from .utils import save_upload
-
+from datetime import datetime, timedelta
 def register_admin_routes(app: Flask) -> None:
+
+    @app.get("/admin")
+    @login_required
+    def admin_dashboard():
+        conn = get_db()
+
+        # последние 7 дней
+        since_dt = (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
+
+        stats = {}
+
+        # Заявки
+        stats["enrolls_total"] = conn.execute("SELECT COUNT(*) FROM enrolls").fetchone()[0]
+        stats["enrolls_7d"] = conn.execute(
+            "SELECT COUNT(*) FROM enrolls WHERE created_at >= ?",
+            (since_dt,),
+        ).fetchone()[0]
+        # Боты (если колонка есть)
+        try:
+            stats["bots_total"] = conn.execute("SELECT COUNT(*) FROM enrolls WHERE is_bot = 1").fetchone()[0]
+            stats["bots_7d"] = conn.execute(
+                "SELECT COUNT(*) FROM enrolls WHERE is_bot = 1 AND created_at >= ?",
+                (since_dt,),
+            ).fetchone()[0]
+        except Exception:
+            stats["bots_total"] = 0
+            stats["bots_7d"] = 0
+
+        # Ученики
+        stats["students_total"] = conn.execute("SELECT COUNT(*) FROM student_accounts").fetchone()[0]
+        stats["students_no_teacher"] = conn.execute(
+            "SELECT COUNT(*) FROM student_accounts WHERE teacher_id IS NULL"
+        ).fetchone()[0]
+
+        # Домашки
+        stats["hw_total"] = conn.execute("SELECT COUNT(*) FROM student_homework").fetchone()[0]
+        stats["hw_new"] = conn.execute(
+            "SELECT COUNT(*) FROM student_homework WHERE status = 'new'"
+        ).fetchone()[0]
+        stats["hw_7d"] = conn.execute(
+            "SELECT COUNT(*) FROM student_homework WHERE created_at >= ?",
+            (since_dt,),
+        ).fetchone()[0]
+
+        # Материалы
+        stats["materials_total"] = conn.execute("SELECT COUNT(*) FROM materials").fetchone()[0]
+        stats["materials_published"] = conn.execute("SELECT COUNT(*) FROM materials WHERE is_published = 1").fetchone()[0]
+
+        # Быстрые списки (небольшие)
+        last_enrolls = conn.execute("""
+            SELECT id, name, contact, created_at, is_bot
+            FROM enrolls
+            ORDER BY id DESC
+            LIMIT 5
+        """).fetchall()
+
+        hw_new_list = conn.execute("""
+            SELECT h.id, h.title, h.created_at, s.name AS student_name, s.public_code AS student_code
+            FROM student_homework h
+            JOIN student_accounts s ON s.id = h.student_id
+            WHERE h.status = 'new'
+            ORDER BY h.created_at DESC
+            LIMIT 5
+        """).fetchall()
+
+        return render_template(
+            "admin_dashboard.html",
+            stats=stats,
+            last_enrolls=last_enrolls,
+            hw_new_list=hw_new_list,
+        )
 
     @app.route("/admin/login", methods=["GET", "POST"])
     def admin_login():

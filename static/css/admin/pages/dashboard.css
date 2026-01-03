@@ -1,0 +1,91 @@
+/* ===== Dashboard ===== */
+.dash-head {
+  margin: 18px 0 12px;
+}
+.dash-sub {
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 4px;
+}
+
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(180px, 1fr));
+  gap: 14px;
+  margin: 14px 0 18px;
+}
+
+.dash-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 14px 14px 12px;
+}
+
+.dash-kpi-title {
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 700;
+}
+.dash-kpi-main {
+  font-size: 34px;
+  font-weight: 900;
+  margin-top: 6px;
+}
+.dash-kpi-sub {
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 2px;
+}
+.dash-actions {
+  margin-top: 10px;
+}
+
+.dash-rows {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.dash-panel {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 14px;
+}
+
+.dash-panel-title {
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.dash-list {
+  display: grid;
+  gap: 10px;
+}
+.dash-item {
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.dash-item-sub {
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+.dash-empty {
+  color: rgba(255, 255, 255, 0.6);
+  padding: 10px 0;
+}
+
+.dash-panel-actions {
+  margin-top: 10px;
+}
+
+/* адаптив */
+@media (max-width: 1200px) {
+  .dash-grid {
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+  }
+  .dash-rows {
+    grid-template-columns: 1fr;
+  }
+}

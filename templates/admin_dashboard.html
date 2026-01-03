@@ -1,0 +1,103 @@
+{% extends "admin_layout.html" %}
+{% block content %}
+
+<div class="dash-head">
+    <h2>Дашборд</h2>
+    <div class="dash-sub">Сводка за 7 дней и быстрые действия</div>
+</div>
+
+<div class="dash-grid">
+    <div class="dash-card">
+        <div class="dash-kpi-title">Заявки</div>
+        <div class="dash-kpi-main">{{ stats.enrolls_total }}</div>
+        <div class="dash-kpi-sub">за 7 дней: <b>{{ stats.enrolls_7d }}</b></div>
+        <div class="dash-actions">
+            <a class="admin-btn" href="{{ url_for('admin_enrolls') }}">Открыть</a>
+        </div>
+    </div>
+
+    <div class="dash-card">
+        <div class="dash-kpi-title">Боты</div>
+        <div class="dash-kpi-main">{{ stats.bots_total }}</div>
+        <div class="dash-kpi-sub">за 7 дней: <b>{{ stats.bots_7d }}</b></div>
+        <div class="dash-actions">
+            <a class="admin-btn" href="{{ url_for('admin_enrolls') }}">Заявки</a>
+        </div>
+    </div>
+
+    <div class="dash-card">
+        <div class="dash-kpi-title">Ученики</div>
+        <div class="dash-kpi-main">{{ stats.students_total }}</div>
+        <div class="dash-kpi-sub">без преподавателя: <b>{{ stats.students_no_teacher }}</b></div>
+        <div class="dash-actions">
+            <a class="admin-btn" href="{{ url_for('teacher_students') }}">Ученики</a>
+        </div>
+    </div>
+
+    <div class="dash-card">
+        <div class="dash-kpi-title">Домашки</div>
+        <div class="dash-kpi-main">{{ stats.hw_new }}</div>
+        <div class="dash-kpi-sub">новых · за 7 дней: <b>{{ stats.hw_7d }}</b></div>
+        <div class="dash-actions">
+            <a class="admin-btn" href="{{ url_for('teacher_homework_list') }}">Открыть</a>
+        </div>
+    </div>
+
+    <div class="dash-card">
+        <div class="dash-kpi-title">Материалы</div>
+        <div class="dash-kpi-main">{{ stats.materials_published }}</div>
+        <div class="dash-kpi-sub">опубликовано · всего: <b>{{ stats.materials_total }}</b></div>
+        <div class="dash-actions">
+            <a class="admin-btn" href="{{ url_for('admin_materials') }}">Материалы</a>
+        </div>
+    </div>
+</div>
+
+<div class="dash-rows">
+    <div class="dash-panel">
+        <div class="dash-panel-title">Последние заявки</div>
+
+        <div class="dash-list">
+            {% for e in last_enrolls %}
+            <div class="dash-item">
+                <div class="dash-item-main">
+                    <b>#{{ e.id }}</b> {{ e.name }} · <span class="admin-meta">{{ e.contact }}</span>
+                    {% if e.is_bot %}<span class="bot-badge is-bot" style="margin-left:10px;"><span class="dot"></span>
+                        BOT</span>{% endif %}
+                </div>
+                <div class="dash-item-sub">{{ e.created_at }}</div>
+            </div>
+            {% else %}
+            <div class="dash-empty">Пока нет заявок.</div>
+            {% endfor %}
+        </div>
+
+        <div class="dash-panel-actions">
+            <a class="btn-link" href="{{ url_for('admin_enrolls') }}">Все заявки →</a>
+        </div>
+    </div>
+
+    <div class="dash-panel">
+        <div class="dash-panel-title">Новые домашки</div>
+
+        <div class="dash-list">
+            {% for h in hw_new_list %}
+            <div class="dash-item">
+                <div class="dash-item-main">
+                    <b>#{{ h.id }}</b> {{ h.student_name }}
+                    {% if h.student_code %}<span class="admin-meta">({{ h.student_code }})</span>{% endif %}
+                </div>
+                <div class="dash-item-sub">{{ h.created_at }} · {{ h.title or 'Без названия' }}</div>
+            </div>
+            {% else %}
+            <div class="dash-empty">Новых домашек нет 🎉</div>
+            {% endfor %}
+        </div>
+
+        <div class="dash-panel-actions">
+            <a class="btn-link" href="{{ url_for('teacher_homework_list') }}">Все домашки →</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
