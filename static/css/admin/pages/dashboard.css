@@ -89,3 +89,66 @@
     grid-template-columns: 1fr;
   }
 }
+/* ===== Dashboard buttons (separate style) ===== */
+
+.dashboard-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dash-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 14px;
+  border-radius: 12px;
+
+  font-weight: 800;
+  font-size: 0.95rem;
+  line-height: 1;
+
+  text-decoration: none;
+  cursor: pointer;
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.92);
+
+  transition: transform 0.12s ease, background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.dash-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-1px);
+}
+
+.dash-btn:active {
+  transform: translateY(0);
+}
+
+/* primary (accent) */
+.dash-btn--primary {
+  border-color: rgba(255, 205, 90, 0.35);
+  background: rgba(255, 205, 90, 0.1);
+}
+
+.dash-btn--primary:hover {
+  background: rgba(255, 205, 90, 0.16);
+  border-color: rgba(255, 205, 90, 0.55);
+}
+
+/* secondary (subtle) */
+.dash-btn--ghost {
+  background: transparent;
+}
+
+/* optional small arrow */
+.dash-btn .arrow {
+  opacity: 0.8;
+  font-weight: 900;
+}

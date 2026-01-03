@@ -12,7 +12,7 @@
         <div class="dash-kpi-main">{{ stats.enrolls_total }}</div>
         <div class="dash-kpi-sub">за 7 дней: <b>{{ stats.enrolls_7d }}</b></div>
         <div class="dash-actions">
-            <a class="admin-btn" href="{{ url_for('admin_enrolls') }}">Открыть</a>
+            <a class="dash-btn dash-btn--primary" href="{{ url_for('admin_enrolls') }}">Открыть</a>
         </div>
     </div>
 
@@ -21,7 +21,7 @@
         <div class="dash-kpi-main">{{ stats.bots_total }}</div>
         <div class="dash-kpi-sub">за 7 дней: <b>{{ stats.bots_7d }}</b></div>
         <div class="dash-actions">
-            <a class="admin-btn" href="{{ url_for('admin_enrolls') }}">Заявки</a>
+            <a class="dash-btn dash-btn--primary" href="{{ url_for('admin_enrolls') }}">Заявки</a>
         </div>
     </div>
 
@@ -30,7 +30,7 @@
         <div class="dash-kpi-main">{{ stats.students_total }}</div>
         <div class="dash-kpi-sub">без преподавателя: <b>{{ stats.students_no_teacher }}</b></div>
         <div class="dash-actions">
-            <a class="admin-btn" href="{{ url_for('teacher_students') }}">Ученики</a>
+            <a class="dash-btn dash-btn--primary" href="{{ url_for('teacher_students') }}">Ученики</a>
         </div>
     </div>
 
@@ -39,7 +39,7 @@
         <div class="dash-kpi-main">{{ stats.hw_new }}</div>
         <div class="dash-kpi-sub">новых · за 7 дней: <b>{{ stats.hw_7d }}</b></div>
         <div class="dash-actions">
-            <a class="admin-btn" href="{{ url_for('teacher_homework_list') }}">Открыть</a>
+            <a class="dash-btn dash-btn--primary" href="{{ url_for('teacher_homework_list') }}">Открыть</a>
         </div>
     </div>
 
@@ -48,7 +48,7 @@
         <div class="dash-kpi-main">{{ stats.materials_published }}</div>
         <div class="dash-kpi-sub">опубликовано · всего: <b>{{ stats.materials_total }}</b></div>
         <div class="dash-actions">
-            <a class="admin-btn" href="{{ url_for('admin_materials') }}">Материалы</a>
+            <a class="dash-btn dash-btn--primary" href="{{ url_for('admin_materials') }}">Материалы</a>
         </div>
     </div>
 </div>
