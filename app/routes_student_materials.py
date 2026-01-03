@@ -4,6 +4,8 @@ from flask import Flask, render_template, session, redirect, url_for, request, a
 from .db import get_db
 from .auth import student_login_required
 
+from collections import OrderedDict
+
 
 def _material_allowed_for_student(m, student) -> bool:
     if not m or not m["is_published"]:
@@ -38,23 +40,37 @@ def register_student_materials_routes(app: Flask) -> None:
             return redirect(url_for("student_dashboard"))
 
         # ВАЖНО: таблица называется materials (а не student_materials)
-        rows = conn.execute(
-            """
+        rows = conn.execute("""
             SELECT *
             FROM materials
             WHERE is_published = 1
-            ORDER BY sort_order ASC, created_at DESC
-            """
-        ).fetchall()
+            ORDER BY
+            COALESCE(topic, '') ASC,
+            sort_order DESC,
+            created_at DESC,
+            id DESC
+        """).fetchall()
+
 
         # фильтруем по доступности
         allowed = [m for m in rows if _material_allowed_for_student(m, student)]
 
+        groups = OrderedDict()
+        for m in rows:
+            # фильтр доступа
+            if not _material_allowed_for_student(m, student):
+                continue
+
+            topic = (m["topic"] or "Без темы").strip()
+            groups.setdefault(topic, []).append(m)
+
+
         return render_template(
             "student_materials.html",
             student=student,
-            materials=allowed,
+            groups=groups,
         )
+
 
     @app.get("/student/materials/<int:mid>/pdf")
     @student_login_required

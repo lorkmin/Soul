@@ -1,4 +1,3 @@
-{# templates/student_materials.html #}
 {% extends "student_layout.html" %}
 
 {% block title %}
@@ -9,53 +8,109 @@
 
 <div class="section-title">
     <h3>Обучающие материалы</h3>
-    <span>Видео и инструкции для самостоятельной работы</span>
+    <span>Видео, PDF и ссылки для самостоятельной работы</span>
 </div>
 
-{% if materials %}
-<div class="student-subcards-wrapper">
-    {% for m in materials %}
-    {% set mtype = (m['type'] or '')|lower %}
+{% if groups and groups|length > 0 %}
 
+{% for topic, items in groups.items() %}
+<div style="margin: 22px 0 10px;">
+    <h4 style="margin:0; font-size:18px;">{{ topic }}</h4>
+    <div style="height:1px; background:rgba(0,0,0,.06); margin-top:10px;"></div>
+</div>
+
+<div class="student-subcards-wrapper">
+    {% for m in items %}
     <div class="student-subcard">
+
         <h4 style="margin-bottom:6px;">{{ m['title'] }}</h4>
 
         {% if m['description'] %}
         <p style="color:#777; margin-top:0;">{{ m['description'] }}</p>
         {% endif %}
 
-        {# VIDEO #}
-        {% if mtype == 'video' and m['url'] %}
-        {% if 'youtube.com/embed/' in m['url'] or 'player.vimeo.com/video/' in m['url'] %}
+        {# ============ VIDEO ============ #}
+        {% if m['type'] == 'video' and m['url'] %}
+        {% set u = m['url'] %}
+
+        {# если embed (youtube/vimeo) — показываем прямо на странице #}
+        {% if 'youtube.com/embed/' in u or 'player.vimeo.com/video/' in u %}
         <div style="aspect-ratio:16/9; border-radius:14px; overflow:hidden; margin-top:10px;">
-            <iframe src="{{ m['url'] }}" style="width:100%; height:100%; border:0;" allowfullscreen></iframe>
+            <iframe src="{{ u }}" style="width:100%; height:100%; border:0;" allowfullscreen></iframe>
         </div>
+
         {% else %}
-        <a class="btn-primary" href="{{ m['url'] }}" target="_blank" rel="noopener">
-            ▶️ Открыть видео
-        </a>
+        {# иначе делаем превью-картинку для YouTube watch/shorts + кнопку #}
+        {% set yid = None %}
+        {% if 'youtu.be/' in u %}
+        {% set yid = u.split('youtu.be/')[-1].split('?')[0].split('/')[0] %}
+        {% elif 'youtube.com/watch' in u and 'v=' in u %}
+        {% set yid = u.split('v=')[-1].split('&')[0] %}
+        {% elif 'youtube.com/shorts/' in u %}
+        {% set yid = u.split('youtube.com/shorts/')[-1].split('?')[0].split('/')[0] %}
         {% endif %}
 
-
-        {# PDF #}
-        {% elif mtype == 'pdf' and m['file_path'] %}
-        <a class="btn-primary" href="{{ url_for('static', filename=m['file_path']) }}" target="_blank">
-            📄 Открыть PDF
+        {% if yid %}
+        <a href="{{ u }}" target="_blank" rel="noopener" style="display:block; text-decoration:none; color:inherit;">
+            <div style="position:relative; border-radius:14px; overflow:hidden; margin-top:10px;">
+                <img src="https://img.youtube.com/vi/{{ yid }}/hqdefault.jpg" alt="preview"
+                    style="width:100%; display:block;" />
+                <div style="
+                      position:absolute; inset:0;
+                      display:flex; align-items:center; justify-content:center;
+                      background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.05));
+                    ">
+                    <span style="
+                        background: rgba(255,255,255,.92);
+                        padding:10px 14px;
+                        border-radius: 999px;
+                        font-weight:600;
+                      ">▶ Открыть видео</span>
+                </div>
+            </div>
         </a>
+        {% else %}
+        <a class="btn-primary" href="{{ u }}" target="_blank" rel="noopener">
+            ▶ Открыть видео
+        </a>
+        {% endif %}
+        {% endif %}
 
-        {# LINK #}
-        {% elif mtype == 'link' and m['url'] %}
+        {# ============ PDF ============ #}
+        {% elif m['type'] == 'pdf' and m['file_path'] %}
+        {% set pdf_url = url_for('static', filename=m['file_path']) %}
+
+        <div style="position:relative; border-radius:14px; overflow:hidden; margin-top:10px;">
+            {# мини-превью: iframe, клики блокируем, чтобы не скроллилось внутри #}
+            <div style="height:220px; background:#fff;">
+                <iframe src="{{ pdf_url }}#page=1&view=FitH"
+                    style="width:100%; height:100%; border:0; pointer-events:none;"></iframe>
+            </div>
+
+            <div style="
+                position:absolute; inset:0;
+                display:flex; align-items:flex-end; justify-content:flex-start;
+                padding:12px;
+                background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,0));
+              ">
+                <a class="btn-primary" href="{{ pdf_url }}" target="_blank" style="text-decoration:none;">
+                    📄 Открыть PDF
+                </a>
+            </div>
+        </div>
+
+        {# ============ LINK ============ #}
+        {% elif m['type'] == 'link' and m['url'] %}
         <a class="btn-primary" href="{{ m['url'] }}" target="_blank" rel="noopener">
             🔗 Открыть материал
         </a>
-
-        {# FALLBACK #}
-        {% else %}
-        <p style="color:#777;">Материал без ссылки или не опубликован.</p>
         {% endif %}
+
     </div>
     {% endfor %}
 </div>
+{% endfor %}
+
 {% else %}
 <p style="color:#777;">Пока нет опубликованных материалов.</p>
 {% endif %}

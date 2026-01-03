@@ -38,6 +38,8 @@ def register_admin_materials_routes(app: Flask) -> None:
         description = (request.form.get("description") or "").strip()
         mtype = (request.form.get("type") or "").strip()  # video/pdf/link
         url = (request.form.get("url") or "").strip()
+        topic = (request.form.get("topic") or "").strip() or None
+
 
         visibility = (request.form.get("visibility") or "all").strip()
         course = (request.form.get("course") or "").strip() or None
@@ -97,9 +99,9 @@ def register_admin_materials_routes(app: Flask) -> None:
         conn = get_db()
         conn.execute("""
             INSERT INTO materials
-            (title, description, type, url, file_path, visibility, course, student_id, sort_order, is_published)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (title, description or None, mtype, url or None, file_path, visibility, course, student_id, sort_order, is_published))
+            (title, description, type, url, file_path, visibility, course, student_id, sort_order, is_published, topic)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (title, description or None, mtype, url or None, file_path, visibility, course, student_id, sort_order, is_published, topic,))
         conn.commit()
 
         flash("Материал добавлен", "success")

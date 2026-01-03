@@ -217,6 +217,14 @@ def init_db(app: Flask) -> None:
             cur.execute(stmt)
         except sqlite3.OperationalError:
             pass
+        
+    for stmt in (
+        "ALTER TABLE materials ADD COLUMN topic TEXT",
+    ):
+        try:
+            cur.execute(stmt)
+        except sqlite3.OperationalError:
+            pass
 
 
     conn.commit()
