@@ -26,21 +26,16 @@
 
         {# VIDEO #}
         {% if mtype == 'video' and m['url'] %}
-        <a class="btn-primary" href="{{ m['url'] }}" target="_blank" rel="noopener">
-            ▶️ Открыть видео
-        </a>
-
-        {# iframe показываем только если это embed-ссылка #}
         {% if 'youtube.com/embed/' in m['url'] or 'player.vimeo.com/video/' in m['url'] %}
         <div style="aspect-ratio:16/9; border-radius:14px; overflow:hidden; margin-top:10px;">
             <iframe src="{{ m['url'] }}" style="width:100%; height:100%; border:0;" allowfullscreen></iframe>
         </div>
         {% else %}
-        <p style="color:#777; margin:10px 0 0;">
-            Чтобы видео показывалось прямо на странице — вставь embed-ссылку (например, YouTube вида
-            <code>https://www.youtube.com/embed/ID</code>).
-        </p>
+        <a class="btn-primary" href="{{ m['url'] }}" target="_blank" rel="noopener">
+            ▶️ Открыть видео
+        </a>
         {% endif %}
+
 
         {# PDF #}
         {% elif mtype == 'pdf' and m['file_path'] %}
