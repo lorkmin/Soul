@@ -2,6 +2,21 @@ import os
 from flask import Flask, render_template, abort, send_file
 from .db import get_db
 from .auth import student_login_required  # у тебя он есть, раз есть кабинет ученика
+from flask import abort
+from .auth import teacher_login_required, login_required  # эти у тебя точно есть?
+from flask import session
+
+try:
+    from .auth import student_login_required
+except ImportError:
+    student_login_required = None
+
+def require_student():
+    # Подстрой под то, как у тебя хранится student_id в session
+    sid = session.get("student_id")
+    if not sid:
+        abort(403)
+    return int(sid)
 
 def _material_allowed_for_student(m, student) -> bool:
     if not m or not m["is_published"]:
