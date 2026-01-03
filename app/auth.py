@@ -19,11 +19,11 @@ def teacher_login_required(f):
     return wrapper
 
 def student_login_required(f):
-    """Allow access if student key session is present."""
     @wraps(f)
     def wrapper(*args, **kwargs):
-        # ВАЖНО: ключ должен совпадать с тем, что ты ставишь при логине ученика
-        if session.get("student_logged_in"):
+        if session.get("student_id"):
             return f(*args, **kwargs)
-        return redirect(url_for("student_login", next=request.path))
+        # редирект на страницу ввода ID
+        return redirect(url_for("student_dashboard", next=request.path))
     return wrapper
+

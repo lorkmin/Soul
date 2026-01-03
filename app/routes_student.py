@@ -1,7 +1,8 @@
 import os
 from datetime import datetime
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
+
 from werkzeug.utils import secure_filename
 
 from .db import get_db
@@ -36,6 +37,10 @@ def register_student_routes(app: Flask) -> None:
             ).fetchone()
             if not student:
                 not_found = True
+                session.pop("student_id", None)  # <-- чтобы не оставалась старая сессия
+            else:
+                session["student_id"] = student["id"]  # <-- ВОТ ЭТО
+
 
         if student:
             rows = conn.execute(
