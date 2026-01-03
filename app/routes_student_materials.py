@@ -1,10 +1,6 @@
-import os
-from flask import Flask, render_template, abort, send_file
+from flask import Flask, render_template, session, redirect, url_for, request
 from .db import get_db
-from .auth import student_login_required  # у тебя он есть, раз есть кабинет ученика
-from flask import abort
-from .auth import teacher_login_required, login_required  # эти у тебя точно есть?
-from flask import session
+from .auth import student_login_required
 
 try:
     from .auth import student_login_required
@@ -36,22 +32,34 @@ def register_student_materials_routes(app: Flask) -> None:
     @app.get("/student/materials")
     @student_login_required
     def student_materials():
-        # предполагаю: current student хранится в g / session и у тебя есть helper.
-        # Если у тебя есть функция get_current_student() — используй её.
-        # Ниже — пример, как обычно делают:
-        from flask import g
-        student = g.student  # <-- подстрой под свой проект
-
         conn = get_db()
-        all_rows = conn.execute("""
-            SELECT *
-            FROM materials
-            WHERE is_published=1
-            ORDER BY sort_order DESC, created_at DESC, id DESC
-        """).fetchall()
 
-        materials = [m for m in all_rows if _material_allowed_for_student(m, student)]
-        return render_template("student_materials.html", materials=materials)
+        student_id = session.get("student_id")
+        student = conn.execute(
+            "SELECT * FROM student_accounts WHERE id = ?",
+            (student_id,),
+        ).fetchone()
+
+        # если вдруг ученик удалён/битая сессия
+        if not student:
+            session.pop("student_id", None)
+            return redirect(url_for("student_dashboard"))
+
+        # TODO: тут уже твоя таблица материалов
+        rows = conn.execute(
+            """
+            SELECT *
+            FROM student_materials
+            WHERE is_published = 1
+            ORDER BY created_at DESC
+            """
+        ).fetchall()
+
+        return render_template(
+            "student_materials.html",
+            student=student,
+            materials=rows,
+        )
 
     @app.get("/student/materials/<int:mid>/pdf")
     @student_login_required
