@@ -6,34 +6,77 @@
   <title>Админка K-Spark</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="{{ url_for('static', filename='admin_style.css') }}">
-
 </head>
 
 <body class="admin-page">
   <div class="wrapper">
-    <section>
-      <div class="section-inner admin-container">
-        <div class="section-title">
-          <h3>Админ-панель</h3>
-          <span>управление школой</span>
-        </div>
 
-        <nav class="admin-nav">
-          <a href="{{ url_for('admin_enrolls') }}">Заявки</a>
-          <a href="{{ url_for('admin_reviews') }}">Отзывы</a>
-          <a href="{{ url_for('admin_teachers') }}">Преподаватели</a>
-          <a href="{{ url_for('admin_courses') }}">Курсы</a>
-          <a href="{{ url_for('admin_gallery') }}">Галерея</a>
-          <a href="{{ url_for('teacher_students') }}">Ученики</a>
-          <a href="{{ url_for('teacher_schedule') }}">Расписание</a>
-          <a href="{{ url_for('teacher_homework_list') }}">Домашние задания</a>
-          <a href="{{ url_for('admin_materials') }}">Материалы</a>
-          <a href="{{ url_for('admin_logout') }}">Выйти</a>
-        </nav>
+    <section>
+      <div class="admin-shell">
+        <header class="admin-header">
+          <div class="admin-header-top">
+            <div>
+              <h1 class="admin-title">Админ-панель</h1>
+              <div class="admin-subtitle">управление школой</div>
+            </div>
+          </div>
+
+          <nav class="admin-nav">
+            <a href="{{ url_for('admin_enrolls') }}"
+              data-active="{{ 1 if request.path.startswith('/admin/enrolls') else 0 }}">
+              📨 Заявки
+            </a>
+
+            <a href="{{ url_for('admin_reviews') }}"
+              data-active="{{ 1 if request.path.startswith('/admin/reviews') else 0 }}">
+              ⭐ Отзывы
+            </a>
+
+            <a href="{{ url_for('admin_teachers') }}"
+              data-active="{{ 1 if request.path.startswith('/admin/teachers') else 0 }}">
+              👩‍🏫 Преподаватели
+            </a>
+
+            <a href="{{ url_for('admin_courses') }}"
+              data-active="{{ 1 if request.path.startswith('/admin/courses') else 0 }}">
+              📚 Курсы
+            </a>
+
+            <a href="{{ url_for('admin_gallery') }}"
+              data-active="{{ 1 if request.path.startswith('/admin/gallery') else 0 }}">
+              🖼️ Галерея
+            </a>
+
+            <a href="{{ url_for('teacher_students') }}"
+              data-active="{{ 1 if request.path.startswith('/teacher/students') else 0 }}">
+              👤 Ученики
+            </a>
+
+            <a href="{{ url_for('teacher_schedule') }}"
+              data-active="{{ 1 if request.path.startswith('/teacher/schedule') else 0 }}">
+              🗓️ Расписание
+            </a>
+
+            <a href="{{ url_for('teacher_homework_list') }}"
+              data-active="{{ 1 if request.path.startswith('/teacher/homework') else 0 }}">
+              ✅ Домашние
+            </a>
+
+            <a href="{{ url_for('admin_materials') }}"
+              data-active="{{ 1 if request.path.startswith('/admin/materials') else 0 }}">
+              🎬 Материалы
+            </a>
+
+            <a class="admin-nav-logout" href="{{ url_for('admin_logout') }}">
+              🚪 Выйти
+            </a>
+          </nav>
+        </header>
 
         {% block content %}{% endblock %}
       </div>
     </section>
+
   </div>
 </body>
 
