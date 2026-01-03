@@ -1,3 +1,4 @@
+{# templates/student_materials.html #}
 {% extends "student_layout.html" %}
 
 {% block title %}
@@ -14,30 +15,49 @@
 {% if materials %}
 <div class="student-subcards-wrapper">
     {% for m in materials %}
-    <div class="student-subcard">
+    {% set mtype = (m['type'] or '')|lower %}
 
+    <div class="student-subcard">
         <h4 style="margin-bottom:6px;">{{ m['title'] }}</h4>
 
         {% if m['description'] %}
         <p style="color:#777; margin-top:0;">{{ m['description'] }}</p>
         {% endif %}
 
-        {% if m['type'] == 'video' and m['url'] %}
-        <div style="aspect-ratio:16/9; border-radius:14px; overflow:hidden;">
+        {# VIDEO #}
+        {% if mtype == 'video' and m['url'] %}
+        <a class="btn-primary" href="{{ m['url'] }}" target="_blank" rel="noopener">
+            ▶️ Открыть видео
+        </a>
+
+        {# iframe показываем только если это embed-ссылка #}
+        {% if 'youtube.com/embed/' in m['url'] or 'player.vimeo.com/video/' in m['url'] %}
+        <div style="aspect-ratio:16/9; border-radius:14px; overflow:hidden; margin-top:10px;">
             <iframe src="{{ m['url'] }}" style="width:100%; height:100%; border:0;" allowfullscreen></iframe>
         </div>
+        {% else %}
+        <p style="color:#777; margin:10px 0 0;">
+            Чтобы видео показывалось прямо на странице — вставь embed-ссылку (например, YouTube вида
+            <code>https://www.youtube.com/embed/ID</code>).
+        </p>
+        {% endif %}
 
-        {% elif m['type'] == 'pdf' and m['file_path'] %}
+        {# PDF #}
+        {% elif mtype == 'pdf' and m['file_path'] %}
         <a class="btn-primary" href="{{ url_for('static', filename=m['file_path']) }}" target="_blank">
             📄 Открыть PDF
         </a>
 
-        {% elif m['type'] == 'link' and m['url'] %}
+        {# LINK #}
+        {% elif mtype == 'link' and m['url'] %}
         <a class="btn-primary" href="{{ m['url'] }}" target="_blank" rel="noopener">
             🔗 Открыть материал
         </a>
-        {% endif %}
 
+        {# FALLBACK #}
+        {% else %}
+        <p style="color:#777;">Материал без ссылки или не опубликован.</p>
+        {% endif %}
     </div>
     {% endfor %}
 </div>
