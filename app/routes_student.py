@@ -1,12 +1,12 @@
 import os
 from datetime import datetime
 
-from flask import Flask, render_template, request, session
-
+from flask import Flask, render_template, request, session, redirect, url_for
 from werkzeug.utils import secure_filename
 
 from .db import get_db
 from .utils import hw_allowed
+
 
 def register_student_routes(app: Flask) -> None:
 
@@ -22,7 +22,7 @@ def register_student_routes(app: Flask) -> None:
         lessons_canceled = []
         homework_list = []
 
-        # Determine code:
+        # 1) Определяем code (из формы / querystring)
         if request.method == "POST" and request.form.get("action") != "upload_homework":
             code = (request.form.get("code") or "").strip()
         else:
@@ -30,19 +30,38 @@ def register_student_routes(app: Flask) -> None:
 
         conn = get_db()
 
-        if code:
+        # 2) Если code не передан, но ученик уже "залогинен" в session — восстановим
+        if not code and session.get("student_id"):
+            sid = session.get("student_id")
+            try:
+                sid = int(sid)
+            except (TypeError, ValueError):
+                sid = None
+
+            if sid:
+                student = conn.execute(
+                    "SELECT * FROM student_accounts WHERE id = ?",
+                    (sid,),
+                ).fetchone()
+
+                if student:
+                    code = student["public_code"]
+                else:
+                    session.pop("student_id", None)
+
+        # 3) Если есть code — ищем ученика по коду
+        if code and not student:
             student = conn.execute(
                 "SELECT * FROM student_accounts WHERE public_code = ?",
                 (code,),
             ).fetchone()
-            if student:
-                session["student_id"] = student["id"]
-                session["student_code"] = student["public_code"]
-            else:
-                session.pop("student_id", None)
-                session.pop("student_code", None)
+            if not student:
+                not_found = True
 
+        # 4) Если ученик найден — закрепляем его в session, чтобы "Назад" работал
         if student:
+            session["student_id"] = student["id"]
+
             rows = conn.execute(
                 """
                 SELECT *
@@ -57,6 +76,7 @@ def register_student_routes(app: Flask) -> None:
                 status = (r["status"] or "").lower() if "status" in r.keys() else ""
                 if not status:
                     status = "planned"
+
                 if status == "planned":
                     lessons_planned.append(r)
                 elif status == "rescheduled":
@@ -68,7 +88,7 @@ def register_student_routes(app: Flask) -> None:
                 else:
                     lessons_planned.append(r)
 
-        # Upload homework
+        # 5) Upload homework
         if student and request.method == "POST" and request.form.get("action") == "upload_homework":
             file = request.files.get("hw_file")
             title = (request.form.get("hw_title") or "").strip()
@@ -78,6 +98,7 @@ def register_student_routes(app: Flask) -> None:
                 filename = secure_filename(file.filename)
                 ts = datetime.now().strftime("%Y%m%d_%H%M%S")
                 new_name = f"stu{student['id']}_{ts}_{filename}"
+
                 abs_path = os.path.join(app.config["HOMEWORK_UPLOAD_FOLDER"], new_name)
                 file.save(abs_path)
 
@@ -114,3 +135,9 @@ def register_student_routes(app: Flask) -> None:
             lessons_done=lessons_done,
             lessons_canceled=lessons_canceled,
         )
+
+    # (опционально, но удобно) выход ученика, чтобы очистить session
+    @app.get("/student/logout")
+    def student_logout():
+        session.pop("student_id", None)
+        return redirect(url_for("student_dashboard"))
