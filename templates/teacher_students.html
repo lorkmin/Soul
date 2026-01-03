@@ -17,6 +17,21 @@
 </div>
 
 <div class="students-controls">
+  <div class="students-filter">
+    <label for="teacherFilter" class="students-filter-label">Преподаватель:</label>
+    <select id="teacherFilter" class="students-filter-select" onchange="location = this.value;">
+      <option value="{{ url_for('teacher_students') }}" {% if not teacher_id %}selected{% endif %}>
+        Все
+      </option>
+
+      {% for t in teachers %}
+      <option value="{{ url_for('teacher_students', teacher_id=t['id']) }}" {% if teacher_id and teacher_id|int==t['id']
+        %}selected{% endif %}>
+        {{ t['name'] }}
+      </option>
+      {% endfor %}
+    </select>
+  </div>
   <div class="students-search">
     <input type="text" id="studentSearch" placeholder="Поиск по имени, курсу или ID…" />
   </div>

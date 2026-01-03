@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 from .auth import teacher_login_required
 from .db import get_db
 from .utils import generate_student_code, hw_allowed
+from flask import request, render_template
 
 def register_teacher_routes(app: Flask) -> None:
 
@@ -41,14 +42,49 @@ def register_teacher_routes(app: Flask) -> None:
     @app.get("/teacher/students")
     @teacher_login_required
     def teacher_students():
+        teacher_id = (request.args.get("teacher_id") or "").strip()
+
         conn = get_db()
-        students = conn.execute("""
-            SELECT s.*, t.name AS teacher_name
-            FROM student_accounts AS s
-            LEFT JOIN teachers AS t ON t.id = s.teacher_id
-            ORDER BY s.name COLLATE NOCASE
-        """).fetchall()
-        return render_template("teacher_students.html", students=students)
+
+        # список преподавателей для фильтра (выпадающий список)
+        teachers = conn.execute(
+            "SELECT id, name FROM teachers ORDER BY name"
+        ).fetchall()
+
+        where_sql = ""
+        params = []
+
+        # если teacher_id выбран — фильтруем
+        if teacher_id.isdigit():
+            where_sql = "WHERE s.teacher_id = ?"
+            params.append(int(teacher_id))
+        else:
+            teacher_id = ""  # чтобы в шаблоне было проще
+
+        # ВАЖНО: здесь я предполагаю, что:
+        # - таблица учеников: student_accounts (алиас s)
+        # - у ученика есть поле teacher_id
+        # - таблица преподавателей: teachers (алиас t)
+        rows = conn.execute(
+            f"""
+            SELECT
+                s.*,
+                t.name AS teacher_name
+            FROM student_accounts s
+            LEFT JOIN teachers t ON t.id = s.teacher_id
+            {where_sql}
+            ORDER BY s.created_at DESC
+            """,
+            params,
+        ).fetchall()
+
+        return render_template(
+            "teacher_students.html",
+            students=rows,
+            teachers=teachers,
+            teacher_id=teacher_id,
+        )
+
 
     @app.route("/teacher/students/add", methods=["GET", "POST"])
     @teacher_login_required
