@@ -11,6 +11,17 @@
       <input type="text" name="name" placeholder="Имя ученика" value="{{ student['name'] if student else '' }}"
         required />
     </div>
+    <div class="form-field">
+      <label>Преподаватель</label>
+      <select name="teacher_id">
+        <option value="">— не указан —</option>
+        {% for t in teachers %}
+        <option value="{{ t.id }}" {% if student.teacher_id==t.id %}selected{% endif %}>
+          {{ t.name }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
 
     <div class="form-field">
       <label>Курс / группа</label>
