@@ -20,14 +20,18 @@
               <div class="admin-subtitle">управление школой</div>
             </div>
           </div>
-          <a href="{{ url_for('admin_dashboard') }}">Дашборд</a>
+
 
           <nav class="admin-nav">
+            <a href="{{ url_for('admin_dashboard') }}"
+              data-active="{{ 1 if request.path.startswith('/admin/dashboard') else 0 }}">
+              🏠 Дашборд
+            </a>
+
             <a href="{{ url_for('admin_enrolls') }}"
               data-active="{{ 1 if request.path.startswith('/admin/enrolls') else 0 }}">
               📨 Заявки
             </a>
-
             <a href="{{ url_for('admin_reviews') }}"
               data-active="{{ 1 if request.path.startswith('/admin/reviews') else 0 }}">
               ⭐ Отзывы
