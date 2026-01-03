@@ -9,6 +9,9 @@ from .routes_admin import register_admin_routes
 from .routes_teacher import register_teacher_routes
 from .routes_student import register_student_routes
 from .routes_errors import register_error_handlers
+from .routes_admin_materials import register_admin_materials_routes
+from .routes_student_materials import register_student_materials_routes
+
 
 def create_app() -> Flask:
     app = Flask(__name__, template_folder="../templates", static_folder="../static")
@@ -24,6 +27,8 @@ def create_app() -> Flask:
         app.config["COURSE_UPLOAD"],
         app.config["GALLERY_UPLOAD"],
         app.config["HOMEWORK_UPLOAD_FOLDER"],
+        app.config["MATERIALS_UPLOAD_FOLDER"],
+
     ):
         os.makedirs(p, exist_ok=True)
 
@@ -36,5 +41,7 @@ def create_app() -> Flask:
     register_teacher_routes(app)
     register_student_routes(app)
     register_error_handlers(app)
-
+    register_admin_materials_routes(app)
+    register_student_materials_routes(app)
+    
     return app

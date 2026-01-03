@@ -167,5 +167,57 @@ def init_db(app: Flask) -> None:
         except sqlite3.OperationalError:
             pass
 
+    # STUDENT MATERIALS (video/pdf/link)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS materials (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            description TEXT,
+            type TEXT NOT NULL,              -- 'video' | 'pdf' | 'link'
+            url TEXT,                        -- для video/link
+            file_path TEXT,                  -- для pdf (например 'uploads/materials/xxx.pdf')
+
+            visibility TEXT NOT NULL DEFAULT 'all', -- 'all' | 'course' | 'student'
+            course TEXT,                     -- если visibility='course'
+            student_id INTEGER,              -- если visibility='student'
+
+            sort_order INTEGER NOT NULL DEFAULT 0,
+            is_published INTEGER NOT NULL DEFAULT 1,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+            FOREIGN KEY(student_id) REFERENCES student_accounts(id)
+        );
+    """)
+
+    # Миграции/индексы (безопасно)
+    for stmt in (
+        "ALTER TABLE materials ADD COLUMN description TEXT",
+        "ALTER TABLE materials ADD COLUMN url TEXT",
+        "ALTER TABLE materials ADD COLUMN file_path TEXT",
+        "ALTER TABLE materials ADD COLUMN visibility TEXT NOT NULL DEFAULT 'all'",
+        "ALTER TABLE materials ADD COLUMN course TEXT",
+        "ALTER TABLE materials ADD COLUMN student_id INTEGER",
+        "ALTER TABLE materials ADD COLUMN sort_order INTEGER NOT NULL DEFAULT 0",
+        "ALTER TABLE materials ADD COLUMN is_published INTEGER NOT NULL DEFAULT 1",
+        "ALTER TABLE materials ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP",
+    ):
+        try:
+            cur.execute(stmt)
+        except sqlite3.OperationalError:
+            pass
+
+    for stmt in (
+        "CREATE INDEX IF NOT EXISTS idx_materials_published ON materials(is_published)",
+        "CREATE INDEX IF NOT EXISTS idx_materials_visibility ON materials(visibility)",
+        "CREATE INDEX IF NOT EXISTS idx_materials_course ON materials(course)",
+        "CREATE INDEX IF NOT EXISTS idx_materials_student ON materials(student_id)",
+        "CREATE INDEX IF NOT EXISTS idx_materials_sort ON materials(sort_order)",
+    ):
+        try:
+            cur.execute(stmt)
+        except sqlite3.OperationalError:
+            pass
+
+
     conn.commit()
     conn.close()

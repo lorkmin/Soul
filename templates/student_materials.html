@@ -1,0 +1,33 @@
+{% extends "student_layout.html" %}
+{% block content %}
+
+<h2>Материалы</h2>
+
+<div class="materials-grid">
+    {% for m in materials %}
+    <div class="material-card">
+
+        <div class="material-title">
+            {% if m.type == 'video' %}🎬{% elif m.type == 'pdf' %}📄{% else %}🔗{% endif %}
+            {{ m.title }}
+        </div>
+
+        {% if m.description %}
+        <div class="material-desc">{{ m.description }}</div>
+        {% endif %}
+
+        <div class="material-actions">
+            {% if m.type == 'pdf' %}
+            <a class="btn btn-primary" target="_blank" href="{{ url_for('student_material_pdf', mid=m.id) }}">
+                Открыть PDF
+            </a>
+            {% else %}
+            <a class="btn btn-primary" target="_blank" href="{{ m.url }}">Открыть</a>
+            {% endif %}
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

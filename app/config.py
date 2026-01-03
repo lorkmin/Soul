@@ -38,3 +38,6 @@ class Config:
 
         self.ALLOWED_EXT = {"png", "jpg", "jpeg", "webp"}
         self.ALLOWED_HW_EXTENSIONS = {"pdf", "png", "jpg", "jpeg", "doc", "docx", "ppt", "pptx", "zip", "txt"}
+
+        MATERIALS_UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads", "materials")
+
