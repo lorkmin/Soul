@@ -23,9 +23,10 @@
                 </p>
 
                 <div class="error-actions">
-                    <a class="btn btn-primary" href="{{ url_for('index') }}">На главную</a>
-                    <a class="btn btn-secondary" href="javascript:location.reload()">Обновить</a>
+                    <a href="{{ url_for('index') }}" class="btn btn-primary">На главную</a>
+                    <button class="btn btn-secondary" onclick="location.reload()">Обновить</button>
                 </div>
+
             </div>
         </section>
     </div>
