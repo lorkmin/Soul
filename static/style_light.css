@@ -4646,3 +4646,47 @@ body.student-dashboard .student-hero-card::after {
 .btn-secondary:hover {
   background: rgba(0, 0, 0, 0.04);
 }
+.error-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+/* БАЗА ДЛЯ ЛЮБОЙ КНОПКИ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+
+  border: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* если где-то есть button.btn — убираем дефолтный фон/рамки браузера */
+button.btn {
+  background: none;
+}
+
+/* ВТОРИЧНАЯ */
+.btn-secondary {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.14);
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.18);
+}
