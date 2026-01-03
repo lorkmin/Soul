@@ -203,3 +203,24 @@
   max-width: 100%;
   box-sizing: border-box;
 }
+/* ===== Enrolls table: fix layout ===== */
+.admin-table.enrolls-table {
+  table-layout: auto; /* ключевое */
+}
+
+.admin-table.enrolls-table th,
+.admin-table.enrolls-table td {
+  vertical-align: top;
+}
+
+/* чтобы колонка "Заметка" была шире и не ломала все остальные */
+.admin-table.enrolls-table th:nth-child(7),
+.admin-table.enrolls-table td:nth-child(7) {
+  width: 380px;
+}
+
+/* чтобы длинные тексты красиво переносились */
+.admin-table.enrolls-table td {
+  word-break: break-word;
+  white-space: normal;
+}
