@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, abort
 from werkzeug.utils import secure_filename
 
 from .db import get_db
@@ -10,86 +10,102 @@ from .utils import hw_allowed
 
 def register_student_routes(app: Flask) -> None:
 
+    def _load_student_by_session(conn):
+        sid = session.get("student_id")
+        if not sid:
+            return None
+        try:
+            sid = int(sid)
+        except (TypeError, ValueError):
+            session.pop("student_id", None)
+            return None
+
+        student = conn.execute(
+            "SELECT * FROM student_accounts WHERE id = ?",
+            (sid,),
+        ).fetchone()
+
+        if not student:
+            session.pop("student_id", None)
+        return student
+
+    def _load_student_by_code(conn, code: str):
+        return conn.execute(
+            "SELECT * FROM student_accounts WHERE public_code = ?",
+            (code,),
+        ).fetchone()
+
+    def _split_lessons(rows):
+        planned, rescheduled, done, canceled = [], [], [], []
+        for r in rows:
+            status = (r["status"] or "").lower() if "status" in r.keys() else ""
+            if not status:
+                status = "planned"
+
+            if status == "planned":
+                planned.append(r)
+            elif status == "rescheduled":
+                rescheduled.append(r)
+            elif status == "done":
+                done.append(r)
+            elif status == "canceled":
+                canceled.append(r)
+            else:
+                planned.append(r)
+        return planned, rescheduled, done, canceled
+
     @app.route("/student", methods=["GET", "POST"])
     def student_dashboard():
-        code = None
-        student = None
-        not_found = False
-
-        lessons_planned = []
-        lessons_rescheduled = []
-        lessons_done = []
-        lessons_canceled = []
-        homework_list = []
-
-        # 1) Определяем code (из формы / querystring)
-        if request.method == "POST" and request.form.get("action") != "upload_homework":
-            code = (request.form.get("code") or "").strip()
-        else:
-            code = (request.values.get("code") or "").strip()
-
         conn = get_db()
 
-        # 2) Если code не передан, но ученик уже "залогинен" в session — восстановим
-        if not code and session.get("student_id"):
-            sid = session.get("student_id")
-            try:
-                sid = int(sid)
-            except (TypeError, ValueError):
-                sid = None
+        not_found = False
 
-            if sid:
-                student = conn.execute(
-                    "SELECT * FROM student_accounts WHERE id = ?",
-                    (sid,),
-                ).fetchone()
+        # ---------- POST: либо "вход по коду", либо "загрузка ДЗ" ----------
+        if request.method == "POST":
+            action = (request.form.get("action") or "").strip()
 
-                if student:
-                    code = student["public_code"]
-                else:
-                    session.pop("student_id", None)
+            # 1) вход по коду
+            if action != "upload_homework":
+                code = (request.form.get("code") or "").strip()
+                if not code:
+                    not_found = True
+                    return render_template(
+                        "student_dashboard.html",
+                        code="",
+                        student=None,
+                        not_found=not_found,
+                        homework_list=[],
+                        lessons_planned=[],
+                        lessons_rescheduled=[],
+                        lessons_done=[],
+                        lessons_canceled=[],
+                    )
 
-        # 3) Если есть code — ищем ученика по коду
-        if code and not student:
-            student = conn.execute(
-                "SELECT * FROM student_accounts WHERE public_code = ?",
-                (code,),
-            ).fetchone()
+                student = _load_student_by_code(conn, code)
+                if not student:
+                    not_found = True
+                    return render_template(
+                        "student_dashboard.html",
+                        code=code,
+                        student=None,
+                        not_found=not_found,
+                        homework_list=[],
+                        lessons_planned=[],
+                        lessons_rescheduled=[],
+                        lessons_done=[],
+                        lessons_canceled=[],
+                    )
+
+                # Сохраняем в сессию и делаем redirect (PRG!)
+                session["student_id"] = student["id"]
+                return redirect(url_for("student_dashboard"))
+
+            # 2) загрузка домашки
+            student = _load_student_by_session(conn)
             if not student:
-                not_found = True
+                # нет сессии -> на страницу входа
+                return redirect(url_for("student_dashboard"))
 
-        # 4) Если ученик найден — закрепляем его в session, чтобы "Назад" работал
-        if student:
-            session["student_id"] = student["id"]
-
-            rows = conn.execute(
-                """
-                SELECT *
-                FROM student_lessons
-                WHERE student_id = ?
-                ORDER BY start_at
-                """,
-                (student["id"],),
-            ).fetchall()
-
-            for r in rows:
-                status = (r["status"] or "").lower() if "status" in r.keys() else ""
-                if not status:
-                    status = "planned"
-
-                if status == "planned":
-                    lessons_planned.append(r)
-                elif status == "rescheduled":
-                    lessons_rescheduled.append(r)
-                elif status == "done":
-                    lessons_done.append(r)
-                elif status == "canceled":
-                    lessons_canceled.append(r)
-                else:
-                    lessons_planned.append(r)
-
-        # 5) Upload homework
-        if student and request.method == "POST" and request.form.get("action") == "upload_homework":
             file = request.files.get("hw_file")
             title = (request.form.get("hw_title") or "").strip()
             comment = (request.form.get("hw_comment") or "").strip()
@@ -113,12 +129,52 @@ def register_student_routes(app: Flask) -> None:
                 )
                 conn.commit()
 
-            homework_list = conn.execute(
-                "SELECT * FROM student_homework WHERE student_id = ? ORDER BY created_at DESC",
+            # ВАЖНО: после POST тоже редиректим (PRG!), чтобы “Назад” не просил повторить POST
+            return redirect(url_for("student_dashboard"))
+
+        # ---------- GET ----------
+        # Если пришли по ссылке /student?code=XXXX — залогиним в session и почистим URL
+        code_qs = (request.args.get("code") or "").strip()
+        if code_qs:
+            student = _load_student_by_code(conn, code_qs)
+            if not student:
+                not_found = True
+                return render_template(
+                    "student_dashboard.html",
+                    code=code_qs,
+                    student=None,
+                    not_found=not_found,
+                    homework_list=[],
+                    lessons_planned=[],
+                    lessons_rescheduled=[],
+                    lessons_done=[],
+                    lessons_canceled=[],
+                )
+            session["student_id"] = student["id"]
+            return redirect(url_for("student_dashboard"))
+
+        # Обычный вход: пробуем взять ученика из session
+        student = _load_student_by_session(conn)
+
+        lessons_planned = []
+        lessons_rescheduled = []
+        lessons_done = []
+        lessons_canceled = []
+        homework_list = []
+
+        if student:
+            rows = conn.execute(
+                """
+                SELECT *
+                FROM student_lessons
+                WHERE student_id = ?
+                ORDER BY start_at
+                """,
                 (student["id"],),
             ).fetchall()
 
-        elif student:
+            lessons_planned, lessons_rescheduled, lessons_done, lessons_canceled = _split_lessons(rows)
+
             homework_list = conn.execute(
                 "SELECT * FROM student_homework WHERE student_id = ? ORDER BY created_at DESC",
                 (student["id"],),
@@ -126,7 +182,8 @@ def register_student_routes(app: Flask) -> None:
 
         return render_template(
             "student_dashboard.html",
-            code=code,
+            # code в URL мы больше не держим (это нормально). Если хочешь — можно показать student["public_code"].
+            code=student["public_code"] if student else "",
             student=student,
             not_found=not_found,
             homework_list=homework_list,
@@ -136,7 +193,6 @@ def register_student_routes(app: Flask) -> None:
             lessons_canceled=lessons_canceled,
         )
 
-    # (опционально, но удобно) выход ученика, чтобы очистить session
     @app.get("/student/logout")
     def student_logout():
         session.pop("student_id", None)
