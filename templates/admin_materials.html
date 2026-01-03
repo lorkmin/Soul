@@ -13,12 +13,24 @@
             </div>
 
             <div class="form-field">
+                <label>Тема (для группировки у ученика)</label>
+                <input name="topic" placeholder="Например: Грамматика / Аудирование / TOPIK">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-field">
                 <label>Тип</label>
                 <select name="type">
                     <option value="video">Видео (ссылка)</option>
                     <option value="link">Ссылка</option>
                     <option value="pdf">PDF (файл)</option>
                 </select>
+            </div>
+
+            <div class="form-field">
+                <label>Порядок</label>
+                <input name="sort_order" type="number" value="0">
             </div>
         </div>
 
@@ -30,6 +42,11 @@
         <div class="form-field">
             <label>URL (для видео/ссылки)</label>
             <input name="url" placeholder="https://...">
+            <div class="admin-meta" style="margin-top:6px;">
+                Для YouTube можно вставлять обычную ссылку (watch/shorts) — на странице ученика появится превью и
+                кнопка.
+                Если вставить embed-ссылку (youtube.com/embed/ID), видео покажется прямо на странице.
+            </div>
         </div>
 
         <div class="form-field">
@@ -66,20 +83,18 @@
 
         <div class="form-row">
             <div class="form-field">
-                <label>Порядок</label>
-                <input name="sort_order" type="number" value="0">
-            </div>
-
-            <div class="form-field">
                 <label>Опубликовано</label>
                 <select name="is_published">
                     <option value="1" selected>Да</option>
                     <option value="0">Нет (черновик)</option>
                 </select>
             </div>
+            <div class="form-field">
+                <label style="opacity:.7;">&nbsp;</label>
+                <button class="admin-btn" type="submit" style="width:100%;">Добавить</button>
+            </div>
         </div>
 
-        <button class="admin-btn" type="submit">Добавить</button>
     </form>
 </div>
 
@@ -87,7 +102,7 @@
     <thead>
         <tr>
             <th>#</th>
-            <th>Название</th>
+            <th>Название / Тема</th>
             <th>Тип</th>
             <th>Доступ</th>
             <th>Опубликовано</th>
@@ -100,15 +115,39 @@
             <td>{{ m.id }}</td>
             <td>
                 <div><strong>{{ m.title }}</strong></div>
-                <div class="admin-meta">{{ m.description or '' }}</div>
+
+                {% if m.topic %}
+                <div class="admin-meta">Тема: <strong>{{ m.topic }}</strong></div>
+                {% else %}
+                <div class="admin-meta">Тема: —</div>
+                {% endif %}
+
+                {% if m.description %}
+                <div class="admin-meta">{{ m.description }}</div>
+                {% endif %}
+
+                {% if m.type in ['video','link'] and m.url %}
+                <div class="admin-meta">URL: {{ m.url }}</div>
+                {% endif %}
+                {% if m.type == 'pdf' and m.file_path %}
+                <div class="admin-meta">PDF: {{ m.file_path }}</div>
+                {% endif %}
             </td>
+
             <td>{{ m.type }}</td>
+
             <td>
-                {% if m.visibility == 'all' %}всем
-                {% elif m.visibility == 'course' %}курс: {{ m.course }}
-                {% else %}ученик: {{ m.student_id }}{% endif %}
+                {% if m.visibility == 'all' %}
+                всем
+                {% elif m.visibility == 'course' %}
+                курс: {{ m.course }}
+                {% else %}
+                ученик: {{ m.student_id }}{% if m.student_name %} ({{ m.student_name }}){% endif %}
+                {% endif %}
             </td>
+
             <td>{{ 'да' if m.is_published else 'нет' }}</td>
+
             <td style="white-space:nowrap;">
                 <form method="post" action="{{ url_for('admin_materials_delete', mid=m.id) }}" class="inline-form"
                     onsubmit="return confirm('Удалить материал?');">
