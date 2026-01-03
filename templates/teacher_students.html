@@ -18,8 +18,9 @@
 
 <div class="students-controls">
   <div class="students-filter">
-    <label for="teacherFilter" class="students-filter-label">Преподаватель:</label>
-    <select id="teacherFilter" class="students-filter-select" onchange="location = this.value;">
+    <span class="students-filter-label">Преподаватель:</span>
+
+    <select class="students-filter-select" onchange="location=this.value" aria-label="Фильтр по преподавателю">
       <option value="{{ url_for('teacher_students') }}" {% if not teacher_id %}selected{% endif %}>
         Все
       </option>
@@ -32,6 +33,7 @@
       {% endfor %}
     </select>
   </div>
+
   <div class="students-search">
     <input type="text" id="studentSearch" placeholder="Поиск по имени, курсу или ID…" />
   </div>
