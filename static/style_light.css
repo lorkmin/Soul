@@ -4690,3 +4690,49 @@ button.btn {
   background: rgba(0, 0, 0, 0.06);
   border-color: rgba(0, 0, 0, 0.18);
 }
+/* ===== STUDENT LAYOUT ===== */
+
+.student-header {
+  background: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.student-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+}
+
+.student-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.student-logo {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.student-header-name {
+  color: #777;
+  font-size: 0.9rem;
+}
+
+.student-header-nav {
+  display: flex;
+  gap: 12px;
+}
+
+.student-nav-link {
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: #333;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.student-nav-link:hover {
+  background: rgba(0, 0, 0, 0.05);
+}

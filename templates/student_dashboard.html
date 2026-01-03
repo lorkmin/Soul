@@ -128,18 +128,17 @@
                   student['last_payment_amount'] }} ₽ {% endif %}
                 </span>
               </div>
-              <div class="student-hero-actions">
-                <a href="{{ url_for('student_materials') }}" class="btn-primary student-hero-btn">
-                  📚 Обучающие материалы
-                </a>
-              </div>
-
               {% if student['comment'] %}
               <p class="student-hero-comment">
                 <span class="comment-label">Комментарий от школы:</span>
                 <span class="comment-text">{{ student['comment'] }}</span>
               </p>
               {% endif %}
+              <div class="student-hero-actions">
+                <a href="{{ url_for('student_materials') }}" class="btn-primary student-hero-btn">
+                  📚 Обучающие материалы
+                </a>
+              </div>
             </div>
           </div>
 
