@@ -27,7 +27,7 @@ def create_app() -> Flask:
         app.config["COURSE_UPLOAD"],
         app.config["GALLERY_UPLOAD"],
         app.config["HOMEWORK_UPLOAD_FOLDER"],
-        app.config.get("MATERIALS_UPLOAD_FOLDER", os.path.join(app.static_folder, "uploads", "materials")),
+        app.config["MATERIALS_UPLOAD_FOLDER"],
 
 
     ):
