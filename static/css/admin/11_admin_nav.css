@@ -17,3 +17,46 @@
 .admin-nav a.active {
   background: rgba(255, 255, 255, 0.2);
 }
+/* базовый вид select в админке */
+.admin-form select,
+.admin-form input,
+.admin-form textarea {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(20, 20, 24, 0.9);
+  color: #fff;
+  padding: 10px 12px;
+  outline: none;
+}
+
+/* красивый фокус */
+.admin-form select:focus,
+.admin-form input:focus,
+.admin-form textarea:focus {
+  border-color: rgba(255, 204, 0, 0.9);
+  box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.18);
+}
+
+/* стрелка (работает в большинстве браузеров) */
+.admin-form select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 38px;
+  background-image: linear-gradient(
+      45deg,
+      transparent 50%,
+      rgba(255, 255, 255, 0.8) 50%
+    ),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.8) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 50%, calc(100% - 12px) 50%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+
+/* option почти не контролируется, но хотя бы читаемо */
+.admin-form select option {
+  background: #141418;
+  color: #fff;
+}
