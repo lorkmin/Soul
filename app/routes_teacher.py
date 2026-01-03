@@ -398,41 +398,53 @@ def register_teacher_routes(app: Flask) -> None:
     def teacher_homework_list():
         conn = get_db()
 
-        teacher_id_raw = (request.args.get("teacher_id") or "").strip()
-        teacher_id = int(teacher_id_raw) if teacher_id_raw.isdigit() else None
+        # фильтры из query string
+        teacher_id = (request.args.get("teacher_id") or "").strip()
+        student_id = (request.args.get("student_id") or "").strip()
+        status = (request.args.get("status") or "").strip()
 
-        sql = """
-            SELECT
-                hw.*,
-                s.name AS student_name,
-                s.public_code AS student_code,
-                s.course AS student_course,
-                t.name AS teacher_name
-            FROM student_homework hw
-            JOIN student_accounts s ON s.id = hw.student_id
-            LEFT JOIN teachers t ON t.id = s.teacher_id
-        """
+        where = []
         params = []
 
-        if teacher_id is not None:
-            sql += " WHERE s.teacher_id = ? "
-            params.append(teacher_id)
+        if teacher_id.isdigit():
+            where.append("s.teacher_id = ?")
+            params.append(int(teacher_id))
 
-        sql += " ORDER BY hw.created_at DESC "
+        if student_id.isdigit():
+            where.append("h.student_id = ?")
+            params.append(int(student_id))
 
-        homework = conn.execute(sql, params).fetchall()
+        if status:
+            where.append("h.status = ?")
+            params.append(status)
 
-        teachers = conn.execute("""
-            SELECT id, name
-            FROM teachers
-            ORDER BY name
-        """).fetchall()
+        where_sql = ("WHERE " + " AND ".join(where)) if where else ""
+
+        rows = conn.execute(f"""
+            SELECT
+                h.*,
+                s.name  AS student_name,
+                s.course AS student_course,
+                t.name  AS teacher_name
+            FROM student_homework h
+            JOIN student_accounts s ON s.id = h.student_id
+            LEFT JOIN teachers t ON t.id = s.teacher_id
+            {where_sql}
+            ORDER BY h.created_at DESC
+        """, params).fetchall()
+
+        # для выпадающих списков
+        teachers = conn.execute("SELECT id, name FROM teachers ORDER BY name").fetchall()
+        students = conn.execute("SELECT id, name FROM student_accounts ORDER BY name LIMIT 500").fetchall()
 
         return render_template(
             "teacher_homework_list.html",
-            homework=homework,
+            homework=rows,
             teachers=teachers,
-            selected_teacher_id=teacher_id,
+            students=students,
+            filt_teacher_id=teacher_id,
+            filt_student_id=student_id,
+            filt_status=status,
         )
 
     @app.route("/teacher/homework/<int:hw_id>", methods=["GET", "POST"])
