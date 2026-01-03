@@ -19,11 +19,16 @@ def teacher_login_required(f):
     return wrapper
 
 def student_login_required(f):
+    """
+    Доступ разрешён, если в session есть student_id.
+    Если нет — отправляем на /student (student_dashboard),
+    потому что отдельного student_login у нас нет.
+    """
     @wraps(f)
     def wrapper(*args, **kwargs):
-        if session.get("student_id"):
-            return f(*args, **kwargs)
-        # редирект на страницу ввода ID
-        return redirect(url_for("student_dashboard", next=request.path))
+        if not session.get("student_id"):
+            return redirect(url_for("student_dashboard", next=request.path))
+        return f(*args, **kwargs)
     return wrapper
+
 

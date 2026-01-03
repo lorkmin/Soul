@@ -35,12 +35,12 @@ def register_student_routes(app: Flask) -> None:
                 "SELECT * FROM student_accounts WHERE public_code = ?",
                 (code,),
             ).fetchone()
-            if not student:
-                not_found = True
-                session.pop("student_id", None)  # <-- чтобы не оставалась старая сессия
+            if student:
+                session["student_id"] = student["id"]
+                session["student_code"] = student["public_code"]
             else:
-                session["student_id"] = student["id"]  # <-- ВОТ ЭТО
-
+                session.pop("student_id", None)
+                session.pop("student_code", None)
 
         if student:
             rows = conn.execute(
