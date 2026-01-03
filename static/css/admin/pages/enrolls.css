@@ -167,3 +167,39 @@
   color: rgba(255, 255, 255, 0.55);
   margin-top: -4px;
 }
+/* === FIX: admin-table should be a real table (enrolls, etc.) === */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* чтобы колонки не прыгали */
+}
+
+.admin-table thead,
+.admin-table tbody {
+  display: table-row-group;
+}
+
+.admin-table tr {
+  display: table-row !important;
+}
+
+.admin-table th,
+.admin-table td {
+  display: table-cell !important;
+  vertical-align: top;
+  padding: 14px 12px;
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* немного воздуха между строками */
+.admin-table tbody tr + tr td {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* чтобы “карточка заметки” не ломала ширину */
+.admin-table td textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
