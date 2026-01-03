@@ -19,6 +19,8 @@
   --transition-med: 0.24s ease;
 }
 
+@import url("css/site/hero.css");
+
 html {
   scroll-behavior: smooth;
 }
@@ -4578,4 +4580,47 @@ body.student-dashboard .student-hero-card::after {
 
 .thankyou-text:last-of-type {
   margin-bottom: 20px;
+}
+/* ===== Error pages ===== */
+
+.error-page {
+  padding: 60px 0;
+}
+
+.error-card {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 26px 22px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.1);
+}
+
+.error-emoji {
+  font-size: 2.4rem;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.12));
+}
+
+.error-title {
+  margin: 0 0 10px;
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+  line-height: 1.15;
+}
+
+.error-text {
+  margin: 0 auto 16px;
+  max-width: 56ch;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.error-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 12px;
 }

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Страница не найдена — Soul</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_light.css') }}">
+</head>
+
+<body>
+    <div class="wrapper">
+        {% include 'partials_header_stub.html' ignore missing %}
+
+        <section class="error-page">
+            <div class="section-inner error-card">
+                <div class="error-emoji">🧭</div>
+                <h1 class="error-title">Страница не найдена</h1>
+
+                <p class="error-text">
+                    Возможно, ссылка устарела или вы ошиблись в адресе.
+                </p>
+
+                <div class="error-actions">
+                    <a class="btn btn-primary" href="{{ url_for('index') }}">На главную</a>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+
+</html>
