@@ -134,3 +134,86 @@ h2 + .admin-form {
   background: #1c1f26;
   color: #fff;
 }
+/* Таблица админки — фиксируем раскладку */
+.admin-table {
+  width: 100%;
+  table-layout: fixed; /* ключевое */
+  border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+  vertical-align: top;
+  padding: 14px 16px;
+}
+
+/* фиксируем “узкие” колонки */
+.admin-table th:nth-child(1),
+.admin-table td:nth-child(1) {
+  width: 110px;
+} /* фото */
+
+.admin-table th:nth-child(2),
+.admin-table td:nth-child(2) {
+  width: 180px;
+} /* имя */
+
+.admin-table th:nth-child(3),
+.admin-table td:nth-child(3) {
+  width: 180px;
+} /* роль */
+
+/* колонка кнопок — фикс */
+.admin-table th:last-child,
+.admin-table td:last-child {
+  width: 230px;
+}
+
+/* Биография: переносы и ограничение */
+.bio-cell {
+  width: auto;
+}
+
+.bio-text {
+  white-space: normal;
+  overflow-wrap: anywhere; /* переносит даже длинные слова/ссылки */
+  word-break: break-word;
+  line-height: 1.45;
+
+  /* если хочешь “аккуратно и компактно” — обрезка до N строк */
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* количество строк превью */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Кнопки не должны ломать строку */
+.actions-cell {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.actions-cell .admin-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-left: 8px;
+}
+
+/* на мобилках можно чуть ужать кнопки */
+@media (max-width: 900px) {
+  .admin-table th:nth-child(1),
+  .admin-table td:nth-child(1) {
+    width: 90px;
+  }
+
+  .admin-table th:last-child,
+  .admin-table td:last-child {
+    width: 200px;
+  }
+
+  .bio-text {
+    -webkit-line-clamp: 4;
+  }
+}
