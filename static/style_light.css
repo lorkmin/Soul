@@ -5097,3 +5097,58 @@ button.btn {
     padding-bottom: 0;
   }
 }
+/* строка формы */
+.review-form-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr auto;
+  gap: 16px;
+  align-items: start; /* ВАЖНО: НЕ end */
+  margin-bottom: 16px;
+}
+
+/* поле */
+.review-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* лейблы */
+.review-form-field label,
+.review-form-field .rating-label {
+  font-size: 13px;
+  opacity: 0.75;
+  line-height: 1.2;
+}
+
+/* инпуты и селекты */
+.review-form-field input,
+.review-form-field select {
+  height: 44px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+}
+
+/* рейтинг */
+.review-form-rating {
+  min-width: 140px;
+}
+
+.rating-stars {
+  display: flex;
+  gap: 6px;
+  font-size: 18px;
+  line-height: 1;
+  margin-top: 6px; /* вместо padding-bottom */
+}
+
+/* мобилка */
+@media (max-width: 760px) {
+  .review-form-row {
+    grid-template-columns: 1fr;
+  }
+  .review-form-rating {
+    min-width: 0;
+  }
+}
