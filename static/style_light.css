@@ -5601,3 +5601,136 @@ button.btn {
   align-items: center;
   justify-content: center;
 }
+/* =========================
+   TRIAL STEPS BLOCK
+   ========================= */
+
+.trial-steps {
+  padding: 64px 0;
+}
+
+.trial-steps__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 18px;
+}
+
+.trial-steps__header {
+  margin-bottom: 18px;
+}
+
+.trial-steps__title {
+  font-size: 28px;
+  line-height: 1.2;
+  margin: 0 0 8px;
+  font-weight: 900;
+}
+
+.trial-steps__subtitle {
+  margin: 0;
+  opacity: 0.8;
+  font-size: 16px;
+}
+
+/* сетка карточек */
+.trial-steps__grid {
+  list-style: none; /* убираем стандартные 1. 2. 3. */
+  padding: 0;
+  margin: 22px 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.trial-steps__card {
+  position: relative;
+  border-radius: 22px;
+  padding: 18px 18px 16px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(10px);
+}
+
+.trial-steps__num {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 14px;
+  background: rgba(255, 183, 3, 0.22);
+  border: 1px solid rgba(255, 170, 0, 0.35);
+  margin-bottom: 10px;
+}
+
+.trial-steps__card-title {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.trial-steps__text {
+  margin: 0;
+  opacity: 0.85;
+  line-height: 1.5;
+}
+
+/* действия */
+.trial-steps__actions {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.trial-steps__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 900;
+  color: #111;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 231, 176, 0.9),
+    rgba(255, 211, 106, 0.9)
+  );
+  border: 1px solid rgba(255, 170, 0, 0.35);
+  box-shadow: 0 14px 34px rgba(245, 176, 0, 0.22);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.trial-steps__btn:hover {
+  opacity: 0.98;
+  transform: translateY(-1px);
+  box-shadow: 0 18px 46px rgba(245, 176, 0, 0.28);
+}
+
+.trial-steps__hint {
+  opacity: 0.75;
+  font-weight: 600;
+}
+
+/* адаптив */
+@media (max-width: 900px) {
+  .trial-steps__grid {
+    grid-template-columns: 1fr;
+  }
+  .trial-steps__title {
+    font-size: 24px;
+  }
+}
+.trial-steps {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 183, 3, 0.06),
+    rgba(255, 255, 255, 0)
+  );
+}
