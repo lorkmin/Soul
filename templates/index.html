@@ -410,9 +410,11 @@
                   {{ c['lessons'] }} уроков · {{ c['price'] }} ₽
                 </p>
                 <div class="course-pill-row">
-                  <span class="course-pill">🌸 уютные занятия</span>
-                  <span class="course-pill">📚 своя программа</span>
+                  {% for t in (c['tags'] or []) %}
+                  <span class="course-pill">{{ t }}</span>
+                  {% endfor %}
                 </div>
+
               </div>
             </div>
           </article>
