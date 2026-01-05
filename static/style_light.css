@@ -5815,3 +5815,31 @@ button,
   font-weight: 600;
   line-height: 1;
 }
+.hero-result {
+  margin-top: 12px;
+}
+
+.hero-result__title {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.75;
+  margin-bottom: 8px;
+}
+
+.hero-result__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.hero-result__chip {
+  display: inline-flex;
+  align-items: center;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  background: rgba(255, 183, 3, 0.14);
+  border: 1px solid rgba(255, 170, 0, 0.28);
+}
