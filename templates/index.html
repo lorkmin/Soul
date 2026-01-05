@@ -96,98 +96,43 @@
     </header>
 
     <!-- ГЕРО -->
-    <section id="hero" class="hero-kawaii">
-      <div class="section-inner hero-inner">
-        <!-- ЛЕВАЯ КОЛОНКА: ТЕКСТ -->
-        <div class="hero-col hero-col-text">
-          <p class="hero-label">Уютная онлайн-школа корейского языка</p>
+    <section class="hero" id="hero">
+      <div class="hero__inner">
 
-          <h1 class="hero-title">
-            Корейский, в который<br />
-            хочется возвращаться<span class="sparkle-emoji">✨</span>
-          </h1>
-
-          <p class="hero-sub">
-            Для тех, кто мечтает об учёбе или жизни в Корее, но хочет начинать
-            в&nbsp;своём темпе — с поддержкой и без стресса.
+        <div class="hero__content">
+          <h1 class="hero__title">Корейский язык — понятно и в вашем темпе</h1>
+          <p class="hero__subtitle">
+            Онлайн-занятия с преподавателем для взрослых и школьников. С нуля и для продолжающих.
           </p>
 
-          <!-- ДВЕ ЦЕЛЕВЫЕ АУДИТОРИИ -->
-          <div class="hero-audience-pills">
-            <div class="hero-pill">
-              15–25 лет<br /><span>готовимся к учёбе и поступлению</span>
-            </div>
-            <div class="hero-pill">
-              40+<br /><span>учим язык для души и переезда</span>
-            </div>
+          <ul class="hero__bullets">
+            <li>Индивидуальные занятия</li>
+            <li>Подберём программу под вашу цель</li>
+            <li>Пробный урок — бесплатно</li>
+          </ul>
+
+          <div class="hero__actions">
+            <a class="hero__btn hero__btn--primary" href="#enroll">Записаться на пробный урок</a>
+            <a class="hero__btn hero__btn--ghost" href="#trial-steps">Как проходит пробный урок</a>
           </div>
 
-          <!-- КНОПКИ -->
-          <div class="hero-actions">
-            <a href="#enroll" class="btn-primary">Записаться на пробный урок</a>
-            <a href="#about" class="btn-ghost">Узнать о школе</a>
-          </div>
-          <!-- МЕЛКИЕ ПЛЮСЫ -->
-          <div class="hero-meta-list">
-            <p class="hero-meta">
-              🎧 <span class="sparkle-word">Мягкий старт</span> с нуля —
-              объясняем спокойно и по шагам.
-            </p>
-            <p class="hero-meta">
-              ⭐ Маленькие группы и тёплая атмосфера поддержки.
-            </p>
-            <p class="hero-meta">
-              🇰🇷 Корейская культура, а не только грамматика.
-            </p>
+          <div class="hero__hint">Без обязательств · 30–40 минут · Zoom/Skype</div>
+        </div>
+
+        <div class="hero__side">
+          <div class="hero__card">
+            <div class="hero__card-title">Что получите после пробного</div>
+            <div class="hero__card-list">
+              <div class="hero__chip">Понимание формата</div>
+              <div class="hero__chip">Оценка уровня</div>
+              <div class="hero__chip">Рекомендация курса</div>
+            </div>
           </div>
         </div>
 
-        <!-- ПРАВАЯ КОЛОНКА: KAWAII-ИЛЛЮСТРАЦИЯ -->
-        <div class="hero-col hero-col-visual">
-          <div class="hero-k-card">
-            <div class="hero-k-header">
-              <span class="hero-k-tag">오늘도 화이팅 ✨</span>
-            </div>
-
-            <div class="hero-k-main">
-              <div class="hero-k-avatar">
-                <div class="hero-k-face">(•‿•)</div>
-                <div class="hero-k-badge">한글</div>
-              </div>
-              <div class="hero-k-text">
-                <p>
-                  Небольшие домашки, понятные объяснения и поддержка
-                  преподавателя.
-                </p>
-                <p class="hero-k-note">
-                  <span class="sparkle-word">Каждый шаг важен</span> — от
-                  алфавита до первых диалогов.
-                </p>
-              </div>
-            </div>
-
-            <div class="hero-k-chips">
-              {% if hero_tags %} {% for tag in hero_tags %}
-              <div class="hero-k-chip">{{ tag }}</div>
-              {% endfor %} {% else %}
-              <!-- запасной вариант, если теги не заданы -->
-              <div class="hero-k-chip">🌸 уютные онлайн-занятия</div>
-              <div class="hero-k-chip">📚 свои материалы</div>
-              {% endif %}
-            </div>
-
-            <!-- МИНИ-ИЛЛЮСТРАЦИИ ВОКРУГ -->
-            <div class="hero-k-icon hero-k-icon--cherry">🌸</div>
-            <div class="hero-k-icon hero-k-icon--house">🏠</div>
-            <div class="hero-k-icon hero-k-icon--book">📖</div>
-            <div class="hero-k-icon hero-k-icon--cup">☕</div>
-            <div class="hero-k-spark hero-k-spark--1">✨</div>
-            <div class="hero-k-spark hero-k-spark--2">✨</div>
-            <div class="hero-k-spark hero-k-spark--3">✨</div>
-          </div>
-        </div>
       </div>
     </section>
+
     <!-- БЛОК: Как проходит пробный урок -->
     <section class="trial-steps" id="trial-steps" aria-labelledby="trialStepsTitle">
       <div class="trial-steps__inner">
