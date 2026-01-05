@@ -5734,3 +5734,18 @@ button.btn {
     rgba(255, 255, 255, 0)
   );
 }
+.trial-steps__title {
+  font-weight: 700; /* вместо 900 */
+}
+
+.trial-steps__card-title {
+  font-weight: 600; /* вместо 900 */
+}
+
+.trial-steps__btn {
+  font-weight: 700; /* вместо 900 */
+}
+
+.trial-steps__num {
+  font-weight: 700; /* вместо 900 */
+}
