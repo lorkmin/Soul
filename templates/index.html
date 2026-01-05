@@ -394,8 +394,9 @@
         <div class="courses-grid">
           {% for c in courses %}
           <!-- КАРТОЧКА КУРСА -->
-          <article class="course-card animate-on-scroll" data-course-id="{{ c['id'] }}"
-            data-course-title="{{ c['title'] }}">
+          <article class="course-card animate-on-scroll {% if c['price'] == 0 %}course-card--free{% endif %}"
+            data-course-id="{{ c['id'] }}" data-course-title="{{ c['title'] }}">
+
             <div class="course-card-inner">
               <div class="course-image-wrap">
                 {% if c['photo'] %}
