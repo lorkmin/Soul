@@ -1,14 +1,17 @@
 from datetime import datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, jsonify
-
+import json
 from .db import get_db
 from .telegram import send_enroll_to_telegram, send_review_to_telegram, send_enroll_email_to_user
+from .utils import tags_json_to_list
+
 
 def register_public_routes(app: Flask) -> None:
 
     @app.get("/")
     def index():
         conn = get_db()
+
         reviews = conn.execute("""
             SELECT name, package, rating, text, created_at
             FROM reviews
@@ -18,8 +21,16 @@ def register_public_routes(app: Flask) -> None:
         """).fetchall()
 
         teachers = conn.execute("SELECT * FROM teachers ORDER BY created_at DESC").fetchall()
-        courses = conn.execute("SELECT * FROM courses ORDER BY created_at ASC").fetchall()
+
+        rows = conn.execute("SELECT * FROM courses ORDER BY created_at ASC").fetchall()
+        courses = []
+        for c in rows:
+            c = dict(c)  # важно: чтобы можно было менять поля
+            c["hero_tags"] = tags_json_to_list(c.get("hero_tags"))
+            courses.append(c)
+
         gallery = conn.execute("SELECT * FROM gallery ORDER BY created_at DESC LIMIT 12").fetchall()
+
         return render_template(
             "index.html",
             reviews=reviews,

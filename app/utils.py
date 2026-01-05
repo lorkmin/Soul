@@ -3,7 +3,7 @@ import random
 from datetime import datetime
 from typing import List, Optional
 from flask import current_app
-
+import json
 from .db import get_db
 
 def split_tags(s: str) -> List[str]:
@@ -41,3 +41,39 @@ def generate_student_code() -> str:
         ).fetchone()
         if not exists:
             return code
+
+def tags_to_json(raw: str) -> str:
+    raw = (raw or "").strip()
+    if not raw:
+        return "[]"
+    # "❤️ Бесплатно, ⌛ 60 мин" -> ["❤️ Бесплатно", "⌛ 60 мин"]
+    tags = [t.strip() for t in raw.split(",") if t.strip()]
+    return json.dumps(tags, ensure_ascii=False)
+
+def tags_json_to_text(raw: str) -> str:
+    raw = (raw or "").strip()
+    if not raw:
+        return ""
+    if raw.startswith("["):
+        try:
+            data = json.loads(raw)
+            if isinstance(data, list):
+                return ", ".join(str(x).strip() for x in data if str(x).strip())
+        except Exception:
+            pass
+    # если в БД лежит старый формат строкой — возвращаем как есть
+    return raw
+
+def tags_json_to_list(raw: str):
+    raw = (raw or "").strip()
+    if not raw:
+        return []
+    if raw.startswith("["):
+        try:
+            data = json.loads(raw)
+            if isinstance(data, list):
+                return [str(x).strip() for x in data if str(x).strip()]
+        except Exception:
+            return []
+    # совместимость со старым форматом
+    return [t.strip() for t in raw.split(",") if t.strip()]

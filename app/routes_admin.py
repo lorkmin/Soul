@@ -5,7 +5,7 @@ from flask import Flask, app, render_template, request, redirect, url_for, send_
 
 from .auth import login_required
 from .db import get_db
-from .utils import save_upload
+from .utils import save_upload, tags_to_json, tags_json_to_text
 from datetime import datetime, timedelta
 def register_admin_routes(app: Flask) -> None:
 
@@ -325,7 +325,8 @@ def register_admin_routes(app: Flask) -> None:
         price = request.form.get("price") or None
         lessons = request.form.get("lessons") or None
         description = request.form.get("description", "")
-        hero_tags = (request.form.get("hero_tags") or "").strip()
+        hero_tags_raw = (request.form.get("hero_tags") or "").strip()
+        hero_tags = tags_to_json(hero_tags_raw)
 
         photo = save_upload(request.files.get("photo"), app.config["COURSE_UPLOAD"])
 
@@ -361,7 +362,8 @@ def register_admin_routes(app: Flask) -> None:
             price = request.form.get("price") or None
             lessons = request.form.get("lessons") or None
             description = request.form.get("description", "")
-            hero_tags = (request.form.get("hero_tags") or "").strip()
+            hero_tags_raw = (request.form.get("hero_tags") or "").strip()
+            hero_tags = tags_to_json(hero_tags_raw)
 
             file = request.files.get("photo")
             new_photo = save_upload(file, app.config["COURSE_UPLOAD"]) if file and file.filename else None
@@ -387,7 +389,12 @@ def register_admin_routes(app: Flask) -> None:
             conn.commit()
             return redirect(url_for("admin_courses"))
 
-        return render_template("admin_course_edit.html", course=course)
+    # 👇 ДОБАВЬ ПРЯМО ПЕРЕД render_template
+    course = dict(course)
+    course["hero_tags"] = tags_json_to_text(course.get("hero_tags"))
+
+    return render_template("admin_course_edit.html", course=course)
+
 
     # ===== GALLERY =====
 
