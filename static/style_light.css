@@ -5843,3 +5843,44 @@ button,
   background: rgba(255, 183, 3, 0.14);
   border: 1px solid rgba(255, 170, 0, 0.28);
 }
+.hero-result--soft {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(8px);
+}
+
+.hero-result__title {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.78;
+  margin-bottom: 10px;
+}
+
+.hero-result__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.hero-result__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  background: rgba(255, 183, 3, 0.1);
+  border: 1px solid rgba(255, 170, 0, 0.22);
+}
+
+.hero-result__note {
+  margin-top: 10px;
+  font-size: 13px;
+  opacity: 0.72;
+}
