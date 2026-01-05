@@ -5028,3 +5028,72 @@ button.btn {
     align-items: flex-start;
   }
 }
+/* Шапка формы (заголовок + кнопка) */
+.review-form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+/* 1-я строка: Имя / Пакет / Оценка */
+.review-form-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr auto;
+  gap: 16px;
+  align-items: end; /* чтобы низы инпутов совпали */
+  margin-bottom: 14px;
+}
+
+.review-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.review-form-field label,
+.review-form-field .rating-label {
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+/* Выровнять инпуты/селекты по высоте */
+.review-form-field input,
+.review-form-field select {
+  height: 42px;
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+
+/* Рейтинг */
+.review-form-rating {
+  min-width: 140px; /* чтобы не сжимался и не переносился */
+  align-items: flex-start;
+}
+
+.rating-stars {
+  display: flex;
+  gap: 6px;
+  line-height: 1;
+  font-size: 18px;
+  padding-bottom: 10px; /* чтобы визуально совпало по низу с инпутами */
+  user-select: none;
+}
+
+.rating-stars span {
+  cursor: pointer;
+}
+
+/* Мобилка: всё в столбик */
+@media (max-width: 760px) {
+  .review-form-row {
+    grid-template-columns: 1fr;
+  }
+  .review-form-rating {
+    min-width: 0;
+  }
+  .rating-stars {
+    padding-bottom: 0;
+  }
+}
