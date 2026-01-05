@@ -389,9 +389,9 @@ def register_admin_routes(app: Flask) -> None:
             conn.commit()
             return redirect(url_for("admin_courses"))
 
-    # GET: показать форму (сделаем hero_tags строкой для удобства)
-    course = dict(course)
-    course["hero_tags"] = tags_json_to_text(course.get("hero_tags"))
+        # GET: показать форму (сделаем hero_tags строкой для удобства)
+        course = dict(course)
+        course["hero_tags"] = tags_json_to_text(course.get("hero_tags"))
     return render_template("admin_course_edit.html", course=course)
 
 
