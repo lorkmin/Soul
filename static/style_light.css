@@ -19,7 +19,7 @@
   --transition-med: 0.24s ease;
 }
 
-@import url("css/site/hero.css");
+/*@import url("css/site/hero.css");*/
 
 html {
   scroll-behavior: smooth;
