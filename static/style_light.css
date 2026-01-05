@@ -4982,3 +4982,49 @@ button.btn {
     animation: none;
   }
 }
+/* строка с полями */
+.review-form-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr auto;
+  gap: 16px;
+  align-items: end;
+  margin-bottom: 16px;
+}
+
+/* общее поле */
+.review-form-row .form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+/* рейтинг */
+.rating-field {
+  min-width: 120px;
+}
+
+/* звезды */
+.rating-stars {
+  display: flex;
+  gap: 4px;
+  font-size: 18px;
+  line-height: 1;
+  padding-bottom: 6px; /* выравнивает по инпутам */
+}
+.review-form {
+  position: relative;
+}
+
+.review-form-toggle {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+@media (max-width: 720px) {
+  .review-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .rating-field {
+    align-items: flex-start;
+  }
+}
