@@ -394,8 +394,9 @@
         <div class="courses-grid">
           {% for c in courses %}
           <!-- КАРТОЧКА КУРСА -->
-          <article class="course-card animate-on-scroll {% if c['price'] == 0 %}course-card--free{% endif %}"
+          <article class="course-card animate-on-scroll {% if (c['price']|int == 0) %}course-card--free{% endif %}"
             data-course-id="{{ c['id'] }}" data-course-title="{{ c['title'] }}">
+
 
             <div class="course-card-inner">
               <div class="course-image-wrap">
@@ -407,8 +408,10 @@
               <div class="course-body">
                 <h4 class="course-title">{{ c['title'] }}</h4>
                 <p class="course-meta">
-                  {{ c['lessons'] }} уроков · {{ c['price'] }} ₽
+                  {{ c['lessons'] }} уроков ·
+                  {% if c['price']|int == 0 %}Бесплатно{% else %}{{ c['price'] }} ₽{% endif %}
                 </p>
+
                 <div class="course-pill-row">
                   {% for t in (c['hero_tags'] or []) %}
                   <span class="course-pill">{{ t }}</span>

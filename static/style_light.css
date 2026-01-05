@@ -4745,12 +4745,15 @@ button.btn {
 
 .course-card--free .course-card-inner {
   position: relative;
-  border-radius: 22px;              /* под твой стиль */
+  border-radius: 22px; /* под твой стиль */
   overflow: hidden;
   /* легкий "премиум" фон */
-  background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.85));
-  box-shadow:
-    0 14px 40px rgba(0, 0, 0, 0.10),
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.95),
+    rgba(255, 255, 255, 0.85)
+  );
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1),
     0 0 0 1px rgba(255, 191, 0, 0.25) inset;
 }
 
@@ -4759,12 +4762,10 @@ button.btn {
   content: "";
   position: absolute;
   inset: 0;
-  padding: 2px;                     /* толщина рамки */
+  padding: 2px; /* толщина рамки */
   border-radius: 22px;
   background: linear-gradient(135deg, #ffb703, #ffd166, #ff006e);
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
@@ -4777,7 +4778,11 @@ button.btn {
   position: absolute;
   inset: -10px;
   border-radius: 26px;
-  background: radial-gradient(closest-side, rgba(255, 191, 0, 0.22), transparent 70%);
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 191, 0, 0.22),
+    transparent 70%
+  );
   filter: blur(10px);
   z-index: -1;
 }
@@ -4820,9 +4825,8 @@ button.btn {
 }
 
 .course-card--free:hover .course-card-inner {
-  box-shadow:
-    0 18px 55px rgba(0, 0, 0, 0.14),
-    0 0 0 1px rgba(255, 191, 0, 0.30) inset;
+  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.14),
+    0 0 0 1px rgba(255, 191, 0, 0.3) inset;
 }
 
 /* уважение к prefer-reduced-motion */
@@ -4845,6 +4849,136 @@ button.btn {
   font-weight: 800;
   background: linear-gradient(90deg, #ffb703, #ff006e);
   color: #fff;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
-  letter-spacing: .3px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  letter-spacing: 0.3px;
+}
+/* =========================
+   FREE COURSE (FEATURED)
+   ========================= */
+
+.course-card--free {
+  position: relative;
+  z-index: 2;
+  transform: translateY(-2px);
+}
+
+/* Основной контейнер карточки */
+.course-card--free .course-card-inner {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.98),
+    rgba(255, 255, 255, 0.9)
+  );
+  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.14),
+    0 0 0 1px rgba(255, 170, 0, 0.25) inset;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+/* Градиентная рамка (как “премиум”) */
+.course-card--free .course-card-inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #ffb703, #ffd166, #ff006e);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.95;
+}
+
+/* Мягкое внешнее свечение */
+.course-card--free::after {
+  content: "";
+  position: absolute;
+  inset: -14px;
+  border-radius: 28px;
+  background: radial-gradient(
+      closest-side,
+      rgba(255, 183, 3, 0.22),
+      transparent 65%
+    ),
+    radial-gradient(closest-side, rgba(255, 0, 110, 0.12), transparent 70%);
+  filter: blur(12px);
+  z-index: -1;
+}
+
+/* Бейдж “Бесплатно” */
+.course-card--free .course-image-wrap {
+  position: relative;
+}
+
+.course-card--free .course-image-wrap::after {
+  content: "Бесплатно";
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  background: rgba(255, 200, 0, 0.18);
+  border: 1px solid rgba(255, 170, 0, 0.35);
+  backdrop-filter: blur(8px);
+}
+
+/* Лёгкая “сияющая” полоса внутри карточки */
+.course-card--free .course-card-inner::after {
+  content: "";
+  position: absolute;
+  inset: -40% -60%;
+  background: linear-gradient(
+    45deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 65%
+  );
+  transform: translateX(-30%) rotate(10deg);
+  opacity: 0.35;
+  pointer-events: none;
+  animation: freeShine 3.8s ease-in-out infinite;
+}
+
+@keyframes freeShine {
+  0% {
+    transform: translateX(-35%) rotate(10deg);
+    opacity: 0.15;
+  }
+  45% {
+    opacity: 0.38;
+  }
+  100% {
+    transform: translateX(35%) rotate(10deg);
+    opacity: 0.12;
+  }
+}
+
+/* Hover — чуть выше и дороже */
+.course-card--free:hover .course-card-inner {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.18),
+    0 0 0 1px rgba(255, 170, 0, 0.3) inset;
+}
+
+/* Чтобы текст “цена 0 ₽” не выглядел странно (опционально) */
+.course-card--free .course-meta {
+  font-weight: 700;
+}
+
+/* Уважение к reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .course-card--free .course-card-inner,
+  .course-card--free:hover .course-card-inner {
+    transition: none;
+    transform: none;
+  }
+  .course-card--free .course-card-inner::after {
+    animation: none;
+  }
 }
