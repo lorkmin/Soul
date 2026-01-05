@@ -5569,3 +5569,35 @@ button.btn {
   box-shadow: 0 8px 18px rgba(245, 176, 0, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
+.review-form *,
+.review-form *::before,
+.review-form *::after {
+  box-sizing: border-box;
+}
+.review-form textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+/* ===== ЕДИНАЯ ВЫСОТА ПОЛЕЙ ===== */
+
+.review-form input[type="text"],
+.review-form select,
+.review-form .rating-stars {
+  height: 44px;
+}
+
+/* input + select */
+.review-form input[type="text"],
+.review-form select {
+  padding: 0 14px;
+  line-height: 44px; /* ВАЖНО */
+  font-size: 14px;
+}
+
+/* рейтинг */
+.review-form .rating-stars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
