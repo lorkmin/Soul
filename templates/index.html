@@ -511,7 +511,9 @@
         <div class="review-form-wrapper collapsed" id="reviewFormWrapper">
           <div class="review-form-header">
             <h4 class="review-form-title">Оставить отзыв</h4>
-            <button type="button" class="btn-primary" id="toggleReviewForm">
+
+            <!-- отдельный класс для кнопки формы -->
+            <button type="button" class="review-btn review-btn--toggle" id="toggleReviewForm">
               Написать отзыв
             </button>
           </div>
@@ -522,6 +524,7 @@
                 <label for="name">Имя</label>
                 <input id="name" name="name" type="text" required placeholder="Ваше имя" />
               </div>
+
               <div class="review-form-field">
                 <label for="package">Пакет</label>
                 <select id="package" name="package">
@@ -532,18 +535,15 @@
                 </select>
               </div>
 
-              <!-- НОВЫЙ блок рейтинга звёздочками -->
               <div class="review-form-field review-form-rating">
-                <label class="rating-label">Оценка</label>
-
-                <div class="rating-stars" id="ratingStars" data-current="5">
+                <label class="rating-label" for="ratingInput">Оценка</label>
+                <div class="rating-stars" id="ratingStars" data-current="5" aria-label="Оценка">
                   <span data-value="1">★</span>
                   <span data-value="2">★</span>
                   <span data-value="3">★</span>
                   <span data-value="4">★</span>
                   <span data-value="5">★</span>
                 </div>
-                <!-- скрытое поле, которое реально уходит в форму -->
                 <input type="hidden" name="rating" id="ratingInput" value="5" />
               </div>
             </div>
@@ -553,11 +553,14 @@
               <textarea id="text" name="text" required
                 placeholder="Поделитесь, как проходят занятия, что понравилось, что было неожиданно…"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">
+
+            <!-- отдельный класс для submit -->
+            <button type="submit" class="review-btn review-btn--submit">
               Отправить отзыв
             </button>
           </form>
         </div>
+
       </div>
     </section>
 
