@@ -427,7 +427,6 @@
 /* таблица не должна ужиматься до состояния "буквы столбиком" */
 .admin-table.enrolls-table {
   width: 100%;
-  min-width: 1700px; /* подстрой если нужно */
   table-layout: auto;
 }
 
