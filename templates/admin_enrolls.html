@@ -41,7 +41,19 @@
           <div class="admin-meta">{{ e.level or "—" }}</div>
         </td>
 
-        <td>{{ e.comment or "" }}</td>
+        <td class="enroll-comment-cell">
+          {% if e.comment %}
+            {% set is_long = e.comment|length > 50 %}
+            {% if is_long %}
+              <details class="enroll-comment">
+                <summary>{{ e.comment[:50] }}&hellip;</summary>
+                <div class="enroll-comment__full">{{ e.comment }}</div>
+              </details>
+            {% else %}
+              <span class="enroll-comment__text">{{ e.comment }}</span>
+            {% endif %}
+          {% endif %}
+        </td>
 
         <td style="white-space: nowrap">
           {% if e.is_bot %}
