@@ -36,6 +36,16 @@ def register_admin_routes(app: Flask) -> None:
             stats["bots_total"] = 0
             stats["bots_7d"] = 0
 
+        # Enroll statuses
+        status_rows = conn.execute("SELECT status, COUNT(*) AS cnt FROM enrolls GROUP BY status").fetchall()
+        status_7d_rows = conn.execute("SELECT status, COUNT(*) AS cnt FROM enrolls WHERE created_at >= ? GROUP BY status", (since_dt,)).fetchall()
+        status_map = {row["status"] or "new": row["cnt"] for row in status_rows}
+        status_7d_map = {row["status"] or "new": row["cnt"] for row in status_7d_rows}
+        stats["enroll_processed_total"] = sum(count for st, count in status_map.items() if st and st != "new")
+        stats["enroll_processed_7d"] = sum(count for st, count in status_7d_map.items() if st and st != "new")
+        stats["enroll_purchased_total"] = status_map.get("purchased", 0)
+        stats["enroll_purchased_7d"] = status_7d_map.get("purchased", 0)
+
         # Ученики
         stats["students_total"] = conn.execute("SELECT COUNT(*) FROM student_accounts").fetchone()[0]
         stats["students_no_teacher"] = conn.execute(
@@ -116,19 +126,31 @@ def register_admin_routes(app: Flask) -> None:
             """
             SELECT id, created_at, ip, name, contact, tariff, level, comment,
                    COALESCE(is_bot, 0) AS is_bot,
-                   admin_note
+                   admin_note,
+                   COALESCE(status, 'new') AS status
             FROM enrolls
             ORDER BY created_at DESC
             LIMIT 500
             """
         ).fetchall()
-        return render_template("admin_enrolls.html", enrolls=enrolls)
+        enroll_statuses = [
+            ("new", "Новая"),
+            ("trial_agreed", "Согласился на пробный урок"),
+            ("trial_scheduled", "Пробный назначен"),
+            ("trial_done", "Пробный проведён"),
+            ("purchased", "Купил пакет"),
+            ("not_interested", "Отказ"),
+            ("no_show", "Не вышел на связь"),
+            ("spam", "Спам / бот"),
+        ]
+        return render_template("admin_enrolls.html", enrolls=enrolls, enroll_statuses=enroll_statuses)
 
     @app.post("/admin/enrolls/<int:enroll_id>/note")
     @login_required
     def admin_enroll_note(enroll_id: int):
         """Update admin note + bot flag for an enroll row."""
         note = (request.form.get("admin_note") or "").strip()
+        status = (request.form.get("status") or "new").strip() or "new"
 
         # из-за hidden + checkbox может прийти ["0"] или ["0","1"]
         is_bot_vals = [v.strip().lower() for v in request.form.getlist("is_bot")]
@@ -136,12 +158,10 @@ def register_admin_routes(app: Flask) -> None:
 
         conn = get_db()
         conn.execute(
-            "UPDATE enrolls SET admin_note = ?, is_bot = ? WHERE id = ?",
-            (note or None, is_bot, enroll_id),
+            "UPDATE enrolls SET admin_note = ?, is_bot = ?, status = ?, status_updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+            (note or None, is_bot, status, enroll_id),
         )
         conn.commit()
-        return redirect(url_for("admin_enrolls"))
-
         return redirect(url_for("admin_enrolls"))
 
     @app.get("/admin/enrolls/export")
@@ -152,7 +172,9 @@ def register_admin_routes(app: Flask) -> None:
             """
             SELECT id, created_at, ip, name, contact, tariff, level, comment,
                    COALESCE(is_bot, 0) AS is_bot,
-                   admin_note
+                   admin_note,
+                   COALESCE(status, 'new') AS status,
+                   status_updated_at
             FROM enrolls
             ORDER BY created_at DESC
             """
@@ -162,7 +184,7 @@ def register_admin_routes(app: Flask) -> None:
         writer = csv.writer(output, delimiter=";")
         writer.writerow([
             "id", "created_at", "ip", "name", "contact",
-            "tariff", "level", "comment", "is_bot", "admin_note"
+            "tariff", "level", "comment", "is_bot", "admin_note", "status", "status_updated_at"
         ])
         for row in rows:
             writer.writerow([
@@ -176,6 +198,8 @@ def register_admin_routes(app: Flask) -> None:
                 row["comment"] or "",
                 int(row["is_bot"] or 0),
                 row["admin_note"] or "",
+                row["status"] or "new",
+                row["status_updated_at"] or "",
             ])
 
         output.seek(0)

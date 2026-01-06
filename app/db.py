@@ -51,6 +51,8 @@ def init_db(app: Flask) -> None:
     for stmt in (
         "ALTER TABLE enrolls ADD COLUMN admin_note TEXT",
         "ALTER TABLE enrolls ADD COLUMN is_bot INTEGER DEFAULT 0",
+        "ALTER TABLE enrolls ADD COLUMN status TEXT DEFAULT 'new'",
+        "ALTER TABLE enrolls ADD COLUMN status_updated_at DATETIME DEFAULT CURRENT_TIMESTAMP",
     ):
         try:
             cur.execute(stmt)

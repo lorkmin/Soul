@@ -232,6 +232,98 @@
   width: 380px;
 }
 
+.admin-table.enrolls-table th:nth-child(6),
+.admin-table.enrolls-table td:nth-child(6) {
+  width: 180px;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+}
+
+.status-badge::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.status-new::before {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.status-trial_agreed::before,
+.status-trial_scheduled::before {
+  background: #f6c344;
+  box-shadow: 0 0 0 3px rgba(246, 195, 68, 0.25);
+}
+
+.status-trial_done::before {
+  background: #5dd39e;
+  box-shadow: 0 0 0 3px rgba(93, 211, 158, 0.25);
+}
+
+.status-purchased {
+  background: rgba(93, 211, 158, 0.15);
+  border-color: rgba(93, 211, 158, 0.4);
+  color: #d6ffe9;
+}
+
+.status-purchased::before {
+  background: #5dd39e;
+  box-shadow: 0 0 0 3px rgba(93, 211, 158, 0.25);
+}
+
+.status-not_interested,
+.status-no_show {
+  background: rgba(255, 173, 65, 0.12);
+  border-color: rgba(255, 173, 65, 0.35);
+  color: rgba(255, 232, 191, 0.9);
+}
+
+.status-not_interested::before,
+.status-no_show::before {
+  background: #ffad41;
+  box-shadow: 0 0 0 3px rgba(255, 173, 65, 0.25);
+}
+
+.status-spam {
+  background: rgba(255, 70, 70, 0.16);
+  border-color: rgba(255, 70, 70, 0.4);
+  color: #ffdede;
+}
+
+.status-spam::before {
+  background: #ff4646;
+  box-shadow: 0 0 0 3px rgba(255, 70, 70, 0.22);
+}
+
+.admin-select {
+  min-width: 220px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.2);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.note-label {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 600;
+}
+
 .enroll-comment {
   margin: 0;
   color: rgba(255, 255, 255, 0.88);

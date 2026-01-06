@@ -1,4 +1,15 @@
 {% extends "admin_layout.html" %} {% block content %}
+{% set statuses_map = {
+  "new": "Новая",
+  "trial_agreed": "Согласился на пробный",
+  "trial_scheduled": "Пробный назначен",
+  "trial_done": "Пробный проведён",
+  "purchased": "Купил пакет",
+  "not_interested": "Отказ",
+  "no_show": "Не вышел на связь",
+  "spam": "Спам / бот"
+} %}
+
 <div class="top-actions enrolls-top-actions">
 
   <div>Всего заявок: {{ enrolls|length }}</div>
@@ -15,8 +26,9 @@
         <th>Имя / Контакт</th>
         <th>Пакет / Уровень</th>
         <th>Комментарий</th>
+        <th>Статус</th>
         <th>Бот</th>
-        <th style="min-width: 340px">Заметка админа</th>
+        <th style="min-width: 360px">Заметка админа</th>
         <th></th>
       </tr>
     </thead>
@@ -55,6 +67,11 @@
           {% endif %}
         </td>
 
+        <td>
+          {% set current_label = statuses_map.get(e.status or 'new', 'Новая') %}
+          <span class="status-badge status-{{ e.status or 'new' }}">{{ current_label }}</span>
+        </td>
+
         <td style="white-space: nowrap">
           {% if e.is_bot %}
           <span class="bot-badge is-bot"><span class="dot"></span> BOT</span>
@@ -68,6 +85,13 @@
           #}
           <form method="post" action="{{ url_for('admin_enroll_note', enroll_id=e.id) }}" class="admin-note-box">
             <div class="bot-actions">
+              <label class="note-label" for="status-{{ e.id }}">Статус</label>
+              <select name="status" id="status-{{ e.id }}" class="admin-select">
+                {% for value, label in enroll_statuses %}
+                  <option value="{{ value }}" {% if (e.status or 'new') == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+
               <!-- hidden гарантирует 0 если чекбокс снят -->
               <input type="hidden" name="is_bot" value="0" />
 

@@ -26,9 +26,27 @@
     </div>
 
     <div class="dash-card">
+        <div class="dash-kpi-title">Обработанные заявки</div>
+        <div class="dash-kpi-main">{{ stats.enroll_processed_total }}</div>
+        <div class="dash-kpi-sub">за 7 дней: <b>{{ stats.enroll_processed_7d }}</b></div>
+        <div class="dash-actions">
+            <a class="dash-btn dash-btn--primary" href="{{ url_for('admin_enrolls') }}">Заявки</a>
+        </div>
+    </div>
+
+    <div class="dash-card">
+        <div class="dash-kpi-title">Купили пакет</div>
+        <div class="dash-kpi-main">{{ stats.enroll_purchased_total }}</div>
+        <div class="dash-kpi-sub">за 7 дней: <b>{{ stats.enroll_purchased_7d }}</b></div>
+        <div class="dash-actions">
+            <a class="dash-btn dash-btn--primary" href="{{ url_for('admin_enrolls') }}">Заявки</a>
+        </div>
+    </div>
+
+    <div class="dash-card">
         <div class="dash-kpi-title">Ученики</div>
         <div class="dash-kpi-main">{{ stats.students_total }}</div>
-        <div class="dash-kpi-sub">без преподавателя: <b>{{ stats.students_no_teacher }}</b></div>
+        <div class="dash-kpi-sub">без закрепленного преподавателя: <b>{{ stats.students_no_teacher }}</b></div>
         <div class="dash-actions">
             <a class="dash-btn dash-btn--primary" href="{{ url_for('teacher_students') }}">Ученики</a>
         </div>
@@ -37,7 +55,7 @@
     <div class="dash-card">
         <div class="dash-kpi-title">Домашки</div>
         <div class="dash-kpi-main">{{ stats.hw_new }}</div>
-        <div class="dash-kpi-sub">новых · за 7 дней: <b>{{ stats.hw_7d }}</b></div>
+        <div class="dash-kpi-sub">новые, за 7 дней: <b>{{ stats.hw_7d }}</b></div>
         <div class="dash-actions">
             <a class="dash-btn dash-btn--primary" href="{{ url_for('teacher_homework_list') }}">Открыть</a>
         </div>
@@ -46,7 +64,7 @@
     <div class="dash-card">
         <div class="dash-kpi-title">Материалы</div>
         <div class="dash-kpi-main">{{ stats.materials_published }}</div>
-        <div class="dash-kpi-sub">опубликовано · всего: <b>{{ stats.materials_total }}</b></div>
+        <div class="dash-kpi-sub">всего загружено: <b>{{ stats.materials_total }}</b></div>
         <div class="dash-actions">
             <a class="dash-btn dash-btn--primary" href="{{ url_for('admin_materials') }}">Материалы</a>
         </div>
