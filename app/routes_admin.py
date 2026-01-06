@@ -182,17 +182,29 @@ def register_admin_routes(app: Flask) -> None:
     @login_required
     def admin_enrolls_export():
         conn = get_db()
-        rows = conn.execute(
-            """
-            SELECT id, created_at, ip, name, contact, tariff, level, comment,
-                   COALESCE(is_bot, 0) AS is_bot,
-                   admin_note,
-                   COALESCE(status, 'new') AS status,
-                   status_updated_at
-            FROM enrolls
-            ORDER BY created_at DESC
-            """
-        ).fetchall()
+        try:
+            rows = conn.execute(
+                """
+                SELECT id, created_at, ip, name, contact, tariff, level, comment,
+                       COALESCE(is_bot, 0) AS is_bot,
+                       admin_note,
+                       COALESCE(status, 'new') AS status,
+                       status_updated_at
+                FROM enrolls
+                ORDER BY created_at DESC
+                """
+            ).fetchall()
+        except sqlite3.OperationalError:
+            rows = conn.execute(
+                """
+                SELECT id, created_at, ip, name, contact, tariff, level, comment,
+                       COALESCE(is_bot, 0) AS is_bot,
+                       admin_note,
+                       COALESCE(status, 'new') AS status
+                FROM enrolls
+                ORDER BY created_at DESC
+                """
+            ).fetchall()
 
         output = io.StringIO()
         writer = csv.writer(output, delimiter=";")
@@ -213,7 +225,7 @@ def register_admin_routes(app: Flask) -> None:
                 int(row["is_bot"] or 0),
                 row["admin_note"] or "",
                 row["status"] or "new",
-                row["status_updated_at"] or "",
+                (row["status_updated_at"] if "status_updated_at" in row.keys() else "") or "",
             ])
 
         output.seek(0)
