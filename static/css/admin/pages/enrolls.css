@@ -213,6 +213,14 @@
   vertical-align: top;
 }
 
+/* Comments column: limit height and allow scrolling */
+.admin-table.enrolls-table td:nth-child(5) {
+  max-height: 140px;
+  overflow-y: auto;
+  line-height: 1.4;
+  padding-right: 10px;
+}
+
 /* чтобы колонка "Заметка" была шире и не ломала все остальные */
 .admin-table.enrolls-table th:nth-child(7),
 .admin-table.enrolls-table td:nth-child(7) {
