@@ -21,7 +21,7 @@
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   width: 100%;
-  max-width: 440px;
+  max-width: 320px;
 }
 
 /* Top row: switch + status badge */
@@ -231,7 +231,7 @@
 /* чтобы колонка "Заметка" была шире и не ломала все остальные */
 .admin-table.enrolls-table th:nth-child(7),
 .admin-table.enrolls-table td:nth-child(7) {
-  width: 380px;
+  width: 340px;
 }
 
 .admin-table.enrolls-table th:nth-child(6),
