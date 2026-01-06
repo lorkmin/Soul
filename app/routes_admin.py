@@ -157,10 +157,24 @@ def register_admin_routes(app: Flask) -> None:
         is_bot = 1 if "1" in is_bot_vals or "true" in is_bot_vals or "on" in is_bot_vals or "yes" in is_bot_vals else 0
 
         conn = get_db()
-        conn.execute(
-            "UPDATE enrolls SET admin_note = ?, is_bot = ?, status = ?, status_updated_at = CURRENT_TIMESTAMP WHERE id = ?",
-            (note or None, is_bot, status, enroll_id),
-        )
+        try:
+            conn.execute(
+                "UPDATE enrolls SET admin_note = ?, is_bot = ?, status = ?, status_updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+                (note or None, is_bot, status, enroll_id),
+            )
+        except sqlite3.OperationalError:
+            # safeguard if status_updated_at column is missing on old DBs
+            try:
+                conn.execute("ALTER TABLE enrolls ADD COLUMN status_updated_at DATETIME DEFAULT CURRENT_TIMESTAMP")
+                conn.execute(
+                    "UPDATE enrolls SET admin_note = ?, is_bot = ?, status = ?, status_updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+                    (note or None, is_bot, status, enroll_id),
+                )
+            except sqlite3.OperationalError:
+                conn.execute(
+                    "UPDATE enrolls SET admin_note = ?, is_bot = ?, status = ? WHERE id = ?",
+                    (note or None, is_bot, status, enroll_id),
+                )
         conn.commit()
         return redirect(url_for("admin_enrolls"))
 
