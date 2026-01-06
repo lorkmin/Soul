@@ -4538,22 +4538,93 @@ body.student-dashboard .student-hero-card::after {
   white-space: nowrap;
 }
 
-/* если где-то есть button.btn — убираем дефолтный фон/рамки браузера */
-button.btn {
+/* Unified button system */
+.btn,
+.btn-primary,
+.btn-ghost,
+.btn-secondary,
+.trial-steps__btn,
+.course-modal-enroll-btn,
+.review-btn,
+.review-btn--submit,
+.review-btn--toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  line-height: 1;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+    background var(--transition-fast), color var(--transition-fast),
+    border-color var(--transition-fast), opacity var(--transition-fast);
+}
+
+button.btn,
+button.review-btn,
+button.review-btn--submit,
+button.review-btn--toggle,
+button.trial-steps__btn,
+button.course-modal-enroll-btn {
   background: none;
 }
 
-/* ВТОРИЧНАЯ */
+.btn-primary,
+.trial-steps__btn,
+.course-modal-enroll-btn,
+.review-btn--submit {
+  background: linear-gradient(
+    135deg,
+    var(--accent-yellow),
+    var(--accent-yellow-soft)
+  );
+  color: #2b1c03;
+  box-shadow: 0 12px 26px rgba(244, 201, 76, 0.65);
+  border-color: rgba(244, 201, 76, 0.55);
+}
+
+.btn-primary:hover,
+.trial-steps__btn:hover,
+.course-modal-enroll-btn:hover,
+.review-btn--submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 36px rgba(244, 201, 76, 0.9);
+}
+
+.btn-ghost,
+.review-btn--toggle {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  color: var(--text-main);
+  box-shadow: none;
+}
+
+.btn-ghost:hover,
+.review-btn--toggle:hover {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.16);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
 .btn-secondary {
   background: rgba(0, 0, 0, 0.03);
   border-color: rgba(0, 0, 0, 0.14);
-  color: rgba(0, 0, 0, 0.75);
+  color: rgba(0, 0, 0, 0.78);
 }
 
 .btn-secondary:hover {
   background: rgba(0, 0, 0, 0.06);
   border-color: rgba(0, 0, 0, 0.18);
 }
+
 /* ===== STUDENT LAYOUT ===== */
 
 .student-header {
