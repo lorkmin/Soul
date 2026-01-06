@@ -1,6 +1,7 @@
 .admin-container {
-  max-width: 1200px;
-  margin: 50px auto;
+  width: 95%;
+  max-width: 1500px;
+  margin: 40px auto;
   background: rgba(255, 255, 255, 0.07);
   padding: 30px;
   border-radius: 20px;
