@@ -173,7 +173,7 @@
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed; /* чтобы колонки не прыгали */
+  table-layout: auto; /* чтобы колонки не прыгали */
 }
 
 .admin-table thead,
@@ -449,50 +449,4 @@
 .admin-table.enrolls-table th:nth-child(7),
 .admin-table.enrolls-table td:nth-child(7) {
   width: 380px;
-}
-
-
-/* === Enrolls table: fixed column widths to prevent shift === */
-.admin-table.enrolls-table {
-  table-layout: fixed;
-}
-
-.admin-table.enrolls-table th:nth-child(1),
-.admin-table.enrolls-table td:nth-child(1) {
-  width: 48px;
-}
-
-.admin-table.enrolls-table th:nth-child(2),
-.admin-table.enrolls-table td:nth-child(2) {
-  width: 120px;
-}
-
-.admin-table.enrolls-table th:nth-child(3),
-.admin-table.enrolls-table td:nth-child(3) {
-  width: 140px;
-}
-
-.admin-table.enrolls-table th:nth-child(4),
-.admin-table.enrolls-table td:nth-child(4) {
-  width: 140px;
-}
-
-.admin-table.enrolls-table th:nth-child(5),
-.admin-table.enrolls-table td:nth-child(5) {
-  width: 320px;
-}
-
-.admin-table.enrolls-table th:nth-child(6),
-.admin-table.enrolls-table td:nth-child(6) {
-  width: 190px;
-}
-
-.admin-table.enrolls-table th:nth-child(7),
-.admin-table.enrolls-table td:nth-child(7) {
-  width: 90px;
-}
-
-.admin-table.enrolls-table th:nth-child(8),
-.admin-table.enrolls-table td:nth-child(8) {
-  width: 340px;
 }
