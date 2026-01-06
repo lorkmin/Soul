@@ -16,10 +16,12 @@
 .admin-note-box {
   display: grid;
   gap: 10px;
-  padding: 10px 12px;
+  padding: 12px 14px;
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  width: 100%;
+  max-width: 440px;
 }
 
 /* Top row: switch + status badge */
@@ -187,7 +189,7 @@
 .admin-table td {
   display: table-cell !important;
   vertical-align: top;
-  padding: 14px 12px;
+  padding: 10px 12px;
   white-space: normal;
   word-break: break-word;
 }
@@ -311,6 +313,7 @@
 
 .admin-select {
   min-width: 220px;
+  width: 100%;
   padding: 8px 10px;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -340,6 +343,9 @@
   text-decoration-thickness: 0.12em;
   text-underline-offset: 2px;
   display: inline-flex;
+  padding: 4px 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
   align-items: center;
   gap: 6px;
 }
