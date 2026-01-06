@@ -215,10 +215,13 @@
 
 /* Comments column: limit height and allow scrolling */
 .admin-table.enrolls-table td:nth-child(5) {
-  max-height: 140px;
-  overflow-y: auto;
+  max-height: 120px;
   line-height: 1.4;
   padding-right: 10px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
 }
 
 /* чтобы колонка "Заметка" была шире и не ломала все остальные */
