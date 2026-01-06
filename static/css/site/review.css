@@ -120,7 +120,7 @@
   justify-content: center;
 }
 
-.review-btn--submit {
+.review-form .review-btn--submit {
   width: 100%;
   max-width: 360px;
   background: linear-gradient(180deg, #ffde7a, #ffc73a);
@@ -130,9 +130,23 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.65);
 }
 
-.review-btn--submit:hover {
+.review-form .review-btn--submit:hover {
   box-shadow: 0 18px 42px rgba(255, 183, 3, 0.42),
     inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  transform: translateY(-1px);
+}
+
+.rating-stars span {
+  color: #d7d7d7;
+  transition: transform 0.12s ease, opacity 0.12s ease, color 0.12s ease;
+}
+
+.rating-stars span.active {
+  color: #f6b800;
+}
+
+.rating-stars span.hovered {
+  color: #ffd84c;
   transform: translateY(-1px);
 }
 
