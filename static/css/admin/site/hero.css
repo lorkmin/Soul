@@ -1,0 +1,95 @@
+/* ===================== HERO ===================== */
+
+.hero {
+  background: radial-gradient(
+    circle at top left,
+    #fff7e9 0,
+    #ffffff 55%,
+    #fff7e9 100%
+  );
+}
+
+.hero-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 56px 20px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: center;
+}
+
+/* ---------- TEXT ---------- */
+
+.hero-label {
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #b9934b;
+  margin-bottom: 10px;
+}
+
+.hero-title {
+  font-size: 2.6rem;
+  line-height: 1.2;
+  margin: 0 0 12px;
+}
+
+.hero-sub {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 520px;
+  margin-bottom: 18px;
+  color: var(--text-muted);
+}
+
+/* ---------- ACTIONS ---------- */
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.hero-meta {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* ---------- VISUAL CARD ---------- */
+
+.hero-col-visual {
+  display: flex;
+  justify-content: center;
+}
+
+.hero-k-card {
+  position: relative;
+  max-width: 360px;
+  width: 100%;
+  background: #fff;
+  border-radius: 24px;
+  padding: 18px;
+  border: 1px solid rgba(255, 230, 180, 0.9);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 860px) {
+  .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 40px 16px;
+  }
+
+  .hero-title {
+    font-size: 2.1rem;
+  }
+
+  .hero-sub {
+    max-width: 100%;
+    font-size: 1rem;
+  }
+}

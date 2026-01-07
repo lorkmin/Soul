@@ -10,10 +10,9 @@
     </p>
   </div>
 
-  <form method="get" action="{{ url_for('teacher_schedule') }}" class="teacher-schedule-form">
-    <div class="teacher-schedule-field">
-      <label>Преподаватель</label>
-      <select name="teacher_id">
+  <form method="get" action="{{ url_for('teacher_schedule') }}">
+    <label style="font-size:0.8rem;">Преподаватель</label>
+    <select name="teacher_id">
       <option value="">— выберите —</option>
       {% for t in teachers %}
       <option value="{{ t.id }}" {% if teacher_id and teacher_id|string==t.id|string %}selected{% endif %}>
@@ -21,12 +20,9 @@
       </option>
       {% endfor %}
     </select>
-    </div>
 
-    <div class="teacher-schedule-field">
-      <label>Месяц</label>
-      <input type="month" name="month" value="{{ month_str }}">
-    </div>
+    <label style="font-size:0.8rem;">Месяц</label>
+    <input type="month" name="month" value="{{ month_str }}">
 
     <button type="submit">Показать</button>
   </form>
