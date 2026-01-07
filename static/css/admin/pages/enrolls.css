@@ -254,6 +254,8 @@
   max-width: 220px;
   line-height: 1.2;
   text-align: left;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .status-badge::before {
