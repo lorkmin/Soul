@@ -1,26 +1,26 @@
 {% extends "student_layout.html" %}
 {% block content %}
 <div class="section-title">
-  <h3>>ñ‘Ø?‘<ü óø+ñ?ç‘' ‘?‘Øç?ñóø</h3>
-  <span>õ?‘???‘'‘?ñ‘'ç ?ø‘?ñ ?õ>ø‘'‘< ñ ?‘?‘'ø?‘?ñç‘?‘? úø?‘?‘'ñ‘?</span>
+  <h3>>ñ‘Ø?‘<ü óø+ñ?ç‘' ‘?‘Øç?ñóø</h3>
+  <span>õ?‘???‘'‘?ñ‘'ç ?ø‘?ñ ?õ>ø‘'‘< ñ ?‘?‘'ø?‘?ñç‘?‘? úø?‘?‘'ñ‘?</span>
 </div>
 
 <div class="enroll-box student-dashboard-card">
   <form method="post">
     <div class="form-field">
-      <label for="code">'ø‘? 6-ú?ø‘Ø?‘<ü ID</label>
-      <input id="code" name="code" type="text" maxlength="6" placeholder="?øõ‘?ñ?ç‘?, 038421"
+      <label for="code">'ø‘? 6-ú?ø‘Ø?‘<ü ID</label>
+      <input id="code" name="code" type="text" maxlength="6" placeholder="?øõ‘?ñ?ç‘?, 038421"
         value="{{ code or '' }}" required />
     </div>
     <button class="btn-primary form-submit" type="submit">
-      ??óøúø‘'‘? ?ø??‘<ç
+      ??óøúø‘'‘? ?ø??‘<ç
     </button>
   </form>
 
   {% if not_found %}
   <p style="color: #c00; margin-top: 10px">
-    -øõñ‘?‘? ‘? ‘'øóñ? ID ?ç ?øü?ç?ø. ?‘???ç‘?‘?‘'ç ó?? ñ>ñ ‘?õ‘??‘?ñ‘'ç ‘?
-    õ‘?çõ??ø?ø‘'ç>‘?.
+    -øõñ‘?‘? ‘? ‘'øóñ? ID ?ç ?øü?ç?ø. ?‘???ç‘?‘?‘'ç ó?? ñ>ñ ‘?õ‘??‘?ñ‘'ç ‘?
+    õ‘?çõ??ø?ø‘'ç>‘?.
   </p>
   {% endif %} {% if student %}
 
@@ -30,7 +30,7 @@
         border-top: 1px solid rgba(0, 0, 0, 0.06);
       " />
 
-  {# õ????‘'??óø ‘Øñ‘?ç> ?>‘? õ‘???‘?ç‘?‘?ø #} {% set total =
+  {# õ????‘'??óø ‘Øñ‘?ç> ?>‘? õ‘???‘?ç‘?‘?ø #} {% set total =
   (student['lessons_total'] or 0)|int %} {% set left =
   (student['lessons_left'] or 0)|int %} {% if total > 0 %} {% set done
   = total - left %} {% if done < 0 %}{% set done=0 %}{% endif %} {% if done> total %}{% set done = total %}{%
@@ -44,18 +44,18 @@
 
         <div class="student-alert-content">
           <div class="student-alert-title">
-            ?øóç‘' úø?‘?‘'ñü úøó??‘Øñ>‘?‘?
+            ?øóç‘' úø?‘?‘'ñü úøó??‘Øñ>‘?‘?
           </div>
 
           <div class="student-alert-text">
-            ???‘<ç ‘?‘??óñ ?ç +‘??‘?‘' õ‘?????ñ‘'‘?‘?‘?, õ?óø ?‘< ?ç õ‘???>ñ‘'ç ?+‘?‘Øç?ñç à?'>
-            ö?‘?ñ‘'ç‘?‘? ‘? õ‘?çõ??ø?ø‘'ç>ç? ñ>ñ ø??ñ?ñ‘?‘'‘?ø‘'?‘???, ‘Ø‘'?+‘< ó‘?õñ‘'‘? ‘?>ç?‘?‘?‘%ñü õøóç‘'.
+            ???‘<ç ‘?‘??óñ ?ç +‘??‘?‘' õ‘?????ñ‘'‘?‘?‘?, õ?óø ?‘< ?ç õ‘???>ñ‘'ç ?+‘?‘Øç?ñç à?'>
+            ö?‘?ñ‘'ç‘?‘? ‘? õ‘?çõ??ø?ø‘'ç>ç? ñ>ñ ø??ñ?ñ‘?‘'‘?ø‘'?‘???, ‘Ø‘'?+‘< ó‘?õñ‘'‘? ‘?>ç?‘?‘?‘%ñü õøóç‘'.
           </div>
         </div>
       </div>
 </div>
 {% endif %}
-<!-- 'ÿ??ôô ??ÿ÷??? ö ?????? -->
+<!-- 'ÿ??ôô ??ÿ÷??? ö ?????? -->
 <div class="student-hero-card">
   <div class="student-hero-main">
     <div class="student-hero-avatar">
@@ -68,7 +68,7 @@
     <div class="student-hero-info">
       <div class="student-hero-title-row">
         <h4 class="student-hero-name">
-          {{ student['name'] or '?‘Øç?ñó' }}
+          {{ student['name'] or '?‘Øç?ñó' }}
         </h4>
         {% if student['public_code'] %}
         <span class="student-hero-id-badge">
@@ -79,29 +79,29 @@
 
       {% if student['course'] %}
       <p class="student-hero-course">
-        à??ñ ?‘?‘?: <span>{{ student['course'] }}</span>
+        à??ñ ?‘?‘?: <span>{{ student['course'] }}</span>
       </p>
       {% endif %}
 
       <p class="student-hero-sub">
-        'ø‘? ‘?‘?‘'?‘<ü õ‘???‘?ç‘?‘? ? ó?‘?çü‘?ó?? à?'
+        'ø‘? ‘?‘?‘'?‘<ü õ‘???‘?ç‘?‘? ? ó?‘?çü‘?ó?? à?'
       </p>
 
       <div class="student-hero-numbers">
         <div class="student-hero-number">
-          <span class="label">'‘?ç?? úø?‘?‘'ñü</span>
+          <span class="label">'‘?ç?? úø?‘?‘'ñü</span>
           <span class="value">
             {{ total if total > 0 else '¢?"' }}
           </span>
         </div>
         <div class="student-hero-number">
-          <span class="label">?‘?‘'ø>?‘?‘?</span>
+          <span class="label">?‘?‘'ø>?‘?‘?</span>
           <span class="value">
             {{ left if total > 0 else '¢?"' }}
           </span>
         </div>
         <div class="student-hero-number">
-          <span class="label">?‘??ü?ç??</span>
+          <span class="label">?‘??ü?ç??</span>
           <span class="value">
             {% if total > 0 %}{{ done }} ({{ percent }}%){% else
             %}¢?"{% endif %}
@@ -110,7 +110,7 @@
       </div>
 
       <div class="student-hero-payment">
-        <span class="student-hero-payment-label">??‘?>ç??‘?‘? ?õ>ø‘'ø:</span>
+        <span class="student-hero-payment-label">??‘?>ç??‘?‘? ?õ>ø‘'ø:</span>
         <span class="student-hero-payment-value">
           {{ student['last_payment_date'] or '¢?"' }} {% if
           student['last_payment_amount'] %} ‚ú {{
@@ -119,13 +119,13 @@
       </div>
       {% if student['comment'] %}
       <p class="student-hero-comment">
-        <span class="comment-label">????ç?‘'ø‘?ñü ?‘' ‘?ó?>‘<:</span>
+        <span class="comment-label">????ç?‘'ø‘?ñü ?‘' ‘?ó?>‘<:</span>
         <span class="comment-text">{{ student['comment'] }}</span>
       </p>
       {% endif %}
       <div class="student-hero-actions">
         <a href="{{ url_for('student_materials') }}" class="btn-primary student-hero-btn">
-          à?"? ?+‘?‘Øø‘?‘%ñç ?ø‘'ç‘?ñø>‘<
+          à?"? ?+‘?‘Øø‘?‘%ñç ?ø‘'ç‘?ñø>‘<
         </a>
       </div>
     </div>
@@ -135,20 +135,20 @@
     {% if total > 0 %}
     <div class="student-progress-card">
       <div class="student-progress-header">
-        <span class="chip chip-soft">?‘???‘?ç‘?‘? õ? õøóç‘'‘?</span>
+        <span class="chip chip-soft">?‘???‘?ç‘?‘? õ? õøóç‘'‘?</span>
         <span class="percent">{{ percent }}%</span>
       </div>
       <div class="student-progress-bar">
         <div class="student-progress-fill" style="width: {{ percent }}%;"></div>
       </div>
       <div class="student-progress-meta">
-        ?‘??ü?ç?? {{ done }} ñú {{ total }} ‘?‘??ó??
+        ?‘??ü?ç?? {{ done }} ñú {{ total }} ‘?‘??ó??
       </div>
     </div>
     {% endif %} {% if done_count > 0 or total > 0 %}
     <div class="student-achievements-card">
       <div class="student-achievements-header">
-        <span class="title">'ø‘?ñ ?ø>ç?‘?óñç ??‘?‘'ñç?ñ‘?</span>
+        <span class="title">'ø‘?ñ ?ø>ç?‘?óñç ??‘?‘'ñç?ñ‘?</span>
         <span class="sparkle">¢?ð</span>
       </div>
       <ul class="student-achievements-list">
@@ -156,34 +156,34 @@
         <li>
           <span class="badge-icon">à??+</span>
           <span class="badge-text">
-            ?ç‘??‘<ü ‘?ø? ¢?" ?‘< ‘?ç ?ø‘Øø>ñ õ‘?‘'‘?!
+            ?ç‘??‘<ü ‘?ø? ¢?" ?‘< ‘?ç ?ø‘Øø>ñ õ‘?‘'‘?!
           </span>
         </li>
         {% endif %} {% if done_count >= 3 %}
         <li>
           <span class="badge-icon">à?"?</span>
           <span class="badge-text">
-            ÷‘?ñ úø?‘?‘'ñ‘? õ?úø?ñ ¢?" ?ç‘?ñ‘'ç ‘?ñ‘'? à?'ò
+            ÷‘?ñ úø?‘?‘'ñ‘? õ?úø?ñ ¢?" ?ç‘?ñ‘'ç ‘?ñ‘'? à?'ò
           </span>
         </li>
         {% endif %} {% if percent >= 50 and percent < 100 %} <li>
           <span class="badge-icon">à???</span>
           <span class="badge-text">
-            ??>??ñ?ø ó‘?‘?‘?ø õ‘??ü?ç?ø ¢?" ?‘< ‘?ç ?ø>çó? õ‘????ñ?‘?>ñ‘?!
+            ??>??ñ?ø ó‘?‘?‘?ø õ‘??ü?ç?ø ¢?" ?‘< ‘?ç ?ø>çó? õ‘????ñ?‘?>ñ‘?!
           </span>
           </li>
           {% endif %} {% if percent >= 90 and left > 0 %}
           <li>
             <span class="badge-icon">à???</span>
             <span class="badge-text">
-              ýñ?ñ‘? +>ñúó? ¢?" ?‘?‘'ø>?‘?‘? ?‘?ç?? ?ç‘?ó?>‘?ó? ‘?‘??ó??.
+              ýñ?ñ‘? +>ñúó? ¢?" ?‘?‘'ø>?‘?‘? ?‘?ç?? ?ç‘?ó?>‘?ó? ‘?‘??ó??.
             </span>
           </li>
           {% endif %} {% if total > 0 and left == 0 and done > 0 %}
           <li>
             <span class="badge-icon">à??:</span>
             <span class="badge-text">
-              ?øóç‘' úø?ç‘?‘?‘'? ¢?" ?‘< +?>‘?‘??ç ‘???ñ‘Øóø!
+              ?øóç‘' úø?ç‘?‘?‘'? ¢?" ?‘< +?>‘?‘??ç ‘???ñ‘Øóø!
             </span>
           </li>
           {% endif %}
@@ -193,25 +193,25 @@
   </div>
 </div>
 
-<!-- ??-?? ??ÿ÷???: ÿ?ö??ö??? + "- -->
+<!-- ??-?? ??ÿ÷???: ÿ?ö??ö??? + "- -->
 <div class="student-subcards-wrapper">
-  <!-- '?ð? -??ô÷?ô -->
+  <!-- '?ð? -??ô÷?ô -->
   <div class="student-subcard">
-    <h4 style="margin-bottom: 8px">'ø‘?ñ úø?‘?‘'ñ‘?</h4>
+    <h4 style="margin-bottom: 8px">'ø‘?ñ úø?‘?‘'ñ‘?</h4>
 
     {% if lessons_planned or lessons_rescheduled or lessons_done or
     lessons_canceled %}
     <div class="student-lessons-sections">
       {% if lessons_planned %}
       <div class="student-lessons-section">
-        <p class="student-lessons-label">'>ñøü‘?ñç úø?‘?‘'ñ‘?</p>
+        <p class="student-lessons-label">'>ñøü‘?ñç úø?‘?‘'ñ‘?</p>
         <ul class="student-lessons-list">
           {% for l in lessons_planned %}
           <li class="lesson-row {% if loop.first %}lesson-next{% endif %}">
             <div class="lesson-main">
               <div>
                 {% if loop.first %}
-                <span class="lesson-next-badge">öó?‘??</span>
+                <span class="lesson-next-badge">öó?‘??</span>
                 {% endif %}
                 <span class="lesson-date">{{ l['start_at'] }}</span>
                 {% if l['topic'] %}
@@ -226,7 +226,7 @@
             </div>
 
             <span class="lesson-status-badge lesson-status-planned">
-              -øõ>ø?ñ‘???ø??
+              -øõ>ø?ñ‘???ø??
             </span>
           </li>
           {% endfor %}
@@ -234,7 +234,7 @@
       </div>
       {% endif %} {% if lessons_rescheduled %}
       <div class="student-lessons-section">
-        <p class="student-lessons-label">?ç‘?ç?ç‘'??‘<ç úø?‘?‘'ñ‘?</p>
+        <p class="student-lessons-label">?ç‘?ç?ç‘'??‘<ç úø?‘?‘'ñ‘?</p>
         <ul class="student-lessons-list">
           {% for l in lessons_rescheduled %}
           <li class="lesson-row">
@@ -251,7 +251,7 @@
               {% endif %}
             </div>
             <span class="lesson-status-badge lesson-status-rescheduled">
-              ?ç‘?ç?ç‘?ç??
+              ?ç‘?ç?ç‘?ç??
             </span>
           </li>
           {% endfor %}
@@ -259,7 +259,7 @@
       </div>
       {% endif %} {% if lessons_done %}
       <div class="student-lessons-section">
-        <p class="student-lessons-label">?‘???ç?‘'??‘<ç úø?‘?‘'ñ‘?</p>
+        <p class="student-lessons-label">?‘???ç?‘'??‘<ç úø?‘?‘'ñ‘?</p>
         <ul class="student-lessons-list">
           {% for l in lessons_done %}
           <li class="lesson-row">
@@ -273,7 +273,7 @@
               {% endif %}
             </div>
             <span class="lesson-status-badge lesson-status-done">
-              ?‘???ç?ç??
+              ?‘???ç?ç??
             </span>
           </li>
           {% endfor %}
@@ -281,7 +281,7 @@
       </div>
       {% endif %} {% if lessons_canceled %}
       <div class="student-lessons-section">
-        <p class="student-lessons-label">?‘'?ç?‘'??‘<ç úø?‘?‘'ñ‘?</p>
+        <p class="student-lessons-label">?‘'?ç?‘'??‘<ç úø?‘?‘'ñ‘?</p>
         <ul class="student-lessons-list">
           {% for l in lessons_canceled %}
           <li class="lesson-row">
@@ -295,7 +295,7 @@
               {% endif %}
             </div>
             <span class="lesson-status-badge lesson-status-canceled">
-              ?‘'?ç?ç??
+              ?‘'?ç?ç??
             </span>
           </li>
           {% endfor %}
@@ -305,15 +305,15 @@
     </div>
     {% else %}
     <p style="font-size: 0.9rem; color: #777; margin-top: 6px">
-      ÿø‘?õñ‘?ø?ñç õ?óø ?ç úøõ?>?ç??. öõ‘??‘?ñ‘'ç ‘? õ‘?çõ??ø?ø‘'ç>‘?, ó???ø
-      +‘??ç‘' +>ñøü‘?çç úø?‘?‘'ñç à?T'
+      ÿø‘?õñ‘?ø?ñç õ?óø ?ç úøõ?>?ç??. öõ‘??‘?ñ‘'ç ‘? õ‘?çõ??ø?ø‘'ç>‘?, ó???ø
+      +‘??ç‘' +>ñøü‘?çç úø?‘?‘'ñç à?T'
     </p>
     {% endif %}
   </div>
 
-  <!-- "???ð?? -?"???ô -->
+  <!-- "???ð?? -?"???ô -->
   <div class="student-subcard">
-    <h4 style="margin-bottom: 8px">"??ø‘??ñç úø?ø?ñ‘?</h4>
+    <h4 style="margin-bottom: 8px">"??ø‘??ñç úø?ø?ñ‘?</h4>
 
     <form method="post" enctype="multipart/form-data" class="enroll-box" style="
             max-width: 520px;
@@ -324,26 +324,26 @@
       <input type="hidden" name="code" value="{{ code }}" />
 
       <div class="form-field">
-        <label for="hw-title">?‘?ø‘'ó?ç ?øú?ø?ñç (õ? ç>ø?ñ‘?)</label>
-        <input id="hw-title" type="text" name="hw_title" placeholder="?øõ‘?ñ?ç‘?: "- õ? ‘'ç?ç ‚<?‘?ñ?ç‘'‘?‘'?ñ‘?‚>" />
+        <label for="hw-title">?‘?ø‘'ó?ç ?øú?ø?ñç (õ? ç>ø?ñ‘?)</label>
+        <input id="hw-title" type="text" name="hw_title" placeholder="?øõ‘?ñ?ç‘?: "- õ? ‘'ç?ç ‚<?‘?ñ?ç‘'‘?‘'?ñ‘?‚>" />
       </div>
 
       <div class="form-field">
-        <label for="hw-comment">????ç?‘'ø‘?ñü</label>
+        <label for="hw-comment">????ç?‘'ø‘?ñü</label>
         <textarea id="hw-comment" name="hw_comment" rows="2"
-          placeholder="‘'? ?‘< ?‘'õ‘?ø?>‘?ç‘'ç, ??õ‘??‘?‘< ó õ‘?çõ??ø?ø‘'ç>‘?¢?³"></textarea>
+          placeholder="‘'? ?‘< ?‘'õ‘?ø?>‘?ç‘'ç, ??õ‘??‘?‘< ó õ‘?çõ??ø?ø‘'ç>‘?¢?³"></textarea>
       </div>
 
       <div class="form-field">
-        <label for="hw-file">ýøü> ???ø‘??ç?? úø?ø?ñ‘?</label>
+        <label for="hw-file">ýøü> ???ø‘??ç?? úø?ø?ñ‘?</label>
         <input id="hw-file" type="file" name="hw_file" required />
         <p class="form-note" style="margin-top: 4px">
-          ???? ?‘'õ‘?ø?ñ‘'‘? ‘"?‘'? ‘'ç‘'‘?ø?ñ, PDF ñ>ñ ??ó‘??ç?‘'.
+          ???? ?‘'õ‘?ø?ñ‘'‘? ‘"?‘'? ‘'ç‘'‘?ø?ñ, PDF ñ>ñ ??ó‘??ç?‘'.
         </p>
       </div>
 
       <button class="btn-primary form-submit" type="submit">
-        ?‘'õ‘?ø?ñ‘'‘? ???ø‘??çç úø?ø?ñç
+        ?‘'õ‘?ø?ñ‘'‘? ???ø‘??çç úø?ø?ñç
       </button>
     </form>
 
@@ -357,24 +357,24 @@
               {{ hw['created_at'] or '' }}
             </span>
             ‚ú
-            <strong>{{ hw['title'] or ''çú ?øú?ø?ñ‘?' }}</strong>
+            <strong>{{ hw['title'] or ''çú ?øú?ø?ñ‘?' }}</strong>
           </div>
           <div class="student-homework-status">
             {% if hw['status'] == 'checked' %}
             <span class="lesson-status-badge lesson-status-done">
-              ?‘???ç‘?ç??
+              ?‘???ç‘?ç??
             </span>
             {% elif hw['status'] == 'assigned' and not hw['file_path'] %}
             <span class="lesson-status-badge lesson-status-planned">
-              -ø?ø?ñç ?‘' õ‘?çõ??ø?ø‘'ç>‘?
+              -ø?ø?ñç ?‘' õ‘?çõ??ø?ø‘'ç>‘?
             </span>
             {% elif hw['status'] == 'new' %}
             <span class="lesson-status-badge lesson-status-planned">
-              ?‘'õ‘?ø?>ç??, ?‘'‘' õ‘???ç‘?óñ
+              ?‘'õ‘?ø?>ç??, ?‘'‘' õ‘???ç‘?óñ
             </span>
             {% else %}
             <span class="lesson-status-badge lesson-status-planned">
-              ' ‘?ø+?‘'ç
+              ' ‘?ø+?‘'ç
             </span>
             {% endif %}
           </div>
@@ -382,24 +382,24 @@
 
           {% if hw['comment'] %}
           <div class="lesson-comment" style="margin-top: 4px">
-            'ø‘? ó???ç?‘'ø‘?ñü: {{ hw['comment'] }}
+            'ø‘? ó???ç?‘'ø‘?ñü: {{ hw['comment'] }}
           </div>
           {% endif %}
 
           <div class="student-homework-files">
             {% if hw['file_path'] %}
             <div>
-              <span class="lesson-topic">'ø‘? ‘"øü>: </span>
+              <span class="lesson-topic">'ø‘? ‘"øü>: </span>
               <a href="{{ url_for('static', filename=hw['file_path']) }}" target="_blank">
-                ?‘'ó‘?‘<‘?
+                ?‘'ó‘?‘<‘?
               </a>
             </div>
             {% endif %}
             {% if hw['teacher_file_path'] %}
             <div style="margin-top: 2px">
-              <span class="lesson-topic">ýøü> ?‘' õ‘?çõ??ø?ø‘'ç>‘?: </span>
+              <span class="lesson-topic">ýøü> ?‘' õ‘?çõ??ø?ø‘'ç>‘?: </span>
               <a href="{{ url_for('static', filename=hw['teacher_file_path']) }}" target="_blank">
-                ‘?óø‘Øø‘'‘?
+                ‘?óø‘Øø‘'‘?
               </a>
             </div>
             {% endif %}
@@ -408,11 +408,11 @@
 
           {% if hw['teacher_comment'] %}
           <div class="lesson-comment" style="margin-top: 6px">
-            ????ç?‘'ø‘?ñü õ‘?çõ??ø?ø‘'ç>‘?: {{ hw['teacher_comment'] }}
+            ????ç?‘'ø‘?ñü õ‘?çõ??ø?ø‘'ç>‘?: {{ hw['teacher_comment'] }}
           </div>
           {% endif %} {% if hw['checked_at'] %}
           <div class="student-homework-meta">
-            ?‘???ç‘?ç??: {{ hw['checked_at'] }}
+            ?‘???ç‘?ç??: {{ hw['checked_at'] }}
           </div>
           {% endif %}
       </li>
@@ -420,7 +420,7 @@
     </ul>
     {% else %}
     <p style="font-size: 0.9rem; color: #777; margin-top: 6px">
-      ??óø ?ç‘' úø?‘?‘?ç??‘<‘: ???ø‘??ñ‘: úø?ø?ñü.
+      ??óø ?ç‘' úø?‘?‘?ç??‘<‘: ???ø‘??ñ‘: úø?ø?ñü.
     </p>
     {% endif %}
   </div>
@@ -429,8 +429,8 @@
 
 {% else %}
 <p style="font-size: 0.9rem; color: #777; margin-top: 12px">
-  '?ç?ñ‘'ç ID ‘?‘Øç?ñóø, ‘Ø‘'?+‘< õ?‘???‘'‘?ç‘'‘? õ‘???‘?ç‘?‘? ñ ?‘'õ‘?ø?ñ‘'‘? ???ø‘??çç
-  úø?ø?ñç.
+  '?ç?ñ‘'ç ID ‘?‘Øç?ñóø, ‘Ø‘'?+‘< õ?‘???‘'‘?ç‘'‘? õ‘???‘?ç‘?‘? ñ ?‘'õ‘?ø?ñ‘'‘? ???ø‘??çç
+  úø?ø?ñç.
 </p>
 {% endif %}
 {% endblock %}
