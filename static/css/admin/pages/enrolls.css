@@ -241,19 +241,19 @@
 
 .status-badge {
   display: inline-flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 6px;
   padding: 6px 10px;
-  border-radius: 999px;
+  border-radius: 12px;
   font-weight: 700;
   font-size: 0.85rem;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.9);
   white-space: normal;
-  max-width: 180px;
+  max-width: 220px;
   line-height: 1.2;
+  text-align: left;
 }
 
 .status-badge::before {

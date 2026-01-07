@@ -82,6 +82,15 @@
                 {% endfor %}
               </select>
 
+              <!-- hidden гарантирует 0 если чекбокс снят -->
+              <input type="hidden" name="is_bot" value="0" />
+
+              <label class="bot-switch">
+                <input type="checkbox" name="is_bot" value="1" {% if e.is_bot %}checked{% endif %} />
+                <span class="track"><span class="thumb"></span></span>
+                <span class="label">Бот</span>
+              </label>
+
               <div class="note-hint">видно только админу</div>
             </div>
 
