@@ -182,6 +182,16 @@ def register_admin_routes(app: Flask) -> None:
     @login_required
     def admin_enrolls_export():
         conn = get_db()
+        status_labels = {
+            "new": "Новая",
+            "trial_agreed": "Согласился на пробный",
+            "trial_scheduled": "Пробный назначен",
+            "trial_done": "Пробный проведён",
+            "purchased": "Купил пакет",
+            "not_interested": "Отказ",
+            "no_show": "Не вышел на связь",
+            "spam": "Спам / бот",
+        }
         try:
             rows = conn.execute(
                 """
@@ -224,7 +234,7 @@ def register_admin_routes(app: Flask) -> None:
                 row["comment"] or "",
                 int(row["is_bot"] or 0),
                 row["admin_note"] or "",
-                row["status"] or "new",
+                status_labels.get(row["status"] or "new", "Новая"),
                 (row["status_updated_at"] if "status_updated_at" in row.keys() else "") or "",
             ])
 
