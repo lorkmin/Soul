@@ -30,6 +30,12 @@
     </div>
 
     <div class="form-field">
+      <label>Всего занятий</label>
+      <input type="number" name="lessons_total" min="0" step="1" placeholder="0"
+        value="{{ student['lessons_total'] if student else 0 }}" />
+    </div>
+
+    <div class="form-field">
       <label>Осталось занятий</label>
       <input type="number" name="lessons_left" placeholder="0"
         value="{{ student['lessons_left'] if student else 0 }}" />
