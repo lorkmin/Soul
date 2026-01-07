@@ -229,18 +229,19 @@
 }
 
 /* чтобы колонка "Заметка" была шире и не ломала все остальные */
-.admin-table.enrolls-table th:nth-child(7),
-.admin-table.enrolls-table td:nth-child(7) {
-  width: 340px;
-}
-
 .admin-table.enrolls-table th:nth-child(6),
 .admin-table.enrolls-table td:nth-child(6) {
-  width: 180px;
+  width: 200px;
+}
+
+.admin-table.enrolls-table th:nth-child(7),
+.admin-table.enrolls-table td:nth-child(7) {
+  width: 360px;
 }
 
 .status-badge {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 6px;
   padding: 6px 10px;
@@ -250,7 +251,9 @@
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.9);
-  white-space: nowrap;
+  white-space: normal;
+  max-width: 180px;
+  line-height: 1.2;
 }
 
 .status-badge::before {
