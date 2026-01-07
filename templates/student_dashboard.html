@@ -1,436 +1,453 @@
-{% extends "student_layout.html" %}
-{% block content %}
-<div class="section-title">
-  <h3>>ñ‘Ø?‘<ü óø+ñ?ç‘' ‘?‘Øç?ñóø</h3>
-  <span>õ?‘???‘'‘?ñ‘'ç ?ø‘?ñ ?õ>ø‘'‘< ñ ?‘?‘'ø?‘?ñç‘?‘? úø?‘?‘'ñ‘?</span>
-</div>
+<!DOCTYPE html>
+<html lang="ru">
 
-<div class="enroll-box student-dashboard-card">
-  <form method="post">
-    <div class="form-field">
-      <label for="code">'ø‘? 6-ú?ø‘Ø?‘<ü ID</label>
-      <input id="code" name="code" type="text" maxlength="6" placeholder="?øõ‘?ñ?ç‘?, 038421"
-        value="{{ code or '' }}" required />
-    </div>
-    <button class="btn-primary form-submit" type="submit">
-      ??óøúø‘'‘? ?ø??‘<ç
-    </button>
-  </form>
+<head>
+  <meta charset="UTF-8" />
+  <title>Личный дашборд ученика — Soul</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style_light.css') }}" />
+</head>
 
-  {% if not_found %}
-  <p style="color: #c00; margin-top: 10px">
-    -øõñ‘?‘? ‘? ‘'øóñ? ID ?ç ?øü?ç?ø. ?‘???ç‘?‘?‘'ç ó?? ñ>ñ ‘?õ‘??‘?ñ‘'ç ‘?
-    õ‘?çõ??ø?ø‘'ç>‘?.
-  </p>
-  {% endif %} {% if student %}
-
-  <hr style="
-        margin: 20px 0;
-        border: none;
-        border-top: 1px solid rgba(0, 0, 0, 0.06);
-      " />
-
-  {# õ????‘'??óø ‘Øñ‘?ç> ?>‘? õ‘???‘?ç‘?‘?ø #} {% set total =
-  (student['lessons_total'] or 0)|int %} {% set left =
-  (student['lessons_left'] or 0)|int %} {% if total > 0 %} {% set done
-  = total - left %} {% if done < 0 %}{% set done=0 %}{% endif %} {% if done> total %}{% set done = total %}{%
-    endif %} {% set percent =
-    (done * 100 / total)|round(0)|int %} {% else %} {% set done = 0 %}
-    {% set percent = 0 %} {% endif %} {% set done_count =
-    lessons_done|length %}
-    {% if total > 0 and left <= 0 %} <div class="student-alert-wrapper">
-      <div class="student-alert student-alert-warning">
-        <div class="student-alert-icon">¢?ÿ¯ñ?</div>
-
-        <div class="student-alert-content">
-          <div class="student-alert-title">
-            ?øóç‘' úø?‘?‘'ñü úøó??‘Øñ>‘?‘?
-          </div>
-
-          <div class="student-alert-text">
-            ???‘<ç ‘?‘??óñ ?ç +‘??‘?‘' õ‘?????ñ‘'‘?‘?‘?, õ?óø ?‘< ?ç õ‘???>ñ‘'ç ?+‘?‘Øç?ñç à?'>
-            ö?‘?ñ‘'ç‘?‘? ‘? õ‘?çõ??ø?ø‘'ç>ç? ñ>ñ ø??ñ?ñ‘?‘'‘?ø‘'?‘???, ‘Ø‘'?+‘< ó‘?õñ‘'‘? ‘?>ç?‘?‘?‘%ñü õøóç‘'.
-          </div>
+<body class="student-dashboard">
+  <div class="wrapper">
+    <section>
+      <div class="section-inner">
+        <div class="section-title">
+          <h3>Личный кабинет ученика</h3>
+          <span>посмотрите ваши оплаты и оставшиеся занятия</span>
         </div>
-      </div>
-</div>
-{% endif %}
-<!-- 'ÿ??ôô ??ÿ÷??? ö ?????? -->
-<div class="student-hero-card">
-  <div class="student-hero-main">
-    <div class="student-hero-avatar">
-      <span class="student-hero-avatar-char">
-        {{ (student['name'] or 'U')[:1] }}
-      </span>
-      <span class="student-hero-avatar-sparkle">¢?ð</span>
-    </div>
 
-    <div class="student-hero-info">
-      <div class="student-hero-title-row">
-        <h4 class="student-hero-name">
-          {{ student['name'] or '?‘Øç?ñó' }}
-        </h4>
-        {% if student['public_code'] %}
-        <span class="student-hero-id-badge">
-          ID: {{ student['public_code'] }}
-        </span>
+        <div class="enroll-box student-dashboard-card">
+          <form method="post">
+            <div class="form-field">
+              <label for="code">Ваш 6-значный ID</label>
+              <input id="code" name="code" type="text" maxlength="6" placeholder="например, 038421"
+                value="{{ code or '' }}" required />
+            </div>
+            <button class="btn-primary form-submit" type="submit">
+              Показать данные
+            </button>
+          </form>
+
+          {% if not_found %}
+          <p style="color: #c00; margin-top: 10px">
+            Запись с таким ID не найдена. Проверьте код или спросите у
+            преподавателя.
+          </p>
+          {% endif %} {% if student %}
+
+          <hr style="
+                margin: 20px 0;
+                border: none;
+                border-top: 1px solid rgba(0, 0, 0, 0.06);
+              " />
+
+          {# подготовка чисел для прогресса #} {% set total =
+          (student['lessons_total'] or 0)|int %} {% set left =
+          (student['lessons_left'] or 0)|int %} {% if total > 0 %} {% set done
+          = total - left %} {% if done < 0 %}{% set done=0 %}{% endif %} {% if done> total %}{% set done = total %}{%
+            endif %} {% set percent =
+            (done * 100 / total)|round(0)|int %} {% else %} {% set done = 0 %}
+            {% set percent = 0 %} {% endif %} {% set done_count =
+            lessons_done|length %}
+            {% if total > 0 and left <= 0 %} <div class="student-alert-wrapper">
+              <div class="student-alert student-alert-warning">
+                <div class="student-alert-icon">⚠️</div>
+
+                <div class="student-alert-content">
+                  <div class="student-alert-title">
+                    Пакет занятий закончился
+                  </div>
+
+                  <div class="student-alert-text">
+                    Новые уроки не будут проводиться, пока вы не продлите обучение 💛
+                    Свяжитесь с преподавателем или администратором, чтобы купить следующий пакет.
+                  </div>
+                </div>
+              </div>
+        </div>
         {% endif %}
-      </div>
+        <!-- ВЕРХНЯЯ КАРТОЧКА С УЧЕНИКОМ -->
+        <div class="student-hero-card">
+          <div class="student-hero-main">
+            <div class="student-hero-avatar">
+              <span class="student-hero-avatar-char">
+                {{ (student['name'] or 'U')[:1] }}
+              </span>
+              <span class="student-hero-avatar-sparkle">✨</span>
+            </div>
 
-      {% if student['course'] %}
-      <p class="student-hero-course">
-        à??ñ ?‘?‘?: <span>{{ student['course'] }}</span>
-      </p>
-      {% endif %}
-
-      <p class="student-hero-sub">
-        'ø‘? ‘?‘?‘'?‘<ü õ‘???‘?ç‘?‘? ? ó?‘?çü‘?ó?? à?'
-      </p>
-
-      <div class="student-hero-numbers">
-        <div class="student-hero-number">
-          <span class="label">'‘?ç?? úø?‘?‘'ñü</span>
-          <span class="value">
-            {{ total if total > 0 else '¢?"' }}
-          </span>
-        </div>
-        <div class="student-hero-number">
-          <span class="label">?‘?‘'ø>?‘?‘?</span>
-          <span class="value">
-            {{ left if total > 0 else '¢?"' }}
-          </span>
-        </div>
-        <div class="student-hero-number">
-          <span class="label">?‘??ü?ç??</span>
-          <span class="value">
-            {% if total > 0 %}{{ done }} ({{ percent }}%){% else
-            %}¢?"{% endif %}
-          </span>
-        </div>
-      </div>
-
-      <div class="student-hero-payment">
-        <span class="student-hero-payment-label">??‘?>ç??‘?‘? ?õ>ø‘'ø:</span>
-        <span class="student-hero-payment-value">
-          {{ student['last_payment_date'] or '¢?"' }} {% if
-          student['last_payment_amount'] %} ‚ú {{
-          student['last_payment_amount'] }} ¢'? {% endif %}
-        </span>
-      </div>
-      {% if student['comment'] %}
-      <p class="student-hero-comment">
-        <span class="comment-label">????ç?‘'ø‘?ñü ?‘' ‘?ó?>‘<:</span>
-        <span class="comment-text">{{ student['comment'] }}</span>
-      </p>
-      {% endif %}
-      <div class="student-hero-actions">
-        <a href="{{ url_for('student_materials') }}" class="btn-primary student-hero-btn">
-          à?"? ?+‘?‘Øø‘?‘%ñç ?ø‘'ç‘?ñø>‘<
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <div class="student-hero-side">
-    {% if total > 0 %}
-    <div class="student-progress-card">
-      <div class="student-progress-header">
-        <span class="chip chip-soft">?‘???‘?ç‘?‘? õ? õøóç‘'‘?</span>
-        <span class="percent">{{ percent }}%</span>
-      </div>
-      <div class="student-progress-bar">
-        <div class="student-progress-fill" style="width: {{ percent }}%;"></div>
-      </div>
-      <div class="student-progress-meta">
-        ?‘??ü?ç?? {{ done }} ñú {{ total }} ‘?‘??ó??
-      </div>
-    </div>
-    {% endif %} {% if done_count > 0 or total > 0 %}
-    <div class="student-achievements-card">
-      <div class="student-achievements-header">
-        <span class="title">'ø‘?ñ ?ø>ç?‘?óñç ??‘?‘'ñç?ñ‘?</span>
-        <span class="sparkle">¢?ð</span>
-      </div>
-      <ul class="student-achievements-list">
-        {% if done_count >= 1 %}
-        <li>
-          <span class="badge-icon">à??+</span>
-          <span class="badge-text">
-            ?ç‘??‘<ü ‘?ø? ¢?" ?‘< ‘?ç ?ø‘Øø>ñ õ‘?‘'‘?!
-          </span>
-        </li>
-        {% endif %} {% if done_count >= 3 %}
-        <li>
-          <span class="badge-icon">à?"?</span>
-          <span class="badge-text">
-            ÷‘?ñ úø?‘?‘'ñ‘? õ?úø?ñ ¢?" ?ç‘?ñ‘'ç ‘?ñ‘'? à?'ò
-          </span>
-        </li>
-        {% endif %} {% if percent >= 50 and percent < 100 %} <li>
-          <span class="badge-icon">à???</span>
-          <span class="badge-text">
-            ??>??ñ?ø ó‘?‘?‘?ø õ‘??ü?ç?ø ¢?" ?‘< ‘?ç ?ø>çó? õ‘????ñ?‘?>ñ‘?!
-          </span>
-          </li>
-          {% endif %} {% if percent >= 90 and left > 0 %}
-          <li>
-            <span class="badge-icon">à???</span>
-            <span class="badge-text">
-              ýñ?ñ‘? +>ñúó? ¢?" ?‘?‘'ø>?‘?‘? ?‘?ç?? ?ç‘?ó?>‘?ó? ‘?‘??ó??.
-            </span>
-          </li>
-          {% endif %} {% if total > 0 and left == 0 and done > 0 %}
-          <li>
-            <span class="badge-icon">à??:</span>
-            <span class="badge-text">
-              ?øóç‘' úø?ç‘?‘?‘'? ¢?" ?‘< +?>‘?‘??ç ‘???ñ‘Øóø!
-            </span>
-          </li>
-          {% endif %}
-      </ul>
-    </div>
-    {% endif %}
-  </div>
-</div>
-
-<!-- ??-?? ??ÿ÷???: ÿ?ö??ö??? + "- -->
-<div class="student-subcards-wrapper">
-  <!-- '?ð? -??ô÷?ô -->
-  <div class="student-subcard">
-    <h4 style="margin-bottom: 8px">'ø‘?ñ úø?‘?‘'ñ‘?</h4>
-
-    {% if lessons_planned or lessons_rescheduled or lessons_done or
-    lessons_canceled %}
-    <div class="student-lessons-sections">
-      {% if lessons_planned %}
-      <div class="student-lessons-section">
-        <p class="student-lessons-label">'>ñøü‘?ñç úø?‘?‘'ñ‘?</p>
-        <ul class="student-lessons-list">
-          {% for l in lessons_planned %}
-          <li class="lesson-row {% if loop.first %}lesson-next{% endif %}">
-            <div class="lesson-main">
-              <div>
-                {% if loop.first %}
-                <span class="lesson-next-badge">öó?‘??</span>
-                {% endif %}
-                <span class="lesson-date">{{ l['start_at'] }}</span>
-                {% if l['topic'] %}
-                <span class="lesson-dot">¢?÷</span>
-                <span class="lesson-topic">{{ l['topic'] }}</span>
+            <div class="student-hero-info">
+              <div class="student-hero-title-row">
+                <h4 class="student-hero-name">
+                  {{ student['name'] or 'Ученик' }}
+                </h4>
+                {% if student['public_code'] %}
+                <span class="student-hero-id-badge">
+                  ID: {{ student['public_code'] }}
+                </span>
                 {% endif %}
               </div>
 
-              {% if l['comment'] %}
-              <div class="lesson-comment">{{ l['comment'] }}</div>
+              {% if student['course'] %}
+              <p class="student-hero-course">
+                🌸 Курс: <span>{{ student['course'] }}</span>
+              </p>
               {% endif %}
-            </div>
 
-            <span class="lesson-status-badge lesson-status-planned">
-              -øõ>ø?ñ‘???ø??
-            </span>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-      {% endif %} {% if lessons_rescheduled %}
-      <div class="student-lessons-section">
-        <p class="student-lessons-label">?ç‘?ç?ç‘'??‘<ç úø?‘?‘'ñ‘?</p>
-        <ul class="student-lessons-list">
-          {% for l in lessons_rescheduled %}
-          <li class="lesson-row">
-            <div class="lesson-main">
-              <span class="lesson-date">{{ l['start_at'] }}</span>
-              {% if l['rescheduled_to'] %}
-              <span class="lesson-arrow">¢Å'</span>
-              <span class="lesson-date">{{ l['rescheduled_to'] }}</span>
-              {% endif %} {% if l['topic'] %}
-              <span class="lesson-dot">¢?÷</span>
-              <span class="lesson-topic">{{ l['topic'] }}</span>
-              {% endif %} {% if l['comment'] %}
-              <div class="lesson-comment">{{ l['comment'] }}</div>
+              <p class="student-hero-sub">
+                Ваш уютный прогресс в корейском 💕
+              </p>
+
+              <div class="student-hero-numbers">
+                <div class="student-hero-number">
+                  <span class="label">Всего занятий</span>
+                  <span class="value">
+                    {{ total if total > 0 else '—' }}
+                  </span>
+                </div>
+                <div class="student-hero-number">
+                  <span class="label">Осталось</span>
+                  <span class="value">
+                    {{ left if total > 0 else '—' }}
+                  </span>
+                </div>
+                <div class="student-hero-number">
+                  <span class="label">Пройдено</span>
+                  <span class="value">
+                    {% if total > 0 %}{{ done }} ({{ percent }}%){% else
+                    %}—{% endif %}
+                  </span>
+                </div>
+              </div>
+
+              <div class="student-hero-payment">
+                <span class="student-hero-payment-label">Последняя оплата:</span>
+                <span class="student-hero-payment-value">
+                  {{ student['last_payment_date'] or '—' }} {% if
+                  student['last_payment_amount'] %} · {{
+                  student['last_payment_amount'] }} ₽ {% endif %}
+                </span>
+              </div>
+              {% if student['comment'] %}
+              <p class="student-hero-comment">
+                <span class="comment-label">Комментарий от школы:</span>
+                <span class="comment-text">{{ student['comment'] }}</span>
+              </p>
               {% endif %}
+              <div class="student-hero-actions">
+                <a href="{{ url_for('student_materials') }}" class="btn-primary student-hero-btn">
+                  📚 Обучающие материалы
+                </a>
+              </div>
             </div>
-            <span class="lesson-status-badge lesson-status-rescheduled">
-              ?ç‘?ç?ç‘?ç??
-            </span>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-      {% endif %} {% if lessons_done %}
-      <div class="student-lessons-section">
-        <p class="student-lessons-label">?‘???ç?‘'??‘<ç úø?‘?‘'ñ‘?</p>
-        <ul class="student-lessons-list">
-          {% for l in lessons_done %}
-          <li class="lesson-row">
-            <div class="lesson-main">
-              <span class="lesson-date">{{ l['start_at'] }}</span>
-              {% if l['topic'] %}
-              <span class="lesson-dot">¢?÷</span>
-              <span class="lesson-topic">{{ l['topic'] }}</span>
-              {% endif %} {% if l['comment'] %}
-              <div class="lesson-comment">{{ l['comment'] }}</div>
-              {% endif %}
-            </div>
-            <span class="lesson-status-badge lesson-status-done">
-              ?‘???ç?ç??
-            </span>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-      {% endif %} {% if lessons_canceled %}
-      <div class="student-lessons-section">
-        <p class="student-lessons-label">?‘'?ç?‘'??‘<ç úø?‘?‘'ñ‘?</p>
-        <ul class="student-lessons-list">
-          {% for l in lessons_canceled %}
-          <li class="lesson-row">
-            <div class="lesson-main">
-              <span class="lesson-date">{{ l['start_at'] }}</span>
-              {% if l['topic'] %}
-              <span class="lesson-dot">¢?÷</span>
-              <span class="lesson-topic">{{ l['topic'] }}</span>
-              {% endif %} {% if l['comment'] %}
-              <div class="lesson-comment">{{ l['comment'] }}</div>
-              {% endif %}
-            </div>
-            <span class="lesson-status-badge lesson-status-canceled">
-              ?‘'?ç?ç??
-            </span>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-      {% endif %}
-    </div>
-    {% else %}
-    <p style="font-size: 0.9rem; color: #777; margin-top: 6px">
-      ÿø‘?õñ‘?ø?ñç õ?óø ?ç úøõ?>?ç??. öõ‘??‘?ñ‘'ç ‘? õ‘?çõ??ø?ø‘'ç>‘?, ó???ø
-      +‘??ç‘' +>ñøü‘?çç úø?‘?‘'ñç à?T'
-    </p>
-    {% endif %}
-  </div>
-
-  <!-- "???ð?? -?"???ô -->
-  <div class="student-subcard">
-    <h4 style="margin-bottom: 8px">"??ø‘??ñç úø?ø?ñ‘?</h4>
-
-    <form method="post" enctype="multipart/form-data" class="enroll-box" style="
-            max-width: 520px;
-            padding: 14px 16px;
-            margin-bottom: 14px;
-          ">
-      <input type="hidden" name="action" value="upload_homework" />
-      <input type="hidden" name="code" value="{{ code }}" />
-
-      <div class="form-field">
-        <label for="hw-title">?‘?ø‘'ó?ç ?øú?ø?ñç (õ? ç>ø?ñ‘?)</label>
-        <input id="hw-title" type="text" name="hw_title" placeholder="?øõ‘?ñ?ç‘?: "- õ? ‘'ç?ç ‚<?‘?ñ?ç‘'‘?‘'?ñ‘?‚>" />
-      </div>
-
-      <div class="form-field">
-        <label for="hw-comment">????ç?‘'ø‘?ñü</label>
-        <textarea id="hw-comment" name="hw_comment" rows="2"
-          placeholder="‘'? ?‘< ?‘'õ‘?ø?>‘?ç‘'ç, ??õ‘??‘?‘< ó õ‘?çõ??ø?ø‘'ç>‘?¢?³"></textarea>
-      </div>
-
-      <div class="form-field">
-        <label for="hw-file">ýøü> ???ø‘??ç?? úø?ø?ñ‘?</label>
-        <input id="hw-file" type="file" name="hw_file" required />
-        <p class="form-note" style="margin-top: 4px">
-          ???? ?‘'õ‘?ø?ñ‘'‘? ‘"?‘'? ‘'ç‘'‘?ø?ñ, PDF ñ>ñ ??ó‘??ç?‘'.
-        </p>
-      </div>
-
-      <button class="btn-primary form-submit" type="submit">
-        ?‘'õ‘?ø?ñ‘'‘? ???ø‘??çç úø?ø?ñç
-      </button>
-    </form>
-
-    {% if homework_list %}
-    <ul class="student-homework-list">
-      {% for hw in homework_list %}
-      <li class="student-homework-item">
-        <div class="student-homework-header">
-          <div>
-            <span class="lesson-date">
-              {{ hw['created_at'] or '' }}
-            </span>
-            ‚ú
-            <strong>{{ hw['title'] or ''çú ?øú?ø?ñ‘?' }}</strong>
           </div>
-          <div class="student-homework-status">
-            {% if hw['status'] == 'checked' %}
-            <span class="lesson-status-badge lesson-status-done">
-              ?‘???ç‘?ç??
-            </span>
-            {% elif hw['status'] == 'assigned' and not hw['file_path'] %}
-            <span class="lesson-status-badge lesson-status-planned">
-              -ø?ø?ñç ?‘' õ‘?çõ??ø?ø‘'ç>‘?
-            </span>
-            {% elif hw['status'] == 'new' %}
-            <span class="lesson-status-badge lesson-status-planned">
-              ?‘'õ‘?ø?>ç??, ?‘'‘' õ‘???ç‘?óñ
-            </span>
+
+          <div class="student-hero-side">
+            {% if total > 0 %}
+            <div class="student-progress-card">
+              <div class="student-progress-header">
+                <span class="chip chip-soft">Прогресс по пакету</span>
+                <span class="percent">{{ percent }}%</span>
+              </div>
+              <div class="student-progress-bar">
+                <div class="student-progress-fill" style="width: {{ percent }}%;"></div>
+              </div>
+              <div class="student-progress-meta">
+                Пройдено {{ done }} из {{ total }} уроков
+              </div>
+            </div>
+            {% endif %} {% if done_count > 0 or total > 0 %}
+            <div class="student-achievements-card">
+              <div class="student-achievements-header">
+                <span class="title">Ваши маленькие достижения</span>
+                <span class="sparkle">✨</span>
+              </div>
+              <ul class="student-achievements-list">
+                {% if done_count >= 1 %}
+                <li>
+                  <span class="badge-icon">🌱</span>
+                  <span class="badge-text">
+                    Первый шаг — вы уже начали путь!
+                  </span>
+                </li>
+                {% endif %} {% if done_count >= 3 %}
+                <li>
+                  <span class="badge-icon">🔥</span>
+                  <span class="badge-text">
+                    Три занятия позади — держите ритм 💪
+                  </span>
+                </li>
+                {% endif %} {% if percent >= 50 and percent < 100 %} <li>
+                  <span class="badge-icon">🌈</span>
+                  <span class="badge-text">
+                    Половина курса пройдена — вы уже далеко продвинулись!
+                  </span>
+                  </li>
+                  {% endif %} {% if percent >= 90 and left > 0 %}
+                  <li>
+                    <span class="badge-icon">🚀</span>
+                    <span class="badge-text">
+                      Финиш близко — осталось всего несколько уроков.
+                    </span>
+                  </li>
+                  {% endif %} {% if total > 0 and left == 0 and done > 0 %}
+                  <li>
+                    <span class="badge-icon">🏅</span>
+                    <span class="badge-text">
+                      Пакет завершён — вы большое умничка!
+                    </span>
+                  </li>
+                  {% endif %}
+              </ul>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- НИЖНИЕ КАРТОЧКИ: РАСПИСАНИЕ + ДЗ -->
+        <div class="student-subcards-wrapper">
+          <!-- ВАШИ ЗАНЯТИЯ -->
+          <div class="student-subcard">
+            <h4 style="margin-bottom: 8px">Ваши занятия</h4>
+
+            {% if lessons_planned or lessons_rescheduled or lessons_done or
+            lessons_canceled %}
+            <div class="student-lessons-sections">
+              {% if lessons_planned %}
+              <div class="student-lessons-section">
+                <p class="student-lessons-label">Ближайшие занятия</p>
+                <ul class="student-lessons-list">
+                  {% for l in lessons_planned %}
+                  <li class="lesson-row {% if loop.first %}lesson-next{% endif %}">
+                    <div class="lesson-main">
+                      <div>
+                        {% if loop.first %}
+                        <span class="lesson-next-badge">Скоро</span>
+                        {% endif %}
+                        <span class="lesson-date">{{ l['start_at'] }}</span>
+                        {% if l['topic'] %}
+                        <span class="lesson-dot">•</span>
+                        <span class="lesson-topic">{{ l['topic'] }}</span>
+                        {% endif %}
+                      </div>
+
+                      {% if l['comment'] %}
+                      <div class="lesson-comment">{{ l['comment'] }}</div>
+                      {% endif %}
+                    </div>
+
+                    <span class="lesson-status-badge lesson-status-planned">
+                      Запланировано
+                    </span>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %} {% if lessons_rescheduled %}
+              <div class="student-lessons-section">
+                <p class="student-lessons-label">Перенесённые занятия</p>
+                <ul class="student-lessons-list">
+                  {% for l in lessons_rescheduled %}
+                  <li class="lesson-row">
+                    <div class="lesson-main">
+                      <span class="lesson-date">{{ l['start_at'] }}</span>
+                      {% if l['rescheduled_to'] %}
+                      <span class="lesson-arrow">→</span>
+                      <span class="lesson-date">{{ l['rescheduled_to'] }}</span>
+                      {% endif %} {% if l['topic'] %}
+                      <span class="lesson-dot">•</span>
+                      <span class="lesson-topic">{{ l['topic'] }}</span>
+                      {% endif %} {% if l['comment'] %}
+                      <div class="lesson-comment">{{ l['comment'] }}</div>
+                      {% endif %}
+                    </div>
+                    <span class="lesson-status-badge lesson-status-rescheduled">
+                      Перенесено
+                    </span>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %} {% if lessons_done %}
+              <div class="student-lessons-section">
+                <p class="student-lessons-label">Проведённые занятия</p>
+                <ul class="student-lessons-list">
+                  {% for l in lessons_done %}
+                  <li class="lesson-row">
+                    <div class="lesson-main">
+                      <span class="lesson-date">{{ l['start_at'] }}</span>
+                      {% if l['topic'] %}
+                      <span class="lesson-dot">•</span>
+                      <span class="lesson-topic">{{ l['topic'] }}</span>
+                      {% endif %} {% if l['comment'] %}
+                      <div class="lesson-comment">{{ l['comment'] }}</div>
+                      {% endif %}
+                    </div>
+                    <span class="lesson-status-badge lesson-status-done">
+                      Проведено
+                    </span>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %} {% if lessons_canceled %}
+              <div class="student-lessons-section">
+                <p class="student-lessons-label">Отменённые занятия</p>
+                <ul class="student-lessons-list">
+                  {% for l in lessons_canceled %}
+                  <li class="lesson-row">
+                    <div class="lesson-main">
+                      <span class="lesson-date">{{ l['start_at'] }}</span>
+                      {% if l['topic'] %}
+                      <span class="lesson-dot">•</span>
+                      <span class="lesson-topic">{{ l['topic'] }}</span>
+                      {% endif %} {% if l['comment'] %}
+                      <div class="lesson-comment">{{ l['comment'] }}</div>
+                      {% endif %}
+                    </div>
+                    <span class="lesson-status-badge lesson-status-canceled">
+                      Отменено
+                    </span>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %}
+            </div>
             {% else %}
-            <span class="lesson-status-badge lesson-status-planned">
-              ' ‘?ø+?‘'ç
-            </span>
+            <p style="font-size: 0.9rem; color: #777; margin-top: 6px">
+              Расписание пока не заполнено. Спросите у преподавателя, когда
+              будет ближайшее занятие 🙂
+            </p>
             {% endif %}
           </div>
 
+          <!-- ДОМАШНИЕ ЗАДАНИЯ -->
+          <div class="student-subcard">
+            <h4 style="margin-bottom: 8px">Домашние задания</h4>
 
-          {% if hw['comment'] %}
-          <div class="lesson-comment" style="margin-top: 4px">
-            'ø‘? ó???ç?‘'ø‘?ñü: {{ hw['comment'] }}
-          </div>
-          {% endif %}
+            <form method="post" enctype="multipart/form-data" class="enroll-box" style="
+                    max-width: 520px;
+                    padding: 14px 16px;
+                    margin-bottom: 14px;
+                  ">
+              <input type="hidden" name="action" value="upload_homework" />
+              <input type="hidden" name="code" value="{{ code }}" />
 
-          <div class="student-homework-files">
-            {% if hw['file_path'] %}
-            <div>
-              <span class="lesson-topic">'ø‘? ‘"øü>: </span>
-              <a href="{{ url_for('static', filename=hw['file_path']) }}" target="_blank">
-                ?‘'ó‘?‘<‘?
-              </a>
-            </div>
+              <div class="form-field">
+                <label for="hw-title">Краткое название (по желанию)</label>
+                <input id="hw-title" type="text" name="hw_title" placeholder="Например: ДЗ по теме «Приветствия»" />
+              </div>
+
+              <div class="form-field">
+                <label for="hw-comment">Комментарий</label>
+                <textarea id="hw-comment" name="hw_comment" rows="2"
+                  placeholder="Что вы отправляете, вопросы к преподавателю…"></textarea>
+              </div>
+
+              <div class="form-field">
+                <label for="hw-file">Файл домашнего задания</label>
+                <input id="hw-file" type="file" name="hw_file" required />
+                <p class="form-note" style="margin-top: 4px">
+                  Можно отправить фото тетради, PDF или документ.
+                </p>
+              </div>
+
+              <button class="btn-primary form-submit" type="submit">
+                Отправить домашнее задание
+              </button>
+            </form>
+
+            {% if homework_list %}
+            <ul class="student-homework-list">
+              {% for hw in homework_list %}
+              <li class="student-homework-item">
+                <div class="student-homework-header">
+                  <div>
+                    <span class="lesson-date">
+                      {{ hw['created_at'] or '' }}
+                    </span>
+                    ·
+                    <strong>{{ hw['title'] or 'Без названия' }}</strong>
+                  </div>
+                  <div class="student-homework-status">
+                    {% if hw['status'] == 'checked' %}
+                    <span class="lesson-status-badge lesson-status-done">
+                      Проверено
+                    </span>
+                    {% elif hw['status'] == 'assigned' and not hw['file_path'] %}
+                    <span class="lesson-status-badge lesson-status-planned">
+                      Задание от преподавателя
+                    </span>
+                    {% elif hw['status'] == 'new' %}
+                    <span class="lesson-status-badge lesson-status-planned">
+                      Отправлено, ждёт проверки
+                    </span>
+                    {% else %}
+                    <span class="lesson-status-badge lesson-status-planned">
+                      В работе
+                    </span>
+                    {% endif %}
+                  </div>
+
+
+                  {% if hw['comment'] %}
+                  <div class="lesson-comment" style="margin-top: 4px">
+                    Ваш комментарий: {{ hw['comment'] }}
+                  </div>
+                  {% endif %}
+
+                  <div class="student-homework-files">
+                    {% if hw['file_path'] %}
+                    <div>
+                      <span class="lesson-topic">Ваш файл: </span>
+                      <a href="{{ url_for('static', filename=hw['file_path']) }}" target="_blank">
+                        открыть
+                      </a>
+                    </div>
+                    {% endif %}
+                    {% if hw['teacher_file_path'] %}
+                    <div style="margin-top: 2px">
+                      <span class="lesson-topic">Файл от преподавателя: </span>
+                      <a href="{{ url_for('static', filename=hw['teacher_file_path']) }}" target="_blank">
+                        скачать
+                      </a>
+                    </div>
+                    {% endif %}
+                  </div>
+
+
+                  {% if hw['teacher_comment'] %}
+                  <div class="lesson-comment" style="margin-top: 6px">
+                    Комментарий преподавателя: {{ hw['teacher_comment'] }}
+                  </div>
+                  {% endif %} {% if hw['checked_at'] %}
+                  <div class="student-homework-meta">
+                    Проверено: {{ hw['checked_at'] }}
+                  </div>
+                  {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <p style="font-size: 0.9rem; color: #777; margin-top: 6px">
+              Пока нет загруженных домашних заданий.
+            </p>
             {% endif %}
-            {% if hw['teacher_file_path'] %}
-            <div style="margin-top: 2px">
-              <span class="lesson-topic">ýøü> ?‘' õ‘?çõ??ø?ø‘'ç>‘?: </span>
-              <a href="{{ url_for('static', filename=hw['teacher_file_path']) }}" target="_blank">
-                ‘?óø‘Øø‘'‘?
-              </a>
-            </div>
-            {% endif %}
           </div>
+        </div>
+        <!-- /student-subcards-wrapper -->
 
-
-          {% if hw['teacher_comment'] %}
-          <div class="lesson-comment" style="margin-top: 6px">
-            ????ç?‘'ø‘?ñü õ‘?çõ??ø?ø‘'ç>‘?: {{ hw['teacher_comment'] }}
-          </div>
-          {% endif %} {% if hw['checked_at'] %}
-          <div class="student-homework-meta">
-            ?‘???ç‘?ç??: {{ hw['checked_at'] }}
-          </div>
-          {% endif %}
-      </li>
-      {% endfor %}
-    </ul>
-    {% else %}
-    <p style="font-size: 0.9rem; color: #777; margin-top: 6px">
-      ??óø ?ç‘' úø?‘?‘?ç??‘<‘: ???ø‘??ñ‘: úø?ø?ñü.
-    </p>
-    {% endif %}
+        {% else %}
+        <p style="font-size: 0.9rem; color: #777; margin-top: 12px">
+          Введите ID ученика, чтобы посмотреть прогресс и отправить домашнее
+          задание.
+        </p>
+        {% endif %}
+      </div>
   </div>
-</div>
-<!-- /student-subcards-wrapper -->
+  </section>
+  </div>
+</body>
 
-{% else %}
-<p style="font-size: 0.9rem; color: #777; margin-top: 12px">
-  '?ç?ñ‘'ç ID ‘?‘Øç?ñóø, ‘Ø‘'?+‘< õ?‘???‘'‘?ç‘'‘? õ‘???‘?ç‘?‘? ñ ?‘'õ‘?ø?ñ‘'‘? ???ø‘??çç
-  úø?ø?ñç.
-</p>
-{% endif %}
-{% endblock %}
+</html>
